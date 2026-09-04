@@ -4675,27 +4675,27 @@ body {
 
   /* Aggressive mobile overflow fixes */
   .modal-dialog, .rate-modal-dialog {
-    width: calc(100vw - 20px) !important;
+    width: calc(100% - 20px) !important;
     max-width: 480px !important;
     margin: 10px auto !important;
     box-sizing: border-box;
   }
   
   .native-lang-dropdown {
-    width: calc(100vw - 20px) !important;
+    width: calc(100% - 20px) !important;
     max-width: 320px !important;
-    right: -10px !important;
+    right: 0 !important;
   }
 
   form, .step-form, .form-card, .detail-pane {
-    max-width: 100vw !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
     overflow-x: hidden;
   }
 
   /* Ensure the navbar action group fits */
   .nav-actions-group {
-    max-width: calc(100vw - 80px); /* Leave room for logo */
+    max-width: calc(100% - 50px);
     flex-wrap: wrap;
     justify-content: flex-end;
   }
