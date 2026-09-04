@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, RefreshCw, FileCheck, Tag, AlertOctagon } from 'lucide-react';
+import { X, CheckCircle, RefreshCw, FileCheck, Tag, AlertOctagon, Sparkles } from 'lucide-react';
 
 export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
   if (!isOpen || !dispute) return null;
@@ -26,24 +26,43 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
-        <div className="modal-header">
-          <div>
-            <div className="modal-title" style={{ fontSize: '17px' }}>Offer a Solution</div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-              Ticket {dispute.id} • {dispute.crop} ({dispute.affectedCrates} crates affected)
+      <div 
+        className="rate-modal-dialog" 
+        onClick={(e) => e.stopPropagation()} 
+        style={{ maxWidth: '540px' }}
+      >
+        <div className="rate-modal-top-accent" />
+
+        {/* Modal Header */}
+        <div className="rate-modal-header">
+          <div className="rate-header-left">
+            <div className="rate-header-icon-box" style={{ background: 'linear-gradient(135deg, var(--navya-forest-800) 0%, #004d38 100%)' }}>
+              <RefreshCw size={20} />
+            </div>
+            <div>
+              <div className="rate-header-tag">
+                <Sparkles size={11} />
+                Bilateral Resolution Offer
+              </div>
+              <div className="rate-header-title">Offer a Solution</div>
+              <div className="rate-header-subtitle">
+                Ticket #{dispute.id} • {dispute.crop} ({dispute.affectedCrates} crates affected)
+              </div>
             </div>
           </div>
-          <button className="evidence-remove-btn" onClick={onClose} style={{ position: 'static' }}>
-            <X size={15} />
+          <button className="rate-close-btn" onClick={onClose} title="Close dialog">
+            <X size={16} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="modal-body">
-            <div className="form-group">
-              <label className="form-label">Select How You Want to Solve This:</label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+          {/* Modal Body */}
+          <div className="rate-modal-body" style={{ gap: '14px' }}>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ fontWeight: 700, marginBottom: '8px', display: 'block' }}>
+                Select How You Want to Solve This:
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div
                   onClick={() => {
                     setActionType('REPLACEMENT_BATCH');
@@ -51,17 +70,18 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                   }}
                   style={{
                     padding: '12px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     border: `1.5px solid ${actionType === 'REPLACEMENT_BATCH' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
                     background: actionType === 'REPLACEMENT_BATCH' ? 'var(--navya-success-bg)' : '#ffffff',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
                     <RefreshCw size={14} />
                     Send Replacement
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
                     Replace the {dispute.affectedCrates} damaged crates
                   </div>
                 </div>
@@ -73,17 +93,18 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                   }}
                   style={{
                     padding: '12px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     border: `1.5px solid ${actionType === 'CREDIT_NOTE' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
                     background: actionType === 'CREDIT_NOTE' ? 'var(--navya-success-bg)' : '#ffffff',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
                     <Tag size={14} />
                     Price Discount
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
                     Deduct reasonable amount from bill
                   </div>
                 </div>
@@ -95,17 +116,18 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                   }}
                   style={{
                     padding: '12px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     border: `1.5px solid ${actionType === 'MANDATORY_RESCAN' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
                     background: actionType === 'MANDATORY_RESCAN' ? 'var(--navya-success-bg)' : '#ffffff',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
                     <FileCheck size={14} />
                     Kiosk Re-Check
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
                     Test at nearest mandi sensor kiosk
                   </div>
                 </div>
@@ -117,17 +139,18 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                   }}
                   style={{
                     padding: '12px',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     border: `1.5px solid ${actionType === 'REJECT_CLAIM' ? 'var(--navya-danger)' : 'var(--border-medium)'}`,
                     background: actionType === 'REJECT_CLAIM' ? 'var(--navya-danger-bg)' : '#ffffff',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-danger)' }}>
                     <AlertOctagon size={14} />
                     Decline Claim
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.4 }}>
                     Decline with explanation
                   </div>
                 </div>
@@ -135,20 +158,21 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
             </div>
 
             {actionType === 'CREDIT_NOTE' && (
-              <div className="form-group">
-                <label className="form-label">Discount Amount (₹)</label>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" style={{ fontWeight: 600 }}>Discount Amount (₹)</label>
                 <input
                   type="number"
                   className="form-input"
                   value={discountAmount}
                   onChange={(e) => setDiscountAmount(e.target.value)}
                   placeholder="e.g. 1000"
+                  required
                 />
               </div>
             )}
 
-            <div className="form-group">
-              <label className="form-label">Message / Note to Counterparty</label>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ fontWeight: 600 }}>Message / Note to Counterparty</label>
               <textarea
                 className="form-textarea"
                 rows={2}
@@ -160,12 +184,13 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
             </div>
           </div>
 
-          <div className="modal-footer">
+          {/* Modal Footer */}
+          <div className="rate-modal-footer">
             <button type="button" className="btn-secondary" onClick={onClose} style={{ fontSize: '13px' }}>
               Cancel
             </button>
             <button type="submit" className="btn-primary" style={{ fontSize: '13px' }}>
-              <CheckCircle size={14} />
+              <CheckCircle size={15} />
               Confirm & Send Solution
             </button>
           </div>
