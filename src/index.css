@@ -1,0 +1,145 @@
+/* =========================================================
+   NAVYA DISPUTE & REDRESSAL PROTOCOL — GLOBAL DESIGN SYSTEM
+   Aligns directly with Navya Core Design Tokens
+   ========================================================= */
+
+:root {
+  /* Brand Palettes */
+  --navya-forest-900: #00261b;
+  --navya-forest-800: #003d2c; /* Core Primary */
+  --navya-forest-700: #00533c; /* Hover */
+  --navya-forest-600: #064332;
+  --navya-forest-500: #1b4332;
+  --navya-forest-400: #2d6a4f;
+  
+  /* Agritech Accents & Earthy Tones */
+  --navya-bronze: #c4863e;
+  --navya-bronze-dark: #9a5d1e;
+  --navya-bronze-light: #fbeed9;
+  --navya-lime-tint: #e7edb8;
+  --navya-sage: #dcefdc;
+  --navya-emerald: #2a9d8f;
+
+  /* Alert / Discrepancy Colors */
+  --navya-danger: #d9383a;
+  --navya-danger-bg: #fdf2f2;
+  --navya-danger-border: #f8b4b4;
+  --navya-warning: #e38e16;
+  --navya-warning-bg: #fef8ee;
+  --navya-warning-border: #f9deb3;
+  --navya-success: #168a5a;
+  --navya-success-bg: #edf8f2;
+  --navya-success-border: #b8e2cb;
+  --navya-info: #1d6fa5;
+  --navya-info-bg: #eff6fb;
+  --navya-info-border: #bee0f5;
+
+  /* Canvas & Neutral Surfaces */
+  --bg-page: #faf9f5;         /* Soft warm ivory/parchment */
+  --bg-surface: #ffffff;      /* Clean card white */
+  --bg-surface-subtle: #f8f7f2;
+  --bg-surface-muted: #f2f0e8;
+
+  /* Typography Colors */
+  --text-main: #063b2c;       /* Deep forest text */
+  --text-body: #2b332f;       /* High-readability dark neutral */
+  --text-muted: #666c67;      /* Secondary label */
+  --text-subtle: #8a918b;     /* Tertiary metadata */
+  --text-on-dark: #ffffff;
+
+  /* Borders & Dividers */
+  --border-subtle: #e8e6df;
+  --border-medium: #d6d3c8;
+  --border-focus: #003d2c;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 38, 27, 0.05);
+  --shadow-md: 0 4px 16px -2px rgba(0, 38, 27, 0.08);
+  --shadow-lg: 0 12px 32px -4px rgba(0, 38, 27, 0.12);
+  --shadow-elevated: 0 20px 48px -8px rgba(0, 38, 27, 0.16);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Fonts */
+  --font-heading: 'DM Sans', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: #ccd0cb;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a9b0a8;
+}
