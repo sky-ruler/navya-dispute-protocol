@@ -76,33 +76,45 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
               <div><strong>Last Checkpoint:</strong> {b.lastCheckpoint}</div>
             </div>
 
-            {/* Sensor Telemetry Box */}
+            {/* Hardware Sensor Telemetry Box */}
             <div style={{
               background: 'var(--bg-surface-subtle)',
               border: '1px solid var(--border-subtle)',
               borderRadius: '8px',
               padding: '12px',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '8px',
               fontSize: '11.5px',
               marginBottom: '16px'
             }}>
-              <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block' }}>SGP30 TVOC</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.tvoc_ppb} ppb</strong>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
+                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--navya-forest-700)', textTransform: 'uppercase' }}>
+                  📡 Navya Mobile Scanner v2.1
+                </span>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                  Sensirion Hardware Suite
+                </span>
               </div>
-              <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block' }}>eCO₂ Reading</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.eco2_ppm} ppm</strong>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block' }}>SHT31 Ambient</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.temp_c}°C / {b.initialTelemetry.humidity_rh}% RH</strong>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block' }}>Est. Shelf Life</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>{b.predictedShelfLifeDays} Days</strong>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '8px'
+              }}>
+                <div>
+                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>SGP30 TVOC</span>
+                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.tvoc_ppb} ppb</strong>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>eCO₂ Respiration</span>
+                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.eco2_ppm} ppm</strong>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>SHT31 Thermal</span>
+                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.temp_c}°C / {b.initialTelemetry.humidity_rh}% RH</strong>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>Sensor Est. Shelf Life</span>
+                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.predictedShelfLifeDays} Days</strong>
+                </div>
               </div>
             </div>
 

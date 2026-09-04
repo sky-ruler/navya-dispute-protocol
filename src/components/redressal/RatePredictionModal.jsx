@@ -162,8 +162,11 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
                     </div>
 
                     <div className="rate-predicted-pill">
-                      <div className="rate-predicted-label">AI PREDICTED SHELF LIFE</div>
+                      <div className="rate-predicted-label">SENSOR PREDICTED SHELF LIFE</div>
                       <div className="rate-predicted-value">{predictedDays} Days</div>
+                      <div style={{ fontSize: '8.5px', color: 'var(--navya-forest-700)', marginTop: '2px', fontWeight: 600 }}>
+                        Calibrated via SGP30 & SHT31
+                      </div>
                     </div>
                   </div>
 

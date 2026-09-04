@@ -16,7 +16,8 @@ export const HomePage = ({
   setCurrentView, 
   onSelectDispute, 
   disputes,
-  onOpenRateModal
+  onOpenRateModal,
+  activeRole = 'DEALER'
 }) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
 
@@ -31,27 +32,48 @@ export const HomePage = ({
         marginBottom: '28px',
         boxShadow: 'var(--shadow-md)'
       }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          background: 'rgba(255, 255, 255, 0.12)',
-          padding: '4px 12px',
-          borderRadius: '20px',
-          fontSize: '12px',
-          fontWeight: 600,
-          color: 'var(--navya-lime-tint)',
-          marginBottom: '14px'
-        }}>
-          <Leaf size={14} />
-          <span>Navya Agritech • Produce Quality Redressal</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'rgba(255, 255, 255, 0.12)',
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '12px',
+            fontWeight: 600,
+            color: 'var(--navya-lime-tint)'
+          }}>
+            <Leaf size={14} />
+            <span>Navya Agritech • Hardware-Backed Dispute Redressal</span>
+          </div>
+
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: activeRole === 'FARMER' ? 'rgba(16, 185, 129, 0.25)' : 'rgba(245, 158, 11, 0.22)',
+            border: `1px solid ${activeRole === 'FARMER' ? 'rgba(110, 231, 183, 0.4)' : 'rgba(252, 211, 77, 0.4)'}`,
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '11.5px',
+            fontWeight: 700,
+            color: activeRole === 'FARMER' ? '#a7f3d0' : '#fde68a'
+          }}>
+            <span>{activeRole === 'FARMER' ? '👨‍🌾 Farmer Mode' : '🏢 Dealer Mode'}</span>
+            <span style={{ opacity: 0.8, fontWeight: 500, color: '#f1f5f9' }}>
+              {activeRole === 'FARMER'
+                ? '• Shielded from unfair mandi deductions via certified sensor baseline'
+                : '• Shielded from fraudulent claims with tamper-proof sensor telemetry'}
+            </span>
+          </div>
         </div>
 
         <h1 style={{ fontSize: '28px', fontWeight: 800, lineHeight: 1.25, color: '#ffffff', marginBottom: '10px' }}>
           Received Damaged or Spoiled Produce?
         </h1>
         <p style={{ fontSize: '15px', color: '#c2d5cd', maxWidth: '640px', lineHeight: 1.5, marginBottom: '24px' }}>
-          Report quality issues directly to your dealer or farmer. Backed by Navya sensor checks, both parties see the truth so problems get solved fairly and quickly.
+          Report quality issues directly to your dealer or farmer. Backed by Sensirion physical sensor checks, both parties see the truth so problems get solved fairly and quickly.
         </p>
 
         {/* Big 2 Core Actions */}
