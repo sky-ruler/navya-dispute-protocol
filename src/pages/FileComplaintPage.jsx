@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { QrScannerModal } from '../components/filing/QrScannerModal';
 import { ReportUploader } from '../components/filing/ReportUploader';
-import { TelemetryComparison } from '../components/filing/TelemetryComparison';
 import { SEED_BATCHES, SAMPLE_DEFECT_PHOTOS } from '../services/mockData';
 import { disputeService } from '../services/disputeService';
 
@@ -201,19 +200,42 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
             </div>
           )}
 
-          {/* Simple Sensor Baseline Summary */}
+          {/* Simple Selected Batch Badge */}
           {selectedBatch && (
-            <TelemetryComparison
-              batch={selectedBatch}
-              comparisonData={{
-                farmGateTvoc: selectedBatch.initialTelemetry?.tvoc_ppb || 125,
-                arrivalReportedTvoc: issueType === 'CARBIDE_SUSPICION' ? 1650 : 380,
-                simpleStatus: issueType === 'CARBIDE_SUSPICION' ? 'CHEMICAL_ALERT' : 'EARLY_DECAY',
-                simpleVerdict: issueType === 'CARBIDE_SUSPICION'
-                  ? "Sensor check confirms chemical signature consistent with artificial carbide ripening."
-                  : "Sensor check confirms moisture entrapment and early ripening during haul."
-              }}
-            />
+            <div style={{
+              marginTop: '12px',
+              padding: '10px 14px',
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '12.5px',
+              color: 'var(--navya-forest-800)',
+              flexWrap: 'wrap',
+              gap: '8px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <CheckCircle2 size={16} color="#16a34a" />
+                <span>
+                  Selected: <strong>{selectedBatch.crop}</strong> ({selectedBatch.id})
+                </span>
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  background: '#dcfce7',
+                  color: '#15803d',
+                  padding: '2px 8px',
+                  borderRadius: '12px'
+                }}>
+                  {selectedBatch.certifiedGrade || 'Grade A'} Verified
+                </span>
+              </div>
+              <span style={{ fontSize: '11.5px', color: '#166534', fontWeight: 600 }}>
+                {selectedBatch.quantityCrates} Crates Available
+              </span>
+            </div>
           )}
         </div>
 
