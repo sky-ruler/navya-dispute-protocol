@@ -1,8 +1,15 @@
 import React from 'react';
-import { Leaf, PlusCircle, Inbox, Search, RefreshCw, UserCheck, ShieldCheck } from 'lucide-react';
+import { Leaf, PlusCircle, Inbox, Search, Award, Sparkles } from 'lucide-react';
 import { LanguageSelector } from './LanguageSelector';
 
-export const Navbar = ({ currentView, setCurrentView, activeRole, setActiveRole }) => {
+export const Navbar = ({ 
+  currentView, 
+  setCurrentView, 
+  activeRole, 
+  setActiveRole, 
+  userPoints = 150,
+  onOpenRateModal 
+}) => {
   return (
     <header className="navya-navbar">
       {/* Brand Identity */}
@@ -52,6 +59,18 @@ export const Navbar = ({ currentView, setCurrentView, activeRole, setActiveRole 
 
       {/* Actions & Role Switcher */}
       <div className="nav-actions-group">
+        {/* Reinforcement Learning Rewards Pill */}
+        <button
+          type="button"
+          className="reward-points-badge"
+          onClick={() => onOpenRateModal && onOpenRateModal()}
+          title="Earn Mandi scan credits by rating AI prediction accuracy"
+        >
+          <span className="points-coin">🪙</span>
+          <span className="points-val">{userPoints} pts</span>
+          <span className="points-credit">(₹{Math.floor(userPoints / 2)})</span>
+        </button>
+
         {/* Multi-lingual Language Selector */}
         <LanguageSelector />
 
@@ -67,13 +86,13 @@ export const Navbar = ({ currentView, setCurrentView, activeRole, setActiveRole 
             className={`role-btn ${activeRole === 'DEALER' ? 'active' : ''}`}
             onClick={() => setActiveRole('DEALER')}
           >
-            🏢 Dealer / Aggregator
+            🏢 Dealer
           </button>
         </div>
 
         {/* Primary CTA */}
         <button
-          className="btn-primary"
+          className="btn-primary nav-cta-btn"
           onClick={() => setCurrentView('file-complaint')}
         >
           <PlusCircle size={16} />

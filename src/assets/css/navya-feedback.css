@@ -1231,3 +1231,257 @@ body {
   background: none !important;
   box-shadow: none !important;
 }
+
+/* =========================================================
+   REINFORCEMENT LEARNING REWARDS BADGE & RATING FLOW
+   ========================================================= */
+.reward-points-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fcd34d;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.12);
+  white-space: nowrap;
+}
+
+.reward-points-badge:hover {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f59e0b;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.2);
+}
+
+.reward-points-badge .points-coin {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reward-points-badge .points-val {
+  font-weight: 800;
+  color: #78350f;
+}
+
+.reward-points-badge .points-credit {
+  font-size: 11px;
+  font-weight: 600;
+  color: #b45309;
+  opacity: 0.9;
+}
+
+/* Close & helper buttons */
+.evidence-remove-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-subtle);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.evidence-remove-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--navya-forest-800);
+}
+
+/* Grids for Batch Explorer & Dealer Dashboard */
+.batches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.dealer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+/* =========================================================
+   COMPREHENSIVE RESPONSIVE STYLES
+   ========================================================= */
+@media (max-width: 1024px) {
+  .navya-navbar {
+    padding: 0 20px;
+  }
+  .nav-links-row {
+    gap: 16px;
+  }
+  .main-content {
+    padding: 24px 20px 48px 20px;
+  }
+  .hero-banner {
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 880px) {
+  .navya-navbar {
+    height: auto;
+    min-height: 64px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+    gap: 10px;
+    position: static;
+  }
+
+  .nav-brand-group {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nav-links-row {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 6px;
+    justify-content: flex-start;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link-item {
+    white-space: nowrap;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .nav-actions-group {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .native-lang-dropdown {
+    position: fixed;
+    top: 70px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    max-height: 80vh;
+  }
+
+  .main-content {
+    padding: 20px 16px 48px 16px;
+  }
+
+  .hero-banner {
+    padding: 28px 20px;
+  }
+
+  .split-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dealer-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+  }
+
+  .batches-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-banner {
+    padding: 22px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-banner h1 {
+    font-size: 22px !important;
+  }
+
+  .hero-banner p {
+    font-size: 13px !important;
+  }
+
+  .hero-stats-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .modal-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 10px auto;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .modal-footer {
+    padding: 12px 16px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-tagline {
+    display: none;
+  }
+
+  .reward-points-badge .points-credit {
+    display: none;
+  }
+
+  .reward-points-badge {
+    padding: 5px 8px;
+    font-size: 11.5px;
+  }
+
+  .role-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .btn-primary.nav-cta-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .batches-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dealer-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

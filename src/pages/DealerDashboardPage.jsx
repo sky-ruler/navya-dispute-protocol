@@ -64,7 +64,7 @@ export const DealerDashboardPage = ({
       </div>
 
       {/* 3 Simple Realistic Stats (No fake giant money numbers!) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginBottom: '22px' }}>
+      <div className="dealer-stats-grid">
         <div style={{ background: '#ffffff', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: '16px', boxShadow: 'var(--shadow-sm)' }}>
           <div style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Total Complaints

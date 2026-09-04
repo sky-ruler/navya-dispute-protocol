@@ -9,7 +9,10 @@ import { FileComplaintPage } from './pages/FileComplaintPage';
 import { DealerDashboardPage } from './pages/DealerDashboardPage';
 import { DisputeDetailsPage } from './pages/DisputeDetailsPage';
 import { BatchExplorerPage } from './pages/BatchExplorerPage';
+import { RatePredictionModal } from './components/redressal/RatePredictionModal';
 import { disputeService } from './services/disputeService';
+import { rewardService } from './services/rewardService';
+import { SEED_BATCHES } from './services/mockData';
 
 function App() {
   // Navigation: 'home' | 'file-complaint' | 'inbox' | 'dispute-detail' | 'batches'
@@ -17,8 +20,13 @@ function App() {
   const [selectedDisputeId, setSelectedDisputeId] = useState('DISP-8041');
   const [activeRole, setActiveRole] = useState('DEALER'); // 'FARMER' | 'DEALER'
   const [disputes, setDisputes] = useState([]);
+  
+  // Reinforcement Learning & Rewards State
+  const [userPoints, setUserPoints] = useState(rewardService.getPoints());
+  const [isRateModalOpen, setIsRateModalOpen] = useState(false);
+  const [batchToRate, setBatchToRate] = useState(SEED_BATCHES[0]);
 
-  // Load disputes from service on mount
+  // Load disputes on mount
   useEffect(() => {
     disputeService.init();
     setDisputes(disputeService.getDisputes());
@@ -50,6 +58,15 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleOpenRateModal = (batch = null) => {
+    setBatchToRate(batch || SEED_BATCHES[0]);
+    setIsRateModalOpen(true);
+  };
+
+  const handleRewardEarned = (result) => {
+    setUserPoints(result.newTotalPoints);
+  };
+
   return (
     <div className="navya-shell">
       {/* Universal Navya Navbar */}
@@ -58,6 +75,8 @@ function App() {
         setCurrentView={setCurrentView}
         activeRole={activeRole}
         setActiveRole={setActiveRole}
+        userPoints={userPoints}
+        onOpenRateModal={handleOpenRateModal}
       />
 
       {/* Main View Area */}
@@ -68,6 +87,8 @@ function App() {
             onSelectDispute={handleSelectDispute}
             disputes={disputes}
             activeRole={activeRole}
+            userPoints={userPoints}
+            onOpenRateModal={handleOpenRateModal}
           />
         )}
 
@@ -94,18 +115,28 @@ function App() {
             onBack={() => setCurrentView('inbox')}
             onDisputeUpdated={handleDisputeUpdated}
             activeRole={activeRole}
+            onOpenRateModal={handleOpenRateModal}
           />
         )}
 
         {currentView === 'batches' && (
           <BatchExplorerPage
             onSelectBatchForClaim={handleSelectBatchForClaim}
+            onOpenRateModal={handleOpenRateModal}
           />
         )}
       </main>
 
       {/* Universal Navya Footer */}
       <Footer />
+
+      {/* AI Reinforcement Learning Ground-Truth Rating Modal */}
+      <RatePredictionModal
+        isOpen={isRateModalOpen}
+        onClose={() => setIsRateModalOpen(false)}
+        batch={batchToRate}
+        onRewardEarned={handleRewardEarned}
+      />
     </div>
   );
 }

@@ -35,7 +35,7 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
+      <div className="batches-grid">
         {filtered.map((b) => (
           <div 
             key={b.id} 
@@ -106,14 +106,23 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
               </div>
             </div>
 
-            <button 
-              className="btn-secondary" 
-              style={{ width: '100%', justifyContent: 'center', fontSize: '13px' }}
-              onClick={() => onSelectBatchForClaim(b)}
-            >
-              <PlusCircle size={14} />
-              File Quality Claim on this Batch
-            </button>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+              <button 
+                className="btn-secondary" 
+                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '7px' }}
+                onClick={() => onSelectBatchForClaim(b)}
+              >
+                <PlusCircle size={13} />
+                Report Issue
+              </button>
+              <button 
+                className="btn-bronze" 
+                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '7px' }}
+                onClick={() => onOpenRateModal && onOpenRateModal(b)}
+              >
+                🧠 Rate AI (+50 pts)
+              </button>
+            </div>
           </div>
         ))}
       </div>

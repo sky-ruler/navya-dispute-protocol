@@ -23,7 +23,8 @@ export const DisputeDetailsPage = ({
   disputeId, 
   onBack, 
   onDisputeUpdated,
-  activeRole 
+  activeRole,
+  onOpenRateModal
 }) => {
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -99,11 +100,22 @@ export const DisputeDetailsPage = ({
         </div>
 
         {/* Header Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <button className="btn-secondary" onClick={() => window.print()} style={{ fontSize: '12.5px' }}>
             <Printer size={14} />
             Print Slip
           </button>
+
+          {batch && onOpenRateModal && (
+            <button 
+              className="btn-bronze" 
+              onClick={() => onOpenRateModal(batch)} 
+              style={{ fontSize: '12.5px' }}
+              title="Help train Navya AI model by rating prediction accuracy"
+            >
+              🧠 Rate AI (+50 pts)
+            </button>
+          )}
 
           {dispute.status !== 'RESOLVED' && (
             <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>

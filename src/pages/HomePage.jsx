@@ -12,7 +12,12 @@ import {
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
 
-export const HomePage = ({ setCurrentView, onSelectDispute, disputes }) => {
+export const HomePage = ({ 
+  setCurrentView, 
+  onSelectDispute, 
+  disputes,
+  onOpenRateModal 
+}) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
 
   return (
@@ -126,6 +131,60 @@ export const HomePage = ({ setCurrentView, onSelectDispute, disputes }) => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* AI Reinforcement Learning Feedback Card */}
+      <section style={{
+        background: 'linear-gradient(135deg, #fef9ee 0%, #edf8f2 100%)',
+        border: '1px solid #fed7aa',
+        borderRadius: 'var(--radius-lg)',
+        padding: '20px 24px',
+        marginBottom: '28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px',
+        boxShadow: 'var(--shadow-sm)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            background: 'var(--navya-forest-800)',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px',
+            flexShrink: 0
+          }}>
+            🧠
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+                Help Train Navya AI & Earn Scan Credits
+              </span>
+              <span style={{ fontSize: '11px', fontWeight: 700, background: '#f59e0b', color: '#fff', padding: '2px 8px', borderRadius: '12px' }}>
+                +50 Pts (₹25)
+              </span>
+            </div>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px', maxWidth: '560px' }}>
+              Tell our reinforcement learning model how long your produce actually lasted compared to our estimate. Your rating makes future predictions more accurate!
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="btn-bronze"
+          onClick={() => onOpenRateModal && onOpenRateModal()}
+          style={{ padding: '9px 18px', fontSize: '13px', flexShrink: 0 }}
+        >
+          Rate a Prediction (+50 pts)
+        </button>
       </section>
 
       {/* Super Simple 3 Steps */}
