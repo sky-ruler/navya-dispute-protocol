@@ -32,42 +32,6 @@ export const HomePage = ({
 
   return (
     <div className="home-page-container">
-      {/* Multilingual Welcome Banner */}
-      <section className="multilingual-welcome-ribbon notranslate" translate="no">
-        <div className="welcome-ribbon-left notranslate" translate="no">
-          <Globe size={18} className="welcome-globe-icon notranslate" />
-          <span className="welcome-ribbon-text notranslate" translate="no">
-            अपनी भाषा में उपयोग करें • ନିଜ ମାତୃଭାଷାରେ ବ୍ୟବହାର କରନ୍ତୁ • Regional Language:
-          </span>
-        </div>
-        <div className="welcome-ribbon-chips notranslate" translate="no">
-          {TOP_LANGUAGES.map((code) => {
-            const lang = SUPPORTED_LANGUAGES.find(l => l.code === code);
-            if (!lang) return null;
-            const isSelected = currentLang === code;
-            return (
-              <button
-                key={code}
-                type="button"
-                className={`welcome-lang-chip notranslate ${isSelected ? 'active' : ''}`}
-                translate="no"
-                onClick={() => languageService.setLanguage(code)}
-              >
-                {lang.native} ({lang.english})
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            className="welcome-lang-more notranslate"
-            translate="no"
-            onClick={onOpenLanguageModal}
-          >
-            + All 10 Languages ▾
-          </button>
-        </div>
-      </section>
-
       {/* Editorial Clean Hero Section */}
       <section className="hero-banner">
         <div className="hero-ambient-glow" />
