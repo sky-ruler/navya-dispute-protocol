@@ -14,6 +14,51 @@
   <body>
     <div id="root"></div>
 
+    <!-- Prevent Google Translate Top Banner from covering Navbar -->
+    <style>
+      /* Hide top Google Translate banner frame & direct body skiptranslate wrapper */
+      body > .skiptranslate,
+      .goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      iframe.goog-te-banner-frame,
+      iframe[class*="goog-te-banner-frame"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0px !important;
+        width: 0px !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+        pointer-events: none !important;
+      }
+
+      /* Force body to stay at top: 0 with no displacement */
+      body {
+        top: 0px !important;
+        position: static !important;
+        margin-top: 0px !important;
+      }
+
+      /* Keep #google_translate_element dropdown visible and clean */
+      #google_translate_element .skiptranslate {
+        display: inline-block !important;
+        visibility: visible !important;
+        height: auto !important;
+        width: auto !important;
+        position: static !important;
+      }
+
+      /* Hide Google translation hover tooltip */
+      #goog-gt-tt,
+      .goog-te-balloon-frame {
+        display: none !important;
+      }
+      .goog-text-highlight {
+        background: none !important;
+        box-shadow: none !important;
+      }
+    </style>
+
     <!-- Google Translate Multi-Lingual Support Script -->
     <script type="text/javascript">
       function googleTranslateElementInit() {
@@ -26,6 +71,23 @@
           }, 'google_translate_element');
         }
       }
+
+      // Continuously reset inline body.style.top added by Google Translate
+      function suppressGoogleTopBanner() {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.top = '0px';
+        }
+        var topBanner = document.querySelector('body > .skiptranslate');
+        if (topBanner) {
+          topBanner.style.setProperty('display', 'none', 'important');
+        }
+      }
+
+      var observer = new MutationObserver(suppressGoogleTopBanner);
+      window.addEventListener('DOMContentLoaded', function() {
+        observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+        setInterval(suppressGoogleTopBanner, 200);
+      });
     </script>
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
