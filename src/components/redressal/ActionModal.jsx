@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, RefreshCw, AlertOctagon, FileCheck, DollarSign } from 'lucide-react';
+import { X, CheckCircle, RefreshCw, FileCheck, Tag, AlertOctagon } from 'lucide-react';
 
 export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
   if (!isOpen || !dispute) return null;
 
-  const [actionType, setActionType] = useState('CREDIT_NOTE');
-  const [amountInr, setAmountInr] = useState(dispute.estimatedDisputeAmountInr || 10000);
-  const [discountPercent, setDiscountPercent] = useState(25);
-  const [replacementBatchId, setReplacementBatchId] = useState('NAV-2026-REPL-01');
-  const [note, setNote] = useState('');
+  const [actionType, setActionType] = useState('REPLACEMENT_BATCH');
+  const [discountAmount, setDiscountAmount] = useState(1200);
+  const [note, setNote] = useState('Agreed to replace damaged crates from tomorrow morning dispatch lot.');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let newStatus = 'ACTION_PROPOSED';
     if (actionType === 'REJECT_CLAIM') newStatus = 'REJECTED';
-    if (actionType === 'FULL_PAYOUT' || actionType === 'CREDIT_NOTE') newStatus = 'ACTION_PROPOSED';
 
     const actionData = {
       type: actionType,
-      amountInr: Number(amountInr),
-      discountPercent: Number(discountPercent),
-      replacementBatchId,
-      note: note || `Authorized ${actionType.replace('_', ' ')} based on verified sensor discrepancy.`,
-      proposedBy: "Dealer / Reviewer Panel"
+      amountInr: actionType === 'CREDIT_NOTE' ? Number(discountAmount) : 0,
+      note: note || (actionType === 'REPLACEMENT_BATCH' ? "Will send replacement fresh crates" : `Offered ₹${discountAmount} discount`),
+      proposedBy: "Dealer / Aggregator"
     };
 
     onActionSubmit(dispute.id, newStatus, actionData);
@@ -31,46 +26,29 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '580px' }}>
+      <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
         <div className="modal-header">
           <div>
-            <div className="modal-title">Take Redressal Action</div>
+            <div className="modal-title" style={{ fontSize: '17px' }}>Offer a Solution</div>
             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-              Ticket {dispute.id} • Batch: {dispute.batchId} ({dispute.crop})
+              Ticket {dispute.id} • {dispute.crop} ({dispute.affectedCrates} crates affected)
             </div>
           </div>
           <button className="evidence-remove-btn" onClick={onClose} style={{ position: 'static' }}>
-            <X size={16} />
+            <X size={15} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
-            {/* Action Type Selector */}
             <div className="form-group">
-              <label className="form-label">Select Resolution Protocol <span className="req">*</span></label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+              <label className="form-label">Select How You Want to Solve This:</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 <div
-                  onClick={() => setActionType('CREDIT_NOTE')}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '8px',
-                    border: `1.5px solid ${actionType === 'CREDIT_NOTE' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
-                    background: actionType === 'CREDIT_NOTE' ? 'var(--navya-success-bg)' : '#ffffff',
-                    cursor: 'pointer'
+                  onClick={() => {
+                    setActionType('REPLACEMENT_BATCH');
+                    setNote('Agreed to send replacement fresh crates from next delivery.');
                   }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13.5px', color: 'var(--navya-forest-800)' }}>
-                    <DollarSign size={15} />
-                    Credit Note / Discount
-                  </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Issue partial financial credit for damaged lot
-                  </div>
-                </div>
-
-                <div
-                  onClick={() => setActionType('REPLACEMENT_BATCH')}
                   style={{
                     padding: '12px',
                     borderRadius: '8px',
@@ -79,17 +57,42 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                     cursor: 'pointer'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13.5px', color: 'var(--navya-forest-800)' }}>
-                    <RefreshCw size={15} />
-                    Dispatch Replacement
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
+                    <RefreshCw size={14} />
+                    Send Replacement
                   </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Send fresh certified crates with FEFO priority
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Replace the {dispute.affectedCrates} damaged crates
                   </div>
                 </div>
 
                 <div
-                  onClick={() => setActionType('MANDATORY_RESCAN')}
+                  onClick={() => {
+                    setActionType('CREDIT_NOTE');
+                    setNote(`Offered ₹${discountAmount} price discount for the spoiled produce.`);
+                  }}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: `1.5px solid ${actionType === 'CREDIT_NOTE' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
+                    background: actionType === 'CREDIT_NOTE' ? 'var(--navya-success-bg)' : '#ffffff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
+                    <Tag size={14} />
+                    Price Discount
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Deduct reasonable amount from bill
+                  </div>
+                </div>
+
+                <div
+                  onClick={() => {
+                    setActionType('MANDATORY_RESCAN');
+                    setNote('Requested a sensor re-scan at the local Mandi Kiosk.');
+                  }}
                   style={{
                     padding: '12px',
                     borderRadius: '8px',
@@ -98,17 +101,20 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                     cursor: 'pointer'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13.5px', color: 'var(--navya-forest-800)' }}>
-                    <FileCheck size={15} />
-                    Order Kiosk Re-Scan
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-forest-800)' }}>
+                    <FileCheck size={14} />
+                    Kiosk Re-Check
                   </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Request mandi kiosk sensor re-verification
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Test at nearest mandi sensor kiosk
                   </div>
                 </div>
 
                 <div
-                  onClick={() => setActionType('REJECT_CLAIM')}
+                  onClick={() => {
+                    setActionType('REJECT_CLAIM');
+                    setNote('Photos or sensor data show normal condition. Cannot accept deduction.');
+                  }}
                   style={{
                     padding: '12px',
                     borderRadius: '8px',
@@ -117,74 +123,50 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
                     cursor: 'pointer'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13.5px', color: 'var(--navya-danger)' }}>
-                    <AlertOctagon size={15} />
-                    Contest / Reject Claim
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', color: 'var(--navya-danger)' }}>
+                    <AlertOctagon size={14} />
+                    Decline Claim
                   </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Reject claim with telemetry contradiction proof
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Decline with explanation
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Dynamic fields based on action type */}
             {actionType === 'CREDIT_NOTE' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                <div className="form-group">
-                  <label className="form-label">Compensation Amount (₹)</label>
-                  <input
-                    type="number"
-                    className="form-input"
-                    value={amountInr}
-                    onChange={(e) => setAmountInr(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Discount Percentage (%)</label>
-                  <input
-                    type="number"
-                    className="form-input"
-                    value={discountPercent}
-                    onChange={(e) => setDiscountPercent(e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-
-            {actionType === 'REPLACEMENT_BATCH' && (
               <div className="form-group">
-                <label className="form-label">Replacement Batch Token / ID</label>
+                <label className="form-label">Discount Amount (₹)</label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-input"
-                  value={replacementBatchId}
-                  onChange={(e) => setReplacementBatchId(e.target.value)}
-                  placeholder="e.g. NAV-2026-REPL-01"
+                  value={discountAmount}
+                  onChange={(e) => setDiscountAmount(e.target.value)}
+                  placeholder="e.g. 1000"
                 />
               </div>
             )}
 
             <div className="form-group">
-              <label className="form-label">Formal Redressal Statement / Feedback Note <span className="req">*</span></label>
+              <label className="form-label">Message / Note to Counterparty</label>
               <textarea
                 className="form-textarea"
-                rows={3}
+                rows={2}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Specify agreed terms, insurance coverage, or reasons for resolution..."
+                placeholder="Explain the solution details..."
                 required
               />
             </div>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn-secondary" onClick={onClose}>
+            <button type="button" className="btn-secondary" onClick={onClose} style={{ fontSize: '13px' }}>
               Cancel
             </button>
-            <button type="submit" className={actionType === 'REJECT_CLAIM' ? 'btn-danger' : 'btn-primary'}>
-              <CheckCircle size={15} />
-              Confirm & Execute Action
+            <button type="submit" className="btn-primary" style={{ fontSize: '13px' }}>
+              <CheckCircle size={14} />
+              Confirm & Send Solution
             </button>
           </div>
         </form>

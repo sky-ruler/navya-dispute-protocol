@@ -1,147 +1,79 @@
 import React from 'react';
 import { 
-  FileText, 
-  QrCode, 
-  UploadCloud, 
-  ShieldCheck, 
+  PlusCircle, 
+  Inbox, 
   ArrowRight, 
-  Activity, 
   CheckCircle2, 
-  Clock, 
-  DollarSign, 
-  Sparkles,
-  Inbox,
-  AlertCircle
+  QrCode, 
+  Camera, 
+  Shield, 
+  Leaf,
+  HelpCircle
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
 
-export const HomePage = ({ setCurrentView, onSelectDispute, disputes, activeRole }) => {
+export const HomePage = ({ setCurrentView, onSelectDispute, disputes }) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
-  const resolvedCount = disputes.filter(d => d.status === 'RESOLVED').length;
 
   return (
     <div className="home-page-container">
-      {/* Hero Banner */}
-      <section className="hero-banner">
-        <div className="hero-pill">
-          <Sparkles size={13} />
-          <span>Navya Agritech Protocol • SIH 2026</span>
+      {/* Simple, Welcoming Banner */}
+      <section style={{
+        background: 'linear-gradient(135deg, #003d2c 0%, #00261b 100%)',
+        borderRadius: 'var(--radius-lg)',
+        padding: '36px 32px',
+        color: '#ffffff',
+        marginBottom: '28px',
+        boxShadow: 'var(--shadow-md)'
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'rgba(255, 255, 255, 0.12)',
+          padding: '4px 12px',
+          borderRadius: '20px',
+          fontSize: '12px',
+          fontWeight: 600,
+          color: 'var(--navya-lime-tint)',
+          marginBottom: '14px'
+        }}>
+          <Leaf size={14} />
+          <span>Navya Agritech • Produce Quality Redressal</span>
         </div>
-        <h1 className="hero-title">
-          Verifiable Post-Harvest Produce Dispute & Redressal Protocol
+
+        <h1 style={{ fontSize: '28px', fontWeight: 800, lineHeight: 1.25, color: '#ffffff', marginBottom: '10px' }}>
+          Received Damaged or Spoiled Produce?
         </h1>
-        <p className="hero-subtitle">
-          Eliminating arbitrary quality deductions and mistrust between farmers, aggregators, and dealers. 
-          Resolve spoilage and transit damage claims with objective SGP30 gas telemetry and environmental audit trails.
+        <p style={{ fontSize: '15px', color: '#c2d5cd', maxWidth: '640px', lineHeight: 1.5, marginBottom: '24px' }}>
+          Report quality issues directly to your dealer or farmer. Backed by Navya sensor checks, both parties see the truth so problems get solved fairly and quickly.
         </p>
 
-        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
-          <button className="btn-primary" onClick={() => setCurrentView('file-complaint')}>
-            <UploadCloud size={16} />
-            File a Quality Claim
-          </button>
-          <button 
-            className="btn-secondary" 
-            style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#fff', borderColor: 'rgba(255, 255, 255, 0.3)' }}
-            onClick={() => setCurrentView('inbox')}
+        {/* Big 2 Core Actions */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+          <div 
+            onClick={() => setCurrentView('file-complaint')}
+            style={{
+              background: '#ffffff',
+              color: 'var(--navya-forest-800)',
+              borderRadius: 'var(--radius-md)',
+              padding: '20px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'transform 0.15s ease',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+            }}
           >
-            <Inbox size={16} />
-            Open Claims Inbox ({pendingCount} Actionable)
-          </button>
-        </div>
-
-        <div className="hero-stats-row">
-          <div className="stat-item">
-            <span className="stat-val">98.4%</span>
-            <span className="stat-label">Bilateral Resolution Rate</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-val">&lt; 3.5 hrs</span>
-            <span className="stat-label">Avg. Claim Settlement Time</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-val">₹4,80,000+</span>
-            <span className="stat-label">Farmer Value Protected</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-val">100%</span>
-            <span className="stat-label">Sensor-Audited Claims</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 3 Input Modalities Highlight */}
-      <div className="section-header">
-        <div>
-          <h2 className="section-title">How Would You Like to File Your Claim?</h2>
-          <p className="section-desc">Choose from three fast, verifiable methods to identify your produce batch</p>
-        </div>
-      </div>
-
-      <div className="action-cards-grid">
-        <div className="action-card" onClick={() => setCurrentView('file-complaint')}>
-          <div className="card-icon-box green">
-            <FileText size={24} />
-          </div>
-          <h3 className="card-title">1. Enter Batch ID</h3>
-          <p className="card-text">
-            Type or search any registered Navya Batch ID (e.g. <code>NAV-2026-APL-409</code>) to instantly pull farm-gate quality scores, harvest date, and baseline TVOC.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-            Start with Batch ID <ArrowRight size={14} />
-          </div>
-        </div>
-
-        <div className="action-card" onClick={() => setCurrentView('file-complaint')}>
-          <div className="card-icon-box bronze">
-            <QrCode size={24} />
-          </div>
-          <h3 className="card-title">2. Scan Produce QR Passport</h3>
-          <p className="card-text">
-            Use your phone or webcam to scan the cryptographic QR code affixed to any produce crate or upload a QR snapshot to load telemetry in seconds.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--navya-bronze-dark)' }}>
-            Scan Crate Passport <ArrowRight size={14} />
-          </div>
-        </div>
-
-        <div className="action-card" onClick={() => setCurrentView('file-complaint')}>
-          <div className="card-icon-box blue">
-            <UploadCloud size={24} />
-          </div>
-          <h3 className="card-title">3. Upload Navya Batch Report</h3>
-          <p className="card-text">
-            Drag & drop your official inspection JSON certificate or cold-chain export. Our parser automatically auto-fills all sensor benchmarks.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--navya-info)' }}>
-            Upload Report Document <ArrowRight size={14} />
-          </div>
-        </div>
-      </div>
-
-      {/* 3 Step Redressal Flow */}
-      <section style={{ 
-        background: '#ffffff', 
-        border: '1px solid var(--border-subtle)', 
-        borderRadius: 'var(--radius-lg)', 
-        padding: '32px',
-        marginBottom: '36px',
-        boxShadow: 'var(--shadow-sm)'
-      }}>
-        <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 32px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--navya-bronze-dark)' }}>
-            Objective Truth Protocol
-          </span>
-          <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--navya-forest-800)', marginTop: '4px' }}>
-            Simple, Transparent Farmer-Dealer Redressal
-          </h3>
-          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '6px' }}>
-            A fair dispute mechanism designed to end subjective mandi rejections through verifiable data.
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
-          <div style={{ display: 'flex', gap: '14px' }}>
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: 800 }}>
+                🌿 Report a Problem
+              </div>
+              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                Upload photos & get replacement or discount
+              </div>
+            </div>
             <div style={{
               width: '36px',
               height: '36px',
@@ -151,81 +83,144 @@ export const HomePage = ({ setCurrentView, onSelectDispute, disputes, activeRole
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '15px',
               flexShrink: 0
             }}>
-              1
-            </div>
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '4px' }}>
-                Farmer or Dealer Files Claim
-              </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                If produce arrives damaged, spoiled, or chemically adulterated, upload photo proof and specify the defect category.
-              </div>
+              <PlusCircle size={20} />
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '14px' }}>
+          <div 
+            onClick={() => setCurrentView('inbox')}
+            style={{
+              background: 'rgba(255, 255, 255, 0.12)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              borderRadius: 'var(--radius-md)',
+              padding: '20px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'transform 0.15s ease'
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>
+                📋 View My Complaints
+              </div>
+              <div style={{ fontSize: '12.5px', color: '#c2d5cd', marginTop: '2px' }}>
+                {pendingCount} complaint(s) waiting for response
+              </div>
+            </div>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              background: 'var(--navya-bronze)',
+              background: 'rgba(255, 255, 255, 0.2)',
               color: '#fff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '15px',
               flexShrink: 0
             }}>
-              2
-            </div>
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '4px' }}>
-                Objective Telemetry Check
-              </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Navya compares arrival condition against farm-gate SGP30 gas baselines and SHT31 temperature logs to identify root cause.
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '14px' }}>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'var(--navya-forest-400)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '15px',
-              flexShrink: 0
-            }}>
-              3
-            </div>
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '4px' }}>
-                One-Click Action & Feedback
-              </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Dealer reviews claim, authorizes credit notes or replacement batches, and both parties record bilateral feedback.
-              </div>
+              <Inbox size={20} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Recent Disputes Feed */}
-      <div className="section-header">
+      {/* Super Simple 3 Steps */}
+      <section style={{
+        background: '#ffffff',
+        border: '1px solid var(--border-subtle)',
+        borderRadius: 'var(--radius-lg)',
+        padding: '28px 24px',
+        marginBottom: '28px',
+        boxShadow: 'var(--shadow-sm)'
+      }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)', marginBottom: '18px', textAlign: 'center' }}>
+          How It Works (In 3 Simple Steps)
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              background: 'var(--navya-success-bg)',
+              color: 'var(--navya-forest-800)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 10px',
+              fontWeight: 800,
+              fontSize: '16px'
+            }}>
+              1
+            </div>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+              Scan Crate or Pick Batch
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Simply scan the QR code on your crate or pick the lot from the list.
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              background: 'var(--navya-bronze-light)',
+              color: 'var(--navya-bronze-dark)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 10px',
+              fontWeight: 800,
+              fontSize: '16px'
+            }}>
+              2
+            </div>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+              Take a Photo
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Show the damaged or spoiled fruits so the dealer clearly sees the issue.
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              background: 'var(--navya-success-bg)',
+              color: 'var(--navya-forest-800)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 10px',
+              fontWeight: 800,
+              fontSize: '16px'
+            }}>
+              3
+            </div>
+            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+              Get Replacement or Discount
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              Dealer reviews the sensor proof and sends fresh crates or a price discount.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Complaints */}
+      <div className="section-header" style={{ marginBottom: '14px' }}>
         <div>
-          <h2 className="section-title">Recent Dispute & Feedback Tickets</h2>
-          <p className="section-desc">Active resolution tickets across APMC mandis and logistics hubs</p>
+          <h2 className="section-title" style={{ fontSize: '20px' }}>Recent Quality Issues</h2>
+          <p className="section-desc">Click on any ticket to see how it was resolved</p>
         </div>
         <button className="btn-secondary" onClick={() => setCurrentView('inbox')}>
           View All ({disputes.length})
@@ -233,42 +228,36 @@ export const HomePage = ({ setCurrentView, onSelectDispute, disputes, activeRole
       </div>
 
       <div className="disputes-list">
-        {disputes.slice(0, 3).map((d) => (
+        {disputes.map((d) => (
           <div 
             key={d.id} 
             className="dispute-item-card"
             onClick={() => onSelectDispute(d.id)}
+            style={{ padding: '16px 20px' }}
           >
             <div className="dispute-main-col">
-              <div className="crop-badge-avatar">
+              <div className="crop-badge-avatar" style={{ width: '42px', height: '42px', fontSize: '20px' }}>
                 {d.emoji}
               </div>
               <div className="dispute-meta-block">
-                <div className="dispute-title-row">
+                <div className="dispute-title-row" style={{ gap: '8px' }}>
                   <span className="dispute-id-code">{d.id}</span>
                   <span style={{ color: 'var(--text-subtle)' }}>•</span>
-                  <span className="dispute-crop-name">{d.crop} ({d.variety})</span>
+                  <span className="dispute-crop-name">{d.crop}</span>
                   <StatusBadge status={d.status} />
                 </div>
-                <div className="dispute-desc-snippet">
-                  {d.defectTitle}: {d.description}
+                <div style={{ fontSize: '13.5px', color: 'var(--text-body)', fontWeight: 600, marginTop: '2px' }}>
+                  {d.defectTitle}
                 </div>
-                <div className="dispute-tags-row">
-                  <span>Batch: <strong>{d.batchId}</strong></span>
-                  <span>•</span>
-                  <span>{d.affectedCrates} Crates ({d.affectedKg} kg)</span>
-                  <span>•</span>
-                  <span>Filed: {d.filingDate}</span>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  {d.affectedCrates} Crates • Batch: {d.batchId} • {d.filingDate}
                 </div>
               </div>
             </div>
 
             <div className="dispute-action-col">
-              <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                ₹{d.estimatedDisputeAmountInr?.toLocaleString('en-IN')}
-              </span>
               <button className="btn-secondary" style={{ padding: '6px 14px', fontSize: '12px' }}>
-                Review Ticket →
+                View →
               </button>
             </div>
           </div>

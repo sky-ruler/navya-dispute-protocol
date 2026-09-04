@@ -1,6 +1,6 @@
 // =========================================================
-// NAVYA POST-HARVEST MOCK REPOSITORY & SEED TELEMETRY
-// Pre-loaded with realistic SGP30 gas curves, SHT31 data, and dispute logs
+// NAVYA MOCK REPOSITORY — SIMPLIFIED & REALISTIC
+// Non-inflated, practical data suitable for hackathon evaluation
 // =========================================================
 
 export const SEED_BATCHES = [
@@ -17,11 +17,11 @@ export const SEED_BATCHES = [
     },
     dealer: {
       name: "FreshRoots Mandi Logistics",
-      hub: "Azadpur Mandi Hub #4, Delhi",
+      hub: "Azadpur Mandi, Delhi",
       contact: "Anil Mehra (+91 98711 00234)"
     },
-    quantityCrates: 180,
-    quantityKg: 3600,
+    quantityCrates: 120,
+    quantityKg: 2400,
     harvestDate: "2026-09-01",
     certifiedGrade: "Grade A",
     farmGateScore: 92,
@@ -30,11 +30,10 @@ export const SEED_BATCHES = [
       tvoc_ppb: 125,
       eco2_ppm: 440,
       temp_c: 16.5,
-      humidity_rh: 68.2,
-      dvoc_dt_slope: 0.12 // Normal gradual ripening slope
+      humidity_rh: 68.2
     },
-    lastCheckpoint: "Warehouse Dispatch Gate 2",
-    checkpointTimestamp: "2026-09-03 14:30 IST",
+    lastCheckpoint: "Warehouse Dispatch Gate",
+    checkpointTimestamp: "2026-09-03 14:30",
     status: "DISPATCHED"
   },
   {
@@ -49,25 +48,24 @@ export const SEED_BATCHES = [
       phone: "+91 94220 89112"
     },
     dealer: {
-      name: "Apex Retail Marts & QuickCommerce",
-      hub: "Vashi APMC Center, Navi Mumbai",
+      name: "Apex Retail Hub",
+      hub: "Vashi APMC Market, Navi Mumbai",
       contact: "Sunil Shinde (+91 98200 45678)"
     },
-    quantityCrates: 120,
-    quantityKg: 2400,
+    quantityCrates: 80,
+    quantityKg: 1600,
     harvestDate: "2026-08-31",
-    certifiedGrade: "Grade A+",
-    farmGateScore: 96,
+    certifiedGrade: "Grade A",
+    farmGateScore: 95,
     predictedShelfLifeDays: 7,
     initialTelemetry: {
       tvoc_ppb: 280,
       eco2_ppm: 510,
       temp_c: 22.0,
-      humidity_rh: 60.5,
-      dvoc_dt_slope: 0.85 // High slope — potential carbide suspicion
+      humidity_rh: 60.5
     },
-    lastCheckpoint: "Warehouse Intake Bay 4",
-    checkpointTimestamp: "2026-09-02 09:15 IST",
+    lastCheckpoint: "Warehouse Intake Gate",
+    checkpointTimestamp: "2026-09-02 09:15",
     status: "IN_TRANSIT"
   },
   {
@@ -82,12 +80,12 @@ export const SEED_BATCHES = [
       phone: "+91 97654 32109"
     },
     dealer: {
-      name: "QuickFresh Dark Stores",
-      hub: "Pune Western Distribution Hub",
+      name: "QuickFresh Local Center",
+      hub: "Pune Western Mandi",
       contact: "Pooja Deshmukh (+91 91580 98765)"
     },
-    quantityCrates: 300,
-    quantityKg: 6000,
+    quantityCrates: 150,
+    quantityKg: 3000,
     harvestDate: "2026-09-02",
     certifiedGrade: "Grade B+",
     farmGateScore: 84,
@@ -96,17 +94,16 @@ export const SEED_BATCHES = [
       tvoc_ppb: 140,
       eco2_ppm: 460,
       temp_c: 24.2,
-      humidity_rh: 72.0,
-      dvoc_dt_slope: 0.22
+      humidity_rh: 72.0
     },
-    lastCheckpoint: "Cold Storage Dwell Stage",
-    checkpointTimestamp: "2026-09-03 18:00 IST",
+    lastCheckpoint: "Cold Storage Dock",
+    checkpointTimestamp: "2026-09-03 18:00",
     status: "DELIVERED"
   },
   {
     id: "NAV-2026-BAN-554",
     crop: "Banana",
-    variety: "Robusta Cavendish",
+    variety: "Robusta",
     emoji: "🍌",
     farmer: {
       name: "Venkatesh Rao",
@@ -115,12 +112,12 @@ export const SEED_BATCHES = [
       phone: "+91 93700 65432"
     },
     dealer: {
-      name: "Metro Fresh Aggregation",
-      hub: "Kalyan Mandi Complex, Mumbai",
+      name: "Metro Mandi Aggregators",
+      hub: "Kalyan Mandi, Mumbai",
       contact: "Vikram Jadhav (+91 98900 11223)"
     },
-    quantityCrates: 220,
-    quantityKg: 4400,
+    quantityCrates: 140,
+    quantityKg: 2800,
     harvestDate: "2026-08-30",
     certifiedGrade: "Grade A",
     farmGateScore: 90,
@@ -129,11 +126,10 @@ export const SEED_BATCHES = [
       tvoc_ppb: 380,
       eco2_ppm: 620,
       temp_c: 19.8,
-      humidity_rh: 75.0,
-      dvoc_dt_slope: 0.45
+      humidity_rh: 75.0
     },
-    lastCheckpoint: "Dispatch Bay 1",
-    checkpointTimestamp: "2026-09-02 22:00 IST",
+    lastCheckpoint: "Dispatch Gate",
+    checkpointTimestamp: "2026-09-02 22:00",
     status: "DELIVERED"
   }
 ];
@@ -146,16 +142,16 @@ export const SEED_DISPUTES = [
     variety: "Royal Delicious",
     emoji: "🍎",
     complainantRole: "DEALER",
-    complainantName: "Anil Mehra (FreshRoots Mandi Logistics)",
+    complainantName: "Anil Mehra (FreshRoots Mandi)",
     respondentName: "Rajesh Kumar (Shimla Orchards FPO)",
-    filingDate: "2026-09-04 11:20 IST",
+    filingDate: "Today, 11:20 AM",
     defectCategory: "PREMATURE_DECAY",
-    defectTitle: "Bottom Layer Fungal Condensation & Premature Softening",
-    description: "Upon unloading crates 40 through 75 at Azadpur dock, bottom layer apples exhibited wet breakdown and fungal spotting. The surface scans at farm-gate indicated Grade A, but trapped condensation during dispatch accelerated decay.",
+    defectTitle: "Bottom Layer Softening & Moisture Spoilage",
+    description: "About 15 crates at the bottom of the truck had moisture condensation and were starting to soften. Top crates are fine.",
     severity: "MODERATE",
-    affectedCrates: 35,
-    affectedKg: 700,
-    estimatedDisputeAmountInr: 12500,
+    affectedCrates: 15,
+    affectedKg: 300,
+    estimatedDisputeAmountInr: 1200, // Modest realistic adjustment
     requestedRemedy: "CREDIT_NOTE",
     evidenceImages: [
       "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80",
@@ -164,35 +160,35 @@ export const SEED_DISPUTES = [
     status: "ACTION_PROPOSED",
     telemetryComparison: {
       farmGateTvoc: 125,
-      arrivalReportedTvoc: 410, // Accelerated VOC decay
-      normalDecayTvoc: 195,
-      tempDelta: "+4.5°C over optimal",
-      verdict: "Accelerated ripening driven by transport humidity entrapment (84% RH recorded on arrival)."
+      arrivalReportedTvoc: 380,
+      normalDecayTvoc: 180,
+      simpleStatus: "EARLY_DECAY",
+      simpleVerdict: "Sensor check confirms higher moisture & ripening gases than normal. Bottom crates experienced moisture entrapment during transport."
     },
     timeline: [
       {
-        time: "2026-09-04 11:20 IST",
+        time: "11:20 AM",
         actor: "FreshRoots Mandi (Dealer)",
-        action: "Filed Quality Claim #DISP-8041 with 2 photographic proofs."
+        action: "Reported 15 softened crates with 2 photos."
       },
       {
-        time: "2026-09-04 13:45 IST",
-        actor: "Navya Automated Telemetry Matcher",
-        action: "Correlated arrival TVOC delta (+215 ppb) vs. farm-gate baseline. Humidity abuse identified."
+        time: "11:22 AM",
+        actor: "Navya Sensor Check",
+        action: "Confirmed early ripening gases in truck bottom."
       },
       {
-        time: "2026-09-04 15:10 IST",
+        time: "02:15 PM",
         actor: "Rajesh Kumar (Farmer FPO)",
-        action: "Reviewed claim. Proposed 25% Credit Note (₹12,500) and FEFO reroute for fast retail sale."
+        action: "Offered ₹1,200 discount for the 15 damaged crates."
       }
     ],
     proposedAction: {
       type: "CREDIT_NOTE",
-      amountInr: 12500,
-      discountPercent: 25,
-      note: "Authorized 25% credit adjustment against invoice #INV-9904. Farmer FPO will claim transport transit insurance for condensation flaw.",
+      amountInr: 1200,
+      discountPercent: 15,
+      note: "Offered ₹1,200 discount on invoice for the 15 damaged crates.",
       proposedBy: "Rajesh Kumar (Farmer)",
-      proposedAt: "2026-09-04 15:10 IST"
+      proposedAt: "Today, 02:15 PM"
     },
     feedback: null
   },
@@ -203,16 +199,16 @@ export const SEED_DISPUTES = [
     variety: "Ratnagiri Alphonso",
     emoji: "🥭",
     complainantRole: "DEALER",
-    complainantName: "Sunil Shinde (Apex Retail Marts)",
+    complainantName: "Sunil Shinde (Apex Retail)",
     respondentName: "Ganesh Patil (Konkan Mango Coop)",
-    filingDate: "2026-09-03 16:40 IST",
+    filingDate: "Yesterday, 04:40 PM",
     defectCategory: "CARBIDE_SUSPICION",
-    defectTitle: "Abnormal Acetylene Spike & Surface Pitting",
-    description: "Retail intake kiosk flagged a sharp dVOC/dt slope. Visual color shows bright canary yellow, but pulp density remains raw-hard. Strong suspicion of post-harvest calcium carbide treatment by transit handler.",
+    defectTitle: "Chemical Smell & Unnatural Yellowing",
+    description: "Mangoes smell strongly like artificial carbide and skin is yellow but pulp is completely hard inside. Requesting sensor re-check.",
     severity: "CRITICAL",
-    affectedCrates: 60,
-    affectedKg: 1200,
-    estimatedDisputeAmountInr: 45000,
+    affectedCrates: 20,
+    affectedKg: 400,
+    estimatedDisputeAmountInr: 2500,
     requestedRemedy: "KIOSK_RESCAN",
     evidenceImages: [
       "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80"
@@ -220,26 +216,21 @@ export const SEED_DISPUTES = [
     status: "UNDER_INVESTIGATION",
     telemetryComparison: {
       farmGateTvoc: 280,
-      arrivalReportedTvoc: 1850, // Massive spike
-      normalDecayTvoc: 360,
-      tempDelta: "+1.2°C",
-      verdict: "Severe slope anomaly (dVOC/dt = 2.45). Consistent with acetylene gas presence rather than natural ethylene."
+      arrivalReportedTvoc: 1650,
+      normalDecayTvoc: 350,
+      simpleStatus: "CHEMICAL_ALERT",
+      simpleVerdict: "High gas spike detected. Chemistry signature indicates potential artificial ripening gas rather than natural ethylene."
     },
     timeline: [
       {
-        time: "2026-09-03 16:40 IST",
-        actor: "Apex Retail Marts",
-        action: "Flagged Batch NAV-2026-MNG-118 for suspicious chemical ripening signature."
+        time: "Yesterday, 04:40 PM",
+        actor: "Sunil Shinde (Dealer)",
+        action: "Reported chemical odor on 20 crates."
       },
       {
-        time: "2026-09-03 17:05 IST",
-        actor: "Navya AI Fraud Engine",
-        action: "High Fraud Likelihood (88%). Gas-vision mismatch detected: Skin chrominance indicates ripe, pulp texture indicates unripened."
-      },
-      {
-        time: "2026-09-04 09:30 IST",
-        actor: "System Administrator",
-        action: "Batch placed on hold at Vashi APMC dock. Kiosk physical re-scan scheduled."
+        time: "Yesterday, 04:45 PM",
+        actor: "Navya Sensor Check",
+        action: "Flagged abnormal gas spike. Scheduled kiosk re-scan."
       }
     ],
     proposedAction: null,
@@ -252,16 +243,16 @@ export const SEED_DISPUTES = [
     variety: "Organic Roma",
     emoji: "🍅",
     complainantRole: "FARMER",
-    complainantName: "Sita Devi (Nashik Valley Kisan Cluster)",
-    respondentName: "QuickFresh Dark Stores",
-    filingDate: "2026-09-02 18:30 IST",
+    complainantName: "Sita Devi (Farmer)",
+    respondentName: "QuickFresh Local Center",
+    filingDate: "2 days ago",
     defectCategory: "TRANSIT_HEAT_ABUSE",
-    defectTitle: "Unrecorded 8-Hour Reefer Shutdown During Transit",
-    description: "The dealer attempted to penalize the farmer for Grade C delivery at Pune hub. However, Navya GPS & SHT31 sensor log proves the logistics vehicle turned off cooling for 8 hours in transit (cabin reached 38°C), causing heat blanching.",
+    defectTitle: "Tomatoes Overheated During Highway Haul",
+    description: "Buyer wanted to cut price claiming Grade C. But truck temperature sensor showed truck sat in direct heat without cooling, which overheated the tomatoes.",
     severity: "CRITICAL",
-    affectedCrates: 150,
-    affectedKg: 3000,
-    estimatedDisputeAmountInr: 32000,
+    affectedCrates: 30,
+    affectedKg: 600,
+    estimatedDisputeAmountInr: 1800,
     requestedRemedy: "REPLACEMENT_OR_PAYOUT",
     evidenceImages: [
       "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80"
@@ -269,60 +260,58 @@ export const SEED_DISPUTES = [
     status: "RESOLVED",
     telemetryComparison: {
       farmGateTvoc: 140,
-      arrivalReportedTvoc: 680,
+      arrivalReportedTvoc: 580,
       normalDecayTvoc: 180,
-      tempDelta: "+13.8°C thermal excursion",
-      verdict: "Telemetry exonerates farmer. Transit contractor logged 38°C thermal excursion between 11:00 and 19:00."
+      simpleStatus: "HEAT_EXCURSION",
+      simpleVerdict: "Temperature log confirmed truck temperature exceeded 36°C for 6 hours. Overheating was during transit, not from the farm."
     },
     timeline: [
       {
-        time: "2026-09-02 18:30 IST",
+        time: "2 days ago",
         actor: "Sita Devi (Farmer)",
-        action: "Filed dispute against buyer's arbitrary quality deduction."
+        action: "Submitted proof showing transit overheating."
       },
       {
-        time: "2026-09-02 19:00 IST",
-        actor: "Navya IoT Telemetry Audit",
-        action: "Immutable temperature log confirmed 8 hours above 35°C during highway haul."
+        time: "2 days ago",
+        actor: "Navya Sensor Check",
+        action: "Sensor history confirmed truck temperature went over 36°C."
       },
       {
-        time: "2026-09-03 10:00 IST",
-        actor: "QuickFresh Dark Stores (Dealer)",
-        action: "Accepted fault. Transferred full payment of ₹32,000 to farmer and filed claim against logistics hauler."
+        time: "Yesterday",
+        actor: "QuickFresh (Dealer)",
+        action: "Accepted transport fault. Cleared farmer payment without deduction."
       }
     ],
     proposedAction: {
       type: "FULL_PAYOUT",
-      amountInr: 32000,
+      amountInr: 1800,
       discountPercent: 100,
-      note: "Full compensation disbursed to farmer account via Escrow. Transit company penalized.",
-      proposedBy: "QuickFresh Dark Stores",
-      proposedAt: "2026-09-03 10:00 IST"
+      note: "Cleared full payment without any quality deduction. Transport carrier took responsibility.",
+      proposedBy: "QuickFresh Local Center",
+      proposedAt: "Yesterday, 10:00 AM"
     },
     feedback: {
-      farmerRating: 5,
-      dealerRating: 5,
-      farmerComment: "Navya's sensor log saved me from losing ₹32,000. Truth was clear.",
-      dealerComment: "Telemetry made it easy to pinpoint carrier liability. Transparent resolution."
+      rating: 5,
+      comment: "Sensor data made it very clear that tomatoes were fresh at harvest and ruined by truck heat. Fairly solved!"
     }
   }
 ];
 
 export const SAMPLE_DEFECT_PHOTOS = [
   {
-    name: "Apple Bottom Rotting",
+    name: "Softened / Bruised Produce",
     url: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80"
   },
   {
-    name: "Skin Bruising & Pressure Marks",
+    name: "Pressure Marks & Bruising",
     url: "https://images.unsplash.com/photo-1579613832125-5d34a13ffe0a?w=600&auto=format&fit=crop&q=80"
   },
   {
-    name: "Chemical Ripening Skin Texture",
+    name: "Chemical Ripening Skin Signs",
     url: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&auto=format&fit=crop&q=80"
   },
   {
-    name: "Thermal Breakdown on Tomatoes",
+    name: "Overripe / Heat Softening",
     url: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80"
   }
 ];

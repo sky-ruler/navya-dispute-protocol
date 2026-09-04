@@ -4,21 +4,16 @@ import {
   CheckCircle2, 
   AlertCircle, 
   Send, 
-  Download, 
   Printer, 
   ShieldCheck, 
-  DollarSign, 
   RefreshCw, 
   Star,
   MessageSquare,
-  Activity,
-  FileCheck,
   Building,
-  User,
   Clock,
-  Sparkles
+  ThumbsUp
 } from 'lucide-react';
-import { StatusBadge, SeverityBadge } from '../components/common/StatusBadge';
+import { StatusBadge } from '../components/common/StatusBadge';
 import { TelemetryComparison } from '../components/filing/TelemetryComparison';
 import { ActionModal } from '../components/redressal/ActionModal';
 import { FeedbackModal } from '../components/redressal/FeedbackModal';
@@ -44,7 +39,7 @@ export const DisputeDetailsPage = ({
         <AlertCircle size={48} color="var(--navya-danger)" style={{ margin: '0 auto 12px' }} />
         <h2>Ticket Not Found</h2>
         <button className="btn-secondary" onClick={onBack} style={{ marginTop: '16px' }}>
-          Back to Inbox
+          Back to List
         </button>
       </div>
     );
@@ -65,7 +60,7 @@ export const DisputeDetailsPage = ({
     if (!commentText.trim()) return;
 
     disputeService.addDisputeMessage(dispute.id, {
-      sender: activeRole === 'DEALER' ? 'Dealer Representative' : 'Farmer / FPO Grower',
+      sender: activeRole === 'DEALER' ? 'Dealer' : 'Farmer',
       text: commentText.trim()
     });
 
@@ -73,318 +68,256 @@ export const DisputeDetailsPage = ({
     onDisputeUpdated();
   };
 
-  const handlePrintCertificate = () => {
-    window.print();
-  };
-
   return (
     <div className="dispute-detail-container">
-      {/* Header Bar */}
+      {/* Top Header */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '14px',
-        marginBottom: '24px'
+        gap: '12px',
+        marginBottom: '20px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <button className="btn-secondary" onClick={onBack} style={{ padding: '8px 12px' }}>
-            <ArrowLeft size={16} />
-            Inbox
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button className="btn-secondary" onClick={onBack} style={{ padding: '7px 12px', fontSize: '13px' }}>
+            <ArrowLeft size={15} />
+            Back
           </button>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '24px' }}>{dispute.emoji}</span>
-              <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--navya-forest-800)', fontFamily: 'var(--font-heading)' }}>
-                {dispute.id}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '22px' }}>{dispute.emoji}</span>
+              <h1 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+                {dispute.defectTitle}
               </h1>
               <StatusBadge status={dispute.status} />
-              <SeverityBadge severity={dispute.severity} />
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
-              Batch: <strong style={{ fontFamily: 'var(--font-mono)' }}>{dispute.batchId}</strong> • {dispute.crop} ({dispute.variety}) • Filed: {dispute.filingDate}
+            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+              Ticket: <strong>{dispute.id}</strong> • Batch: <strong>{dispute.batchId}</strong> ({dispute.crop})
             </div>
           </div>
         </div>
 
-        {/* Header Action Tools */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button className="btn-secondary" onClick={handlePrintCertificate}>
-            <Printer size={15} />
-            Print Redressal Slip
+        {/* Header Action Buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="btn-secondary" onClick={() => window.print()} style={{ fontSize: '12.5px' }}>
+            <Printer size={14} />
+            Print Slip
           </button>
-          
+
           {dispute.status !== 'RESOLVED' && (
-            <button className="btn-primary" onClick={() => setIsActionModalOpen(true)}>
-              <DollarSign size={15} />
-              Propose Resolution
+            <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
+              <RefreshCw size={14} />
+              Offer Solution
             </button>
           )}
 
           {dispute.proposedAction && dispute.status !== 'RESOLVED' && (
-            <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)}>
-              <Star size={15} />
-              Accept & Close Ticket
+            <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px' }}>
+              <Star size={14} />
+              Accept & Finish
             </button>
           )}
         </div>
       </div>
 
-      {/* Main Split-Screen Layout */}
+      {/* Main 2-Column Split */}
       <div className="split-detail-grid">
-        {/* LEFT COLUMN: Origin Baseline & Sensor Telemetry */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Card 1: Batch Origin Identity */}
+        {/* LEFT: Batch Origin, Sensor Check, & Photos */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Card 1: Batch Info */}
           <div className="detail-pane">
-            <h3 className="pane-title">
-              <Building size={17} />
-              Produce Batch & Checkpoint Registry
+            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+              <Building size={16} />
+              Batch Origin Details
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px' }}>
               <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '11px', textTransform: 'uppercase' }}>Farmer / FPO</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Farmer</span>
+                <div style={{ fontWeight: 700, color: 'var(--navya-forest-800)' }}>
                   {batch?.farmer?.name || dispute.respondentName}
-                </strong>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-subtle)' }}>{batch?.farmer?.region}</div>
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{batch?.farmer?.region}</div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '11px', textTransform: 'uppercase' }}>Dealer / Aggregator</span>
-                <strong style={{ color: 'var(--navya-forest-800)' }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Dealer</span>
+                <div style={{ fontWeight: 700, color: 'var(--navya-forest-800)' }}>
                   {batch?.dealer?.name || dispute.complainantName}
-                </strong>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-subtle)' }}>{batch?.dealer?.hub}</div>
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{batch?.dealer?.hub}</div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '11px', textTransform: 'uppercase' }}>Certified Grade</span>
-                <span style={{ fontWeight: 700, color: 'var(--navya-success)' }}>
-                  {batch?.certifiedGrade || 'Grade A'} (Score: {batch?.farmGateScore || 92}/100)
-                </span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Quality Grade at Farm</span>
+                <div style={{ fontWeight: 700, color: 'var(--navya-success)' }}>
+                  {batch?.certifiedGrade || 'Grade A'} (Fresh)
+                </div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '11px', textTransform: 'uppercase' }}>Harvest & Dwell Time</span>
-                <span style={{ fontWeight: 600 }}>
-                  {batch?.harvestDate || '2026-09-01'} (3 days transit)
-                </span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Total Lot Size</span>
+                <div style={{ fontWeight: 700 }}>
+                  {batch?.quantityCrates || 100} Crates
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Telemetry Comparison */}
+          {/* Card 2: Simple Sensor Check */}
           <TelemetryComparison
-            batch={batch || { initialTelemetry: { tvoc_ppb: dispute.telemetryComparison.farmGateTvoc, temp_c: 18, humidity_rh: 65 }, certifiedGrade: 'Grade A', predictedShelfLifeDays: 8 }}
+            batch={batch || { initialTelemetry: { tvoc_ppb: 125, temp_c: 18, humidity_rh: 65 }, certifiedGrade: 'Grade A' }}
             comparisonData={dispute.telemetryComparison}
           />
 
-          {/* Card 3: Photo Evidence Gallery */}
+          {/* Card 3: Photos */}
           <div className="detail-pane">
-            <h3 className="pane-title">
-              <FileCheck size={17} />
-              Photographic Proof of Condition ({dispute.evidenceImages?.length || 0})
+            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+              Produce Photos Attached ({dispute.evidenceImages?.length || 0})
             </h3>
 
             {dispute.evidenceImages && dispute.evidenceImages.length > 0 ? (
-              <div className="evidence-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))' }}>
+              <div className="evidence-grid">
                 {dispute.evidenceImages.map((img, i) => (
                   <div 
                     key={i} 
                     className="evidence-thumb-box"
                     style={{ cursor: 'pointer' }}
                     onClick={() => setActiveImageZoom(img)}
-                    title="Click to view high-res evidence"
+                    title="Click to view full photo"
                   >
-                    <img src={img} alt={`Evidence ${i+1}`} className="evidence-thumb-img" />
+                    <img src={img} alt={`Photo ${i+1}`} className="evidence-thumb-img" />
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)', padding: '12px 0' }}>
-                No images attached to this claim.
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                No photos attached.
               </div>
             )}
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Claim Details, Redressal Actions & Negotiation */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Card 1: Complainant's Claim Statement */}
+        {/* RIGHT: Complaint, Solution, and Chat */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* What Was Reported */}
           <div className="detail-pane">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-              <div>
-                <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--navya-bronze-dark)', letterSpacing: '0.04em' }}>
-                  Complainant Grievance Statement
-                </span>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)', marginTop: '2px' }}>
-                  {dispute.defectTitle}
-                </h2>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Claimed Loss</span>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
-                  ₹{dispute.estimatedDisputeAmountInr?.toLocaleString('en-IN')}
-                </div>
-              </div>
+            <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--navya-bronze-dark)' }}>
+              Reported by {dispute.complainantName} ({dispute.filingDate})
             </div>
 
-            <p style={{ fontSize: '14px', color: 'var(--text-body)', lineHeight: 1.6, background: 'var(--bg-surface-subtle)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-subtle)', marginBottom: '16px' }}>
+            <div style={{ fontSize: '14px', color: 'var(--text-body)', marginTop: '8px', lineHeight: 1.5, background: 'var(--bg-surface-subtle)', padding: '12px', borderRadius: '8px' }}>
               "{dispute.description}"
-            </p>
+            </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12.5px' }}>
-              <div style={{ padding: '8px 12px', background: 'var(--bg-surface-subtle)', borderRadius: '6px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Affected Produce:</span>{' '}
-                <strong>{dispute.affectedCrates} Crates ({dispute.affectedKg} kg)</strong>
+            <div style={{ marginTop: '12px', display: 'flex', gap: '16px', fontSize: '13px' }}>
+              <div>
+                <span style={{ color: 'var(--text-muted)' }}>Damaged Crates:</span>{' '}
+                <strong>{dispute.affectedCrates} Crates</strong>
               </div>
-              <div style={{ padding: '8px 12px', background: 'var(--bg-surface-subtle)', borderRadius: '6px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Requested Remedy:</span>{' '}
+              <div>
+                <span style={{ color: 'var(--text-muted)' }}>Preferred Solution:</span>{' '}
                 <strong>{dispute.requestedRemedy?.replace('_', ' ')}</strong>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Proposed Redressal Action / Resolved Banner */}
+          {/* Dealer's Solution Box */}
           {dispute.proposedAction ? (
             <div style={{
               background: dispute.status === 'RESOLVED' ? 'var(--navya-success-bg)' : '#fff8ed',
               border: `1.5px solid ${dispute.status === 'RESOLVED' ? 'var(--navya-success-border)' : '#fed7aa'}`,
               borderRadius: 'var(--radius-lg)',
-              padding: '24px',
-              boxShadow: 'var(--shadow-sm)'
+              padding: '20px'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {dispute.status === 'RESOLVED' ? (
-                    <ShieldCheck size={20} color="var(--navya-success)" />
-                  ) : (
-                    <Clock size={20} color="var(--navya-warning)" />
-                  )}
-                  <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
-                    {dispute.status === 'RESOLVED' ? 'Officially Resolved & Settled' : 'Proposed Redressal Settlement'}
-                  </span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+                  {dispute.status === 'RESOLVED' ? <ShieldCheck size={18} color="var(--navya-success)" /> : <Clock size={18} color="var(--navya-warning)" />}
+                  {dispute.status === 'RESOLVED' ? 'Problem Solved & Agreed' : 'Solution Offered by Dealer'}
                 </div>
-                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                  {dispute.proposedAction.proposedAt}
-                </span>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{dispute.proposedAction.proposedAt}</span>
               </div>
 
-              <div style={{ fontSize: '14px', color: 'var(--text-body)', marginBottom: '14px', lineHeight: 1.5 }}>
+              <div style={{ fontSize: '13.5px', color: 'var(--text-body)', marginBottom: '12px' }}>
                 {dispute.proposedAction.note}
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '12px 16px', background: '#ffffff', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.06)' }}>
-                {dispute.proposedAction.amountInr && (
-                  <div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Credit Authorized</div>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
-                      ₹{dispute.proposedAction.amountInr?.toLocaleString('en-IN')}
-                    </div>
-                  </div>
-                )}
-                {dispute.proposedAction.discountPercent && (
-                  <div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Invoice Discount</div>
-                    <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-bronze-dark)' }}>
-                      {dispute.proposedAction.discountPercent}%
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Action Type</div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                    {dispute.proposedAction.type?.replace('_', ' ')}
-                  </div>
+              {dispute.proposedAction.amountInr > 0 && (
+                <div style={{ display: 'inline-block', padding: '6px 12px', background: '#ffffff', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.08)', fontSize: '13px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                  Discount Agreed: ₹{dispute.proposedAction.amountInr?.toLocaleString('en-IN')}
                 </div>
-              </div>
+              )}
 
-              {/* Bilateral Feedback Display if Resolved */}
               {dispute.feedback && (
-                <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                    <div style={{ color: '#f59e0b', fontSize: '16px' }}>
-                      {'★'.repeat(dispute.feedback.rating || 5)}
-                    </div>
-                    <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                      Bilateral Mutual Trust Score: {dispute.feedback.rating || 5}/5
-                    </span>
+                <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                  <div style={{ color: '#f59e0b', fontSize: '16px' }}>
+                    {'★'.repeat(dispute.feedback.rating || 5)}
                   </div>
-                  <div style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '2px' }}>
                     "{dispute.feedback.comment}"
                   </div>
                 </div>
               )}
 
-              {/* Accept button if action proposed but not yet closed */}
               {dispute.status !== 'RESOLVED' && (
-                <div style={{ marginTop: '18px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button 
-                    className="btn-bronze" 
-                    onClick={() => setIsFeedbackModalOpen(true)}
-                    style={{ padding: '9px 18px' }}
-                  >
-                    <Star size={15} />
-                    Accept Settlement & Close Ticket
+                <div style={{ marginTop: '14px', textAlign: 'right' }}>
+                  <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px', padding: '8px 16px' }}>
+                    <ThumbsUp size={14} />
+                    Accept Solution & Finish
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <div style={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)',
+              background: 'var(--bg-surface-subtle)',
+              border: '1px dashed var(--border-medium)',
               borderRadius: 'var(--radius-lg)',
-              padding: '24px',
+              padding: '20px',
               textAlign: 'center'
             }}>
-              <Clock size={36} color="var(--navya-warning)" style={{ margin: '0 auto 10px' }} />
-              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                Awaiting Dealer / Aggregator Redressal
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                Waiting for Dealer Reply
               </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '360px', margin: '4px auto 16px' }}>
-                Review the sensor telemetry delta on the left and propose a fair credit note, replacement batch, or re-scan.
+              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '4px auto 12px', maxWidth: '320px' }}>
+                Check the sensor verdict and photos, then offer replacement crates or a fair discount.
               </div>
-              <button className="btn-primary" onClick={() => setIsActionModalOpen(true)}>
-                <DollarSign size={15} />
-                Propose Redressal Action Now
+              <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
+                Offer Solution Now
               </button>
             </div>
           )}
 
-          {/* Card 3: Bilateral Discussion Thread */}
+          {/* Simple Message Chat */}
           <div className="detail-pane">
-            <h3 className="pane-title">
-              <MessageSquare size={17} />
-              Farmer-Dealer Negotiation Thread
+            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+              <MessageSquare size={16} />
+              Messages & Activity
             </h3>
 
-            {/* Conversation Timeline */}
             <div className="timeline-track">
               {dispute.timeline?.map((item, idx) => (
                 <div key={idx} className="timeline-node">
                   <div className="timeline-dot"></div>
                   <div className="timeline-node-time">{item.time}</div>
-                  <div className="timeline-node-title">{item.actor}</div>
-                  <div className="timeline-node-text">{item.action}</div>
+                  <div className="timeline-node-title" style={{ fontSize: '13px' }}>{item.actor}</div>
+                  <div className="timeline-node-text" style={{ fontSize: '12px' }}>{item.action}</div>
                 </div>
               ))}
             </div>
 
-            {/* Send note form */}
-            <form onSubmit={handleSendComment} style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+            <form onSubmit={handleSendComment} style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
               <input
                 type="text"
                 className="form-input"
-                placeholder={`Post note as ${activeRole === 'DEALER' ? 'Dealer' : 'Farmer'}...`}
+                style={{ padding: '8px 12px', fontSize: '13px' }}
+                placeholder={`Type a note as ${activeRole === 'DEALER' ? 'Dealer' : 'Farmer'}...`}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
               />
-              <button type="submit" className="btn-primary" style={{ padding: '0 18px', flexShrink: 0 }}>
-                <Send size={15} />
-                Send
+              <button type="submit" className="btn-primary" style={{ padding: '0 14px' }}>
+                <Send size={14} />
               </button>
             </form>
           </div>
@@ -394,12 +327,12 @@ export const DisputeDetailsPage = ({
       {/* Image Zoom Lightbox */}
       {activeImageZoom && (
         <div className="modal-backdrop" onClick={() => setActiveImageZoom(null)}>
-          <div style={{ maxWidth: '800px', width: '90%', position: 'relative' }}>
-            <img src={activeImageZoom} alt="Zoomed evidence" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }} />
+          <div style={{ maxWidth: '700px', width: '90%', position: 'relative' }}>
+            <img src={activeImageZoom} alt="Zoomed evidence" style={{ width: '100%', borderRadius: '10px' }} />
             <button 
               className="evidence-remove-btn" 
               onClick={() => setActiveImageZoom(null)}
-              style={{ position: 'absolute', top: '12px', right: '12px', width: '32px', height: '32px' }}
+              style={{ position: 'absolute', top: '10px', right: '10px' }}
             >
               ✕
             </button>

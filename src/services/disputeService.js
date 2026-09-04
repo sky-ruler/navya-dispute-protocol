@@ -1,15 +1,14 @@
 // =========================================================
-// NAVYA DISPUTE SERVICE
-// Handles dispute lifecycle, LocalStorage persistence, and batch telemetry lookup
+// NAVYA DISPUTE SERVICE — SIMPLIFIED
+// Handles complaint tracking, local storage, and simple sensor matching
 // =========================================================
 
 import { SEED_BATCHES, SEED_DISPUTES } from './mockData';
 
-const STORAGE_KEY_DISPUTES = 'navya_disputes_v1';
-const STORAGE_KEY_BATCHES = 'navya_batches_v1';
+const STORAGE_KEY_DISPUTES = 'navya_disputes_v2';
+const STORAGE_KEY_BATCHES = 'navya_batches_v2';
 
 export const disputeService = {
-  // Initialize storage if empty
   init() {
     if (!localStorage.getItem(STORAGE_KEY_BATCHES)) {
       localStorage.setItem(STORAGE_KEY_BATCHES, JSON.stringify(SEED_BATCHES));
@@ -56,54 +55,49 @@ export const disputeService = {
     const batch = this.getBatchById(data.batchId);
 
     const newId = `DISP-${Math.floor(1000 + Math.random() * 9000)}`;
-    const nowStr = new Date().toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    }) + " IST";
+    const nowStr = "Just now";
 
-    // Compute expected normal decay TVOC vs reported TVOC
     const farmTvoc = batch?.initialTelemetry?.tvoc_ppb || 120;
-    const arrivalTvoc = data.estimatedArrivalTvoc || farmTvoc * 2.5;
-    const normalExpectedTvoc = farmTvoc * 1.5;
+    const arrivalTvoc = data.estimatedArrivalTvoc || farmTvoc * 2.2;
+    const normalExpectedTvoc = farmTvoc * 1.4;
 
     const newDispute = {
       id: newId,
-      batchId: data.batchId ? data.batchId.toUpperCase() : "NAV-CUSTOM-001",
+      batchId: data.batchId ? data.batchId.toUpperCase() : "NAV-CUSTOM-01",
       crop: batch?.crop || data.crop || "Fresh Produce",
       variety: batch?.variety || data.variety || "Standard Lot",
       emoji: batch?.emoji || "📦",
       complainantRole: data.complainantRole || "DEALER",
-      complainantName: data.complainantName || "Verified Stakeholder",
-      respondentName: batch ? (data.complainantRole === "DEALER" ? batch.farmer.name + ` (${batch.farmer.fpo})` : batch.dealer.name) : "Navya Producer Cluster",
+      complainantName: data.complainantName || "Verified User",
+      respondentName: batch ? (data.complainantRole === "DEALER" ? batch.farmer.name : batch.dealer.name) : "Mandi Partner",
       filingDate: nowStr,
       defectCategory: data.defectCategory || "PREMATURE_DECAY",
-      defectTitle: data.defectTitle || "Produce Quality Mismatch",
-      description: data.description || "No description provided.",
+      defectTitle: data.defectTitle || "Produce Quality Issue",
+      description: data.description || "Produce condition does not match farm-gate inspection.",
       severity: data.severity || "MODERATE",
       affectedCrates: Number(data.affectedCrates) || 10,
       affectedKg: Number(data.affectedKg) || 200,
-      estimatedDisputeAmountInr: Number(data.estimatedDisputeAmountInr) || 5000,
-      requestedRemedy: data.requestedRemedy || "CREDIT_NOTE",
+      estimatedDisputeAmountInr: Number(data.estimatedDisputeAmountInr) || 1000,
+      requestedRemedy: data.requestedRemedy || "REPLACEMENT_BATCH",
       evidenceImages: data.evidenceImages || [],
       status: "PENDING_REVIEW",
       telemetryComparison: {
         farmGateTvoc: farmTvoc,
         arrivalReportedTvoc: Math.round(arrivalTvoc),
         normalDecayTvoc: Math.round(normalExpectedTvoc),
-        tempDelta: "+2.8°C excursion during haul",
-        verdict: "Anomaly detected: Arrival TVOC exceeds typical biological decay curve by +65%."
+        simpleStatus: "EARLY_DECAY",
+        simpleVerdict: "Sensor check confirms higher ripening gases than normal. Validates early spoilage or transit heat."
       },
       timeline: [
         {
           time: nowStr,
           actor: data.complainantName || "Complainant",
-          action: `Filed Quality Dispute #${newId} with ${data.evidenceImages?.length || 0} supporting proofs.`
+          action: `Reported issue #${newId} with ${data.evidenceImages?.length || 0} photos.`
         },
         {
           time: nowStr,
-          actor: "Navya Automated Telemetry Matcher",
-          action: "Ingested farm-gate baseline and created verifiable dispute token."
+          actor: "Navya Sensor Check",
+          action: "Verified against farm-gate sensor baseline."
         }
       ],
       proposedAction: null,
@@ -122,11 +116,7 @@ export const disputeService = {
     if (index === -1) return null;
 
     const dispute = { ...disputes[index] };
-    const nowStr = new Date().toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    }) + " IST";
+    const nowStr = "Just now";
 
     dispute.status = newStatus;
 
@@ -138,7 +128,7 @@ export const disputeService = {
       dispute.timeline.push({
         time: nowStr,
         actor: actionData.proposedBy || "Reviewer",
-        action: `Action applied: ${actionData.type.replace('_', ' ')} (${actionData.note || 'Confirmed'})`
+        action: `Solution offered: ${actionData.note || actionData.type.replace('_', ' ')}`
       });
     }
 
@@ -146,8 +136,8 @@ export const disputeService = {
       dispute.feedback = feedbackData;
       dispute.timeline.push({
         time: nowStr,
-        actor: "Mutual Redressal Protocol",
-        action: `Bilateral feedback recorded: Rating ${feedbackData.rating || 5}/5 stars.`
+        actor: "Resolution",
+        action: `Both parties agreed. Rating: ${feedbackData.rating || 5} Stars.`
       });
     }
 
@@ -163,15 +153,9 @@ export const disputeService = {
     if (index === -1) return null;
 
     const dispute = { ...disputes[index] };
-    const nowStr = new Date().toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    }) + " IST";
-
     if (!dispute.timeline) dispute.timeline = [];
     dispute.timeline.push({
-      time: nowStr,
+      time: "Just now",
       actor: message.sender || "Participant",
       action: message.text
     });

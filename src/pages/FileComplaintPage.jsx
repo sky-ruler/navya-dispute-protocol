@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   FileText, 
   QrCode, 
   UploadCloud, 
-  Search, 
   CheckCircle2, 
-  AlertTriangle, 
   Camera, 
   Trash2, 
-  ShieldCheck, 
   ArrowRight,
-  Plus
+  Sparkles,
+  AlertCircle
 } from 'lucide-react';
 import { QrScannerModal } from '../components/filing/QrScannerModal';
 import { ReportUploader } from '../components/filing/ReportUploader';
@@ -19,62 +17,46 @@ import { SEED_BATCHES, SAMPLE_DEFECT_PHOTOS } from '../services/mockData';
 import { disputeService } from '../services/disputeService';
 
 export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
-  // Filing tab: 'batch-id' | 'qr-scan' | 'upload-report'
-  const [activeTab, setActiveTab] = useState('batch-id');
-
-  // Selected Batch state
-  const [batchSearchInput, setBatchSearchInput] = useState('');
   const [selectedBatch, setSelectedBatch] = useState(SEED_BATCHES[0]);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [showReportUploader, setShowReportUploader] = useState(false);
 
-  // Form Fields
-  const [defectCategory, setDefectCategory] = useState('PREMATURE_DECAY');
-  const [defectTitle, setDefectTitle] = useState('Premature Spoilage & Fungal Decay');
-  const [description, setDescription] = useState(
-    'Upon opening crates at destination dock, produce showed signs of accelerated rotting and fungal patches inconsistent with the certified Grade A farm-gate report.'
-  );
-  const [severity, setSeverity] = useState('MODERATE');
-  const [affectedCrates, setAffectedCrates] = useState(25);
-  const [affectedKg, setAffectedKg] = useState(500);
-  const [estimatedDisputeAmountInr, setEstimatedDisputeAmountInr] = useState(12000);
-  const [requestedRemedy, setRequestedRemedy] = useState('CREDIT_NOTE');
+  // Simple, intuitive issue categories
+  const [issueType, setIssueType] = useState('PREMATURE_DECAY');
+  const [damagedCrates, setDamagedCrates] = useState(15);
+  const [notes, setNotes] = useState('About 15 crates at the bottom arrived soft with early moisture damage.');
+  const [remedyChoice, setRemedyChoice] = useState('REPLACEMENT'); // 'REPLACEMENT' | 'DISCOUNT' | 'CHECK'
   const [evidenceImages, setEvidenceImages] = useState([
-    SAMPLE_DEFECT_PHOTOS[0].url,
-    SAMPLE_DEFECT_PHOTOS[1].url
+    SAMPLE_DEFECT_PHOTOS[0].url
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Filter batches for autocomplete
-  const filteredBatches = SEED_BATCHES.filter(b => 
-    b.id.toLowerCase().includes(batchSearchInput.toLowerCase()) ||
-    b.crop.toLowerCase().includes(batchSearchInput.toLowerCase()) ||
-    b.farmer.name.toLowerCase().includes(batchSearchInput.toLowerCase())
-  );
-
-  const handleSelectBatch = (batch) => {
-    setSelectedBatch(batch);
-    setBatchSearchInput(batch.id);
-  };
-
-  const handleBatchScanned = (scannedBatch) => {
-    setSelectedBatch(scannedBatch);
-    setBatchSearchInput(scannedBatch.id);
-  };
-
-  const handleReportParsed = (parsedBatch) => {
-    setSelectedBatch(parsedBatch);
-    setBatchSearchInput(parsedBatch.id);
-  };
-
-  const addSamplePhoto = (photoUrl) => {
-    if (!evidenceImages.includes(photoUrl)) {
-      setEvidenceImages([...evidenceImages, photoUrl]);
+  const issueOptions = [
+    {
+      id: 'PREMATURE_DECAY',
+      title: 'Spoiled / Rotting Early',
+      desc: 'Fruits are soft, leaking, or show fungal moisture patches',
+      emoji: '🍄'
+    },
+    {
+      id: 'CARBIDE_SUSPICION',
+      title: 'Chemical / Carbide Smell',
+      desc: 'Unnatural yellow skin but hard raw pulp inside with odor',
+      emoji: '🧪'
+    },
+    {
+      id: 'TRANSIT_HEAT_ABUSE',
+      title: 'Overheated in Transport',
+      desc: 'Truck cooling failed or sat in direct sunlight',
+      emoji: '🌡️'
+    },
+    {
+      id: 'CRATE_DAMAGE',
+      title: 'Crushed Crates / Damage',
+      desc: 'Rough transit caused physical bruising or breakage',
+      emoji: '📦'
     }
-  };
-
-  const removePhoto = (index) => {
-    setEvidenceImages(evidenceImages.filter((_, i) => i !== index));
-  };
+  ];
 
   const handleCustomPhotoUpload = (e) => {
     const file = e.target.files?.[0];
@@ -87,14 +69,23 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
     }
   };
 
+  const addSamplePhoto = (url) => {
+    if (!evidenceImages.includes(url)) {
+      setEvidenceImages([...evidenceImages, url]);
+    }
+  };
+
+  const removePhoto = (index) => {
+    setEvidenceImages(evidenceImages.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!selectedBatch) {
-      alert("Please select or scan a valid produce batch first.");
-      return;
-    }
+    if (!selectedBatch) return;
 
     setIsSubmitting(true);
+
+    const matchedIssue = issueOptions.find(i => i.id === issueType);
 
     const disputePayload = {
       batchId: selectedBatch.id,
@@ -102,436 +93,290 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
       variety: selectedBatch.variety,
       complainantRole: activeRole,
       complainantName: activeRole === 'DEALER' 
-        ? (selectedBatch.dealer?.name || "GreenRoots Mandi Aggregator") 
-        : (selectedBatch.farmer?.name || "Kisan Producer Member"),
-      defectCategory,
-      defectTitle,
-      description,
-      severity,
-      affectedCrates: Number(affectedCrates),
-      affectedKg: Number(affectedKg),
-      estimatedDisputeAmountInr: Number(estimatedDisputeAmountInr),
-      requestedRemedy,
+        ? (selectedBatch.dealer?.name || "Local Mandi Dealer") 
+        : (selectedBatch.farmer?.name || "Grower Member"),
+      defectCategory: issueType,
+      defectTitle: matchedIssue?.title || "Produce Quality Issue",
+      description: notes || "Produce arrived in substandard condition.",
+      severity: issueType === 'CARBIDE_SUSPICION' ? 'CRITICAL' : 'MODERATE',
+      affectedCrates: Number(damagedCrates) || 10,
+      affectedKg: (Number(damagedCrates) || 10) * 20,
+      estimatedDisputeAmountInr: remedyChoice === 'DISCOUNT' ? 1200 : 0,
+      requestedRemedy: remedyChoice === 'DISCOUNT' ? 'CREDIT_NOTE' : 'REPLACEMENT_BATCH',
       evidenceImages,
-      estimatedArrivalTvoc: defectCategory === 'CARBIDE_SUSPICION' ? 1950 : 420
+      estimatedArrivalTvoc: issueType === 'CARBIDE_SUSPICION' ? 1650 : 380
     };
 
     setTimeout(() => {
       const newDispute = disputeService.createDispute(disputePayload);
       setIsSubmitting(false);
       onDisputeCreated(newDispute.id);
-    }, 600);
+    }, 500);
   };
 
   return (
-    <div className="file-complaint-container">
+    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
       {/* Page Title */}
-      <div className="section-header" style={{ marginBottom: '24px' }}>
-        <div>
-          <h1 className="section-title" style={{ fontSize: '26px' }}>File a Quality Dispute or Claim</h1>
-          <p className="section-desc">
-            Submit a verifiable quality discrepancy backed by Navya produce telemetry
-          </p>
-        </div>
+      <div style={{ marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+          Report a Quality Problem
+        </h1>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+          Fill in 3 simple details so your dealer can review and fix the issue
+        </p>
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* Step 1: Batch Identification Wizard Card */}
-        <div className="wizard-card">
-          <div className="wizard-tabs">
-            <button
-              type="button"
-              className={`wizard-tab-btn ${activeTab === 'batch-id' ? 'active' : ''}`}
-              onClick={() => setActiveTab('batch-id')}
-            >
-              <FileText size={16} />
-              1. Enter Batch ID
-            </button>
-            <button
-              type="button"
-              className={`wizard-tab-btn ${activeTab === 'qr-scan' ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab('qr-scan');
-                setIsQrModalOpen(true);
-              }}
-            >
-              <QrCode size={16} />
-              2. Scan QR Passport
-            </button>
-            <button
-              type="button"
-              className={`wizard-tab-btn ${activeTab === 'upload-report' ? 'active' : ''}`}
-              onClick={() => setActiveTab('upload-report')}
-            >
-              <UploadCloud size={16} />
-              3. Upload Navya Report
-            </button>
+        {/* Step 1: Select Batch */}
+        <div style={{
+          background: '#ffffff',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '24px',
+          marginBottom: '20px',
+          boxShadow: 'var(--shadow-sm)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+              Step 1: Which Produce Batch?
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: '6px 12px', fontSize: '12px' }}
+                onClick={() => setIsQrModalOpen(true)}
+              >
+                <QrCode size={14} />
+                Scan Crate QR
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: '6px 12px', fontSize: '12px' }}
+                onClick={() => setShowReportUploader(!showReportUploader)}
+              >
+                <UploadCloud size={14} />
+                Upload Report
+              </button>
+            </div>
           </div>
 
-          <div className="wizard-body">
-            {/* Tab 1: Batch ID Search & Autocomplete */}
-            {activeTab === 'batch-id' && (
-              <div>
-                <div className="form-group">
-                  <label className="form-label">
-                    Batch ID or Tracking Token <span className="req">*</span>
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="text"
-                      className="form-input"
-                      placeholder="Type or search Batch ID (e.g. NAV-2026-APL-409)..."
-                      value={batchSearchInput}
-                      onChange={(e) => setBatchSearchInput(e.target.value)}
-                    />
-                    <div style={{ position: 'absolute', right: '12px', top: '11px', color: 'var(--text-muted)' }}>
-                      <Search size={18} />
-                    </div>
-                  </div>
-                  <div className="form-help">
-                    Quick suggestions from recent harvest dispatches:
-                  </div>
+          {/* Quick Click Batches */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+            {SEED_BATCHES.map((b) => (
+              <div
+                key={b.id}
+                onClick={() => setSelectedBatch(b)}
+                style={{
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: `1.5px solid ${selectedBatch?.id === b.id ? 'var(--navya-forest-800)' : 'var(--border-subtle)'}`,
+                  background: selectedBatch?.id === b.id ? 'var(--navya-success-bg)' : 'var(--bg-surface-subtle)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <div style={{ fontSize: '20px' }}>{b.emoji}</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)', marginTop: '4px' }}>
+                  {b.crop}
                 </div>
-
-                {/* Autocomplete Quick Pills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '20px' }}>
-                  {SEED_BATCHES.map((b) => (
-                    <button
-                      type="button"
-                      key={b.id}
-                      onClick={() => handleSelectBatch(b)}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 'var(--radius-full)',
-                        border: `1px solid ${selectedBatch?.id === b.id ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
-                        background: selectedBatch?.id === b.id ? 'var(--navya-forest-800)' : '#ffffff',
-                        color: selectedBatch?.id === b.id ? '#ffffff' : 'var(--navya-forest-800)',
-                        fontSize: '12.5px',
-                        fontWeight: 600,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      <span>{b.emoji}</span>
-                      <span>{b.id}</span>
-                      <span style={{ opacity: 0.8, fontSize: '11px' }}>({b.crop})</span>
-                    </button>
-                  ))}
+                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                  {b.id} • {b.quantityCrates} Crates
                 </div>
               </div>
-            )}
+            ))}
+          </div>
 
-            {/* Tab 2: QR Scanner Helper */}
-            {activeTab === 'qr-scan' && (
-              <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                <div style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '50%',
-                  background: 'var(--bg-surface-subtle)',
-                  border: '1px solid var(--border-medium)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 12px',
-                  color: 'var(--navya-forest-800)'
-                }}>
-                  <QrCode size={32} />
-                </div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '6px' }}>
-                  Scan Crate Digital Produce Passport
-                </div>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto 16px' }}>
-                  Use device optical scanner to decrypt batch cryptographic keys directly from the crate tag.
-                </p>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => setIsQrModalOpen(true)}
-                >
-                  <Camera size={16} />
-                  Launch Scanner Viewfinder
-                </button>
-              </div>
-            )}
-
-            {/* Tab 3: Upload Report */}
-            {activeTab === 'upload-report' && (
-              <ReportUploader 
-                onReportParsed={handleReportParsed}
+          {/* Optional Report Uploader drop-down */}
+          {showReportUploader && (
+            <div style={{ marginTop: '16px', padding: '16px', background: '#faf9f5', borderRadius: '8px', border: '1px solid var(--border-medium)' }}>
+              <ReportUploader
+                onReportParsed={(parsed) => {
+                  setSelectedBatch(parsed);
+                  setShowReportUploader(false);
+                }}
                 activeBatch={selectedBatch}
               />
-            )}
+            </div>
+          )}
 
-            {/* Selected Batch Summary Banner */}
-            {selectedBatch && (
-              <div style={{
-                marginTop: '20px',
-                padding: '16px 20px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--navya-success-bg)',
-                border: '1px solid var(--navya-success-border)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '14px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ fontSize: '32px' }}>{selectedBatch.emoji}</div>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--navya-forest-800)', fontSize: '15px' }}>
-                        {selectedBatch.id}
-                      </span>
-                      <span style={{ fontSize: '11.5px', fontWeight: 700, background: '#ffffff', color: 'var(--navya-success)', padding: '2px 8px', borderRadius: '4px', border: '1px solid var(--navya-success-border)' }}>
-                        {selectedBatch.certifiedGrade} (Score: {selectedBatch.farmGateScore})
-                      </span>
-                    </div>
-                    <div style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-main)', marginTop: '2px' }}>
-                      {selectedBatch.crop} • {selectedBatch.variety}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                      Farmer: {selectedBatch.farmer?.name} ({selectedBatch.farmer?.region}) • Last Checkpoint: {selectedBatch.lastCheckpoint}
-                    </div>
-                  </div>
-                </div>
+          {/* Simple Sensor Baseline Summary */}
+          {selectedBatch && (
+            <TelemetryComparison
+              batch={selectedBatch}
+              comparisonData={{
+                farmGateTvoc: selectedBatch.initialTelemetry?.tvoc_ppb || 125,
+                arrivalReportedTvoc: issueType === 'CARBIDE_SUSPICION' ? 1650 : 380,
+                simpleStatus: issueType === 'CARBIDE_SUSPICION' ? 'CHEMICAL_ALERT' : 'EARLY_DECAY',
+                simpleVerdict: issueType === 'CARBIDE_SUSPICION'
+                  ? "Sensor check confirms chemical signature consistent with artificial carbide ripening."
+                  : "Sensor check confirms moisture entrapment and early ripening during haul."
+              }}
+            />
+          )}
+        </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <CheckCircle2 size={20} color="var(--navya-success)" />
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                    Baseline Verified
+        {/* Step 2: What is the issue? */}
+        <div style={{
+          background: '#ffffff',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '24px',
+          marginBottom: '20px',
+          boxShadow: 'var(--shadow-sm)'
+        }}>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '14px' }}>
+            Step 2: What Went Wrong?
+          </div>
+
+          {/* Big Issue Selection Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }}>
+            {issueOptions.map((opt) => (
+              <div
+                key={opt.id}
+                onClick={() => setIssueType(opt.id)}
+                style={{
+                  padding: '14px',
+                  borderRadius: '8px',
+                  border: `1.5px solid ${issueType === opt.id ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
+                  background: issueType === opt.id ? 'var(--navya-success-bg)' : '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '20px' }}>{opt.emoji}</span>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                    {opt.title}
                   </span>
                 </div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  {opt.desc}
+                </div>
               </div>
-            )}
+            ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label className="form-label">How Many Crates Are Affected?</label>
+              <input
+                type="number"
+                className="form-input"
+                value={damagedCrates}
+                onChange={(e) => setDamagedCrates(e.target.value)}
+                min="1"
+                max={selectedBatch?.quantityCrates || 200}
+                required
+              />
+              <div className="form-help">Total batch volume is {selectedBatch?.quantityCrates || 100} crates</div>
+            </div>
+
+            <div className="form-group" style={{ margin: 0 }}>
+              <label className="form-label">What Solution Would You Prefer?</label>
+              <select
+                className="form-select"
+                value={remedyChoice}
+                onChange={(e) => setRemedyChoice(e.target.value)}
+              >
+                <option value="REPLACEMENT">🔄 Send Replacement Fresh Crates</option>
+                <option value="DISCOUNT">🏷️ Small Price Discount on this lot</option>
+                <option value="CHECK">🔬 Mandi Kiosk Re-Inspection</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Add a Short Note for the Dealer</label>
+            <textarea
+              className="form-textarea"
+              rows={2}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="e.g. Please check the bottom crates, top ones were fine..."
+            />
           </div>
         </div>
 
-        {/* Telemetry Comparison & Sensor Audit Card */}
-        {selectedBatch && (
-          <TelemetryComparison 
-            batch={selectedBatch} 
-            comparisonData={{
-              farmGateTvoc: selectedBatch.initialTelemetry?.tvoc_ppb || 120,
-              arrivalReportedTvoc: defectCategory === 'CARBIDE_SUSPICION' ? 1950 : 420,
-              normalDecayTvoc: Math.round((selectedBatch.initialTelemetry?.tvoc_ppb || 120) * 1.5),
-              tempDelta: "+3.2°C ambient shift",
-              verdict: defectCategory === 'CARBIDE_SUSPICION'
-                ? "Severe slope anomaly (dVOC/dt = 2.45). Chemical ripening signature matches acetylene off-gassing."
-                : "Accelerated ripening detected (+65% over typical post-harvest curve). Validates early spoilage claim."
-            }}
-          />
-        )}
+        {/* Step 3: Photos & Submit */}
+        <div style={{
+          background: '#ffffff',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '24px',
+          marginBottom: '28px',
+          boxShadow: 'var(--shadow-sm)'
+        }}>
+          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '14px' }}>
+            Step 3: Add Photos of Damaged Produce
+          </div>
 
-        {/* Step 2: Defect Details & Evidence Card */}
-        <div className="wizard-card" style={{ padding: '32px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>2. Defect Specification & Proof of Condition</span>
-          </h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-            {/* Defect Category */}
-            <div className="form-group">
-              <label className="form-label">Defect Category <span className="req">*</span></label>
-              <select
-                className="form-select"
-                value={defectCategory}
-                onChange={(e) => {
-                  setDefectCategory(e.target.value);
-                  if (e.target.value === 'CARBIDE_SUSPICION') {
-                    setDefectTitle('Abnormal Acetylene Spike & Artificial Ripening');
-                    setSeverity('CRITICAL');
-                  } else if (e.target.value === 'TRANSIT_HEAT_ABUSE') {
-                    setDefectTitle('Transit Temperature Abuse / Cold Chain Break');
-                  } else {
-                    setDefectTitle('Premature Spoilage & Fungal Decay');
-                  }
-                }}
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap' }}>
+            <label className="btn-secondary" style={{ cursor: 'pointer', padding: '7px 14px', fontSize: '13px' }}>
+              <Camera size={15} />
+              Take or Upload Photo
+              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleCustomPhotoUpload} />
+            </label>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+              or click to add test photo:
+            </span>
+            {SAMPLE_DEFECT_PHOTOS.slice(0, 2).map((s, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="sample-pill-btn"
+                onClick={() => addSamplePhoto(s.url)}
               >
-                <option value="PREMATURE_DECAY">🍄 Premature Spoilage / Fungal Breakdown</option>
-                <option value="CARBIDE_SUSPICION">🧪 Calcium Carbide / Chemical Ripening Suspicion</option>
-                <option value="TRANSIT_HEAT_ABUSE">🌡️ Transit Temperature Abuse / Reefer Breakdown</option>
-                <option value="GRADE_MISMATCH">⚖️ Visual Grade Mismatch vs. Farm-Gate Certificate</option>
-                <option value="QUANTITY_MISMATCH">📦 Crate Shortage / Weight Discrepancy</option>
-              </select>
-            </div>
-
-            {/* Severity */}
-            <div className="form-group">
-              <label className="form-label">Severity Level <span className="req">*</span></label>
-              <select
-                className="form-select"
-                value={severity}
-                onChange={(e) => setSeverity(e.target.value)}
-              >
-                <option value="MINOR">🌱 Minor (Salvageable / Cosmetic Flaw)</option>
-                <option value="MODERATE">⚡ Moderate (Partial lot affected, fast decay)</option>
-                <option value="CRITICAL">⚠️ Critical (Immediate total loss / health violation)</option>
-              </select>
-            </div>
+                + {s.name}
+              </button>
+            ))}
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Issue Summary / Title <span className="req">*</span></label>
-            <input
-              type="text"
-              className="form-input"
-              value={defectTitle}
-              onChange={(e) => setDefectTitle(e.target.value)}
-              placeholder="e.g. Moisture Condensation & Softening in Bottom Layers"
-              required
-            />
-          </div>
-
-          {/* Affected Volume */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-            <div className="form-group">
-              <label className="form-label">Affected Crates</label>
-              <input
-                type="number"
-                className="form-input"
-                value={affectedCrates}
-                onChange={(e) => {
-                  setAffectedCrates(e.target.value);
-                  setAffectedKg(Number(e.target.value) * 20);
-                }}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Est. Weight (kg)</label>
-              <input
-                type="number"
-                className="form-input"
-                value={affectedKg}
-                onChange={(e) => setAffectedKg(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Dispute Value Claimed (₹)</label>
-              <input
-                type="number"
-                className="form-input"
-                value={estimatedDisputeAmountInr}
-                onChange={(e) => setEstimatedDisputeAmountInr(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Remedy */}
-          <div className="form-group">
-            <label className="form-label">Requested Redressal Remedy <span className="req">*</span></label>
-            <select
-              className="form-select"
-              value={requestedRemedy}
-              onChange={(e) => setRequestedRemedy(e.target.value)}
-            >
-              <option value="CREDIT_NOTE">💰 Credit Note / Agreed Percentage Discount</option>
-              <option value="REPLACEMENT_BATCH">🔄 Priority Replacement Batch (FEFO Reroute)</option>
-              <option value="KIOSK_RESCAN">🔬 Mandatory Mandi Kiosk Re-Scan & Lab Audit</option>
-              <option value="FULL_REFUND">🛡️ Full Batch Rejection & Escrow Refund</option>
-            </select>
-          </div>
-
-          {/* Detailed Observations */}
-          <div className="form-group">
-            <label className="form-label">Detailed Description of Discrepancy <span className="req">*</span></label>
-            <textarea
-              className="form-textarea"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe physical smell, surface discoloration, truck condition, or temperature recordings..."
-              required
-            />
-          </div>
-
-          {/* Photographic Proof */}
-          <div className="form-group">
-            <label className="form-label">Photographic Proof & Condition Evidence</label>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-              <label className="btn-secondary" style={{ cursor: 'pointer', padding: '7px 14px', fontSize: '13px' }}>
-                <Camera size={15} />
-                Upload Photo from Device
-                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleCustomPhotoUpload} />
-              </label>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                or pick sample damaged produce proof:
-              </span>
-            </div>
-
-            {/* Quick Sample Photos */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
-              {SAMPLE_DEFECT_PHOTOS.map((sample, idx) => (
-                <button
-                  type="button"
-                  key={idx}
-                  onClick={() => addSamplePhoto(sample.url)}
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-medium)',
-                    background: evidenceImages.includes(sample.url) ? 'var(--navya-sage)' : '#ffffff',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    color: 'var(--navya-forest-800)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  + Add {sample.name}
-                </button>
+          {/* Photos Grid */}
+          {evidenceImages.length > 0 && (
+            <div className="evidence-grid" style={{ marginBottom: '16px' }}>
+              {evidenceImages.map((img, i) => (
+                <div key={i} className="evidence-thumb-box">
+                  <img src={img} alt="Evidence" className="evidence-thumb-img" />
+                  <button
+                    type="button"
+                    className="evidence-remove-btn"
+                    onClick={() => removePhoto(i)}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               ))}
             </div>
+          )}
 
-            {/* Evidence Image Previews */}
-            {evidenceImages.length > 0 && (
-              <div className="evidence-grid">
-                {evidenceImages.map((img, i) => (
-                  <div key={i} className="evidence-thumb-box">
-                    <img src={img} alt="Evidence" className="evidence-thumb-img" />
-                    <button
-                      type="button"
-                      className="evidence-remove-btn"
-                      onClick={() => removePhoto(i)}
-                      title="Remove image"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="btn-primary"
+            style={{ width: '100%', justifyContent: 'center', padding: '14px', fontSize: '15px' }}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <span>Sending Report to Dealer...</span>
+            ) : (
+              <>
+                <span>Submit Complaint to Dealer</span>
+                <ArrowRight size={16} />
+              </>
             )}
-          </div>
-
-          {/* Form Actions */}
-          <div style={{ marginTop: '32px', paddingTop: '20px', borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'flex-end', gap: '14px' }}>
-            <button
-              type="submit"
-              className="btn-primary"
-              style={{ padding: '12px 28px', fontSize: '15px' }}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <span>Generating Immutable Ticket...</span>
-              ) : (
-                <>
-                  <span>Submit Quality Dispute Ticket</span>
-                  <ArrowRight size={16} />
-                </>
-              )}
-            </button>
-          </div>
+          </button>
         </div>
       </form>
 
-      {/* QR Scanner Modal */}
+      {/* QR Modal */}
       <QrScannerModal
         isOpen={isQrModalOpen}
         onClose={() => setIsQrModalOpen(false)}
-        onBatchScanned={handleBatchScanned}
+        onBatchScanned={(scanned) => {
+          setSelectedBatch(scanned);
+        }}
       />
     </div>
   );
