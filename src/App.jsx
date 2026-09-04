@@ -10,6 +10,7 @@ import { DealerDashboardPage } from './pages/DealerDashboardPage';
 import { DisputeDetailsPage } from './pages/DisputeDetailsPage';
 import { BatchExplorerPage } from './pages/BatchExplorerPage';
 import { RatePredictionModal } from './components/redressal/RatePredictionModal';
+import { RewardsBalanceModal } from './components/common/RewardsBalanceModal';
 import { disputeService } from './services/disputeService';
 import { rewardService } from './services/rewardService';
 import { SEED_BATCHES } from './services/mockData';
@@ -23,6 +24,7 @@ function App() {
   
   // Reinforcement Learning & Rewards State
   const [userPoints, setUserPoints] = useState(rewardService.getPoints());
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isRateModalOpen, setIsRateModalOpen] = useState(false);
   const [batchToRate, setBatchToRate] = useState(SEED_BATCHES[0]);
 
@@ -59,13 +61,6 @@ function App() {
   };
 
   const handleOpenRateModal = (batch = null) => {
-    if (currentView === 'home') {
-      const el = document.getElementById('rate-prediction-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-    }
     setBatchToRate(batch || SEED_BATCHES[0]);
     setIsRateModalOpen(true);
   };
@@ -83,7 +78,7 @@ function App() {
         activeRole={activeRole}
         setActiveRole={setActiveRole}
         userPoints={userPoints}
-        onOpenRateModal={handleOpenRateModal}
+        onOpenWalletModal={() => setIsWalletModalOpen(true)}
       />
 
       {/* Main View Area */}
@@ -137,6 +132,14 @@ function App() {
 
       {/* Universal Navya Footer */}
       <Footer />
+
+      {/* Mandi Rewards & Balance Breakdown Modal */}
+      <RewardsBalanceModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        userPoints={userPoints}
+        onOpenRateModal={handleOpenRateModal}
+      />
 
       {/* AI Reinforcement Learning Ground-Truth Rating Modal */}
       <RatePredictionModal

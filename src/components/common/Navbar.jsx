@@ -8,7 +8,7 @@ export const Navbar = ({
   activeRole, 
   setActiveRole, 
   userPoints = 150,
-  onOpenRateModal 
+  onOpenWalletModal 
 }) => {
   return (
     <header className="navya-navbar">
@@ -59,12 +59,12 @@ export const Navbar = ({
 
       {/* Actions & Role Switcher */}
       <div className="nav-actions-group">
-        {/* Reinforcement Learning Rewards Pill */}
+        {/* Reinforcement Learning Rewards & Wallet Pill */}
         <button
           type="button"
           className="reward-points-badge"
-          onClick={() => onOpenRateModal && onOpenRateModal()}
-          title="Verified Navya reward points — redeemable as discounts on the main Navya website"
+          onClick={() => onOpenWalletModal && onOpenWalletModal()}
+          title="View Mandi Credits Wallet & Rewards Balance"
         >
           <span className="points-coin">🪙</span>
           <span className="points-val">{userPoints} pts</span>

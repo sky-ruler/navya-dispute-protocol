@@ -17,6 +17,13 @@ export const rewardService = {
     return Math.floor(this.getPoints() / 2);
   },
 
+  getPendingPoints() {
+    const logs = this.getFeedbackLogs();
+    return logs
+      .filter(l => l.status === 'PENDING_VERIFICATION')
+      .reduce((acc, curr) => acc + (curr.potentialPoints || 50), 0);
+  },
+
   getFeedbackLogs() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY_RL_LOGS)) || [];

@@ -11,14 +11,11 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
-import { SeamlessRateAccuracySection } from '../components/redressal/SeamlessRateAccuracySection';
 
 export const HomePage = ({ 
   setCurrentView, 
   onSelectDispute, 
-  disputes,
-  onOpenRateModal,
-  onRewardEarned 
+  disputes 
 }) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
 
@@ -134,9 +131,6 @@ export const HomePage = ({
           </div>
         </div>
       </section>
-
-      {/* Seamless Integrated AI Shelf-Life Precision Section */}
-      <SeamlessRateAccuracySection onRewardEarned={onRewardEarned} />
 
       {/* Super Simple 3 Steps */}
       <section style={{
