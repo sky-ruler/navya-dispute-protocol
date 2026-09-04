@@ -1,5 +1,6 @@
 import React from 'react';
 import { Leaf, PlusCircle, Inbox, Search, RefreshCw, UserCheck, ShieldCheck } from 'lucide-react';
+import { LanguageSelector } from './LanguageSelector';
 
 export const Navbar = ({ currentView, setCurrentView, activeRole, setActiveRole }) => {
   return (
@@ -31,26 +32,29 @@ export const Navbar = ({ currentView, setCurrentView, activeRole, setActiveRole 
           onClick={() => setCurrentView('file-complaint')}
         >
           <PlusCircle size={15} />
-          File Claim
+          Report Issue
         </button>
         <button
           className={`nav-link-item ${currentView === 'inbox' || currentView === 'dispute-detail' ? 'active' : ''}`}
           onClick={() => setCurrentView('inbox')}
         >
           <Inbox size={15} />
-          Claims Inbox
+          Complaints Inbox
         </button>
         <button
           className={`nav-link-item ${currentView === 'batches' ? 'active' : ''}`}
           onClick={() => setCurrentView('batches')}
         >
           <Search size={15} />
-          Batch Telemetry
+          Batch Explorer
         </button>
       </nav>
 
       {/* Actions & Role Switcher */}
       <div className="nav-actions-group">
+        {/* Multi-lingual Language Selector */}
+        <LanguageSelector />
+
         {/* Role Toggle */}
         <div className="role-switcher" title="Switch active actor view to test bilateral farmer-dealer feedback">
           <button
