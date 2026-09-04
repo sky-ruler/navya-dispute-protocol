@@ -24,11 +24,11 @@ export const Footer = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', fontSize: '12.5px', flexWrap: 'wrap' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
             <Shield size={14} color="var(--navya-forest-800)" />
-            Verifiable SGP30/SHT31 Sensor Audit
+            Photo-Backed Defect Evidence
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
             <Award size={14} color="var(--navya-bronze)" />
-            Bilateral Trust & Escrow Guarantee
+            Bilateral Redressal Protocol
           </span>
           <a
             href="https://github.com/sky-ruler/navya-dispute-protocol"

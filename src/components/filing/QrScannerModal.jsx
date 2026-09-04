@@ -417,7 +417,7 @@ export const QrScannerModal = ({ isOpen, onClose, onBatchScanned }) => {
                     {feedMode === 'camera' ? 'Align Physical Crate QR in Box' : 'Simulated Mandi Crate Tracking'}
                   </div>
                   <div style={{ fontSize: '11.5px', color: '#a7f3d0' }}>
-                    Scanning for Navya SHA-256 cryptographic lot passport...
+                    Scanning for Navya lot passport...
                   </div>
                 </div>
 
@@ -449,7 +449,7 @@ export const QrScannerModal = ({ isOpen, onClose, onBatchScanned }) => {
                   {scannedResult?.crop} ({scannedResult?.variety}) • {scannedResult?.certifiedGrade} (Score: {scannedResult?.farmGateScore}/100)
                 </div>
                 <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '6px' }}>
-                  Applying cryptographic passport to complaint form...
+                  Applying lot passport to complaint form...
                 </div>
               </div>
             )}

@@ -16,9 +16,9 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim, onOpenRateModal }) =>
     <div className="batch-explorer-container">
       <div className="section-header">
         <div>
-          <h1 className="section-title">Navya Produce Batch Explorer</h1>
+          <h1 className="section-title">Produce Batch Explorer</h1>
           <p className="section-desc">
-            Cryptographically registered produce batches with immutable sensor baselines and checkpoints
+            Consignment lots registered with dispatch sensor checks and transit checkpoints
           </p>
         </div>
 
@@ -73,13 +73,13 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim, onOpenRateModal }) =>
                   📡 Navya Mobile Scanner v2.1
                 </span>
                 <span className="batch-telemetry-hw-label">
-                  Sensirion Hardware Suite
+                  Sensor Readings
                 </span>
               </div>
 
               <div className="batch-telemetry-grid">
                 <div>
-                  <span className="batch-telemetry-metric">SGP30 TVOC</span>
+                  <span className="batch-telemetry-metric">TVOC Gas</span>
                   <strong className="batch-telemetry-value">{b.initialTelemetry.tvoc_ppb} ppb</strong>
                 </div>
                 <div>
@@ -87,7 +87,7 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim, onOpenRateModal }) =>
                   <strong className="batch-telemetry-value">{b.initialTelemetry.eco2_ppm} ppm</strong>
                 </div>
                 <div>
-                  <span className="batch-telemetry-metric">SHT31 Thermal</span>
+                  <span className="batch-telemetry-metric">Temperature</span>
                   <strong className="batch-telemetry-value">{b.initialTelemetry.temp_c}°C / {b.initialTelemetry.humidity_rh}% RH</strong>
                 </div>
                 <div>

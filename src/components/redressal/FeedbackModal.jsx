@@ -117,7 +117,7 @@ export const FeedbackModal = ({ isOpen, onClose, dispute, onFeedbackSubmit }) =>
             }}>
               <ShieldCheck size={18} color="var(--navya-success)" style={{ flexShrink: 0, marginTop: '1px' }} />
               <span>
-                By submitting, both parties agree to mark Ticket #{dispute.id} as <strong>Officially Resolved</strong> with immutable telemetry ledger entry.
+                By submitting, both parties agree to mark Ticket #{dispute.id} as <strong>Officially Resolved</strong>. This resolution will be recorded in the system.
               </span>
             </div>
           </div>

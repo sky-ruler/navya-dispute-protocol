@@ -98,7 +98,7 @@ export const RewardsBalanceModal = ({ isOpen, onClose, userPoints = 150 }) => {
                 {userPoints} <span style={{ fontSize: '16px', fontWeight: 600, color: '#fcd34d' }}>Points</span>
               </div>
               <div style={{ fontSize: '12.5px', color: '#dcefdc', marginTop: '3px', fontWeight: 500 }}>
-                ≈ ₹{inrValue} Mandi Scan Discount Credit
+                ≈ Redeemable Discount Credits
               </div>
             </div>
 
@@ -142,7 +142,7 @@ export const RewardsBalanceModal = ({ isOpen, onClose, userPoints = 150 }) => {
                   </span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.45, margin: '0 0 12px 0' }}>
-                  Convert your available {userPoints} points into an instant ₹{inrValue} discount voucher applicable towards digital lot passports, chemical testing, or sensor scans at any partner APMC mandi.
+                  Convert your available {userPoints} points into a discount voucher applicable towards digital lot passports or quality testing at partner mandis.
                 </p>
 
                 <button
@@ -161,7 +161,7 @@ export const RewardsBalanceModal = ({ isOpen, onClose, userPoints = 150 }) => {
                   }}
                 >
                   <Gift size={15} />
-                  <span>Redeem Now (₹{inrValue} Voucher)</span>
+                  <span>Redeem Now ({userPoints} Points)</span>
                 </button>
               </div>
             ) : (
@@ -180,7 +180,7 @@ export const RewardsBalanceModal = ({ isOpen, onClose, userPoints = 150 }) => {
                     borderRadius: '12px',
                     border: '1px solid #a7f3d0'
                   }}>
-                    Value: ₹{inrValue} OFF
+                    Value: {userPoints} Points Redeemed
                   </span>
                 </div>
 
@@ -216,7 +216,7 @@ export const RewardsBalanceModal = ({ isOpen, onClose, userPoints = 150 }) => {
                 </div>
 
                 <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                  Use this promo code at checkout on the main Navya website (<strong>navya.agritech</strong>) to deduct ₹{inrValue} from your next produce scan invoice.
+                  Use this promo code on the Navya platform to avail your discount on your next produce quality check.
                 </div>
               </div>
             )}

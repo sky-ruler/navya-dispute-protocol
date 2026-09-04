@@ -165,7 +165,7 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
                       <div className="rate-predicted-label">SENSOR PREDICTED SHELF LIFE</div>
                       <div className="rate-predicted-value">{predictedDays} Days</div>
                       <div style={{ fontSize: '8.5px', color: 'var(--navya-forest-700)', marginTop: '2px', fontWeight: 600 }}>
-                        Calibrated via SGP30 & SHT31
+                        Calibrated via Sensor Data
                       </div>
                     </div>
                   </div>
@@ -209,10 +209,10 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
                     <div className="rate-policy-coin">🪙</div>
                     <div style={{ flex: 1 }}>
                       <div className="rate-policy-title">
-                        <span>Earn Up to +50 Verified Points (₹25 Value)</span>
+                        <span>Earn Up to +50 Points for Verified Feedback</span>
                       </div>
                       <div className="rate-policy-text">
-                        Ratings are verified by Navya's telemetry pipeline before credits are deposited to ensure clean ML training datasets.
+                        Ratings are reviewed before points are awarded to maintain data quality.
                       </div>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
                     borderRadius: '6px'
                   }}>
                     <ShieldCheck size={14} color="var(--navya-forest-700)" />
-                    <span>Cross-referenced with batch {batch.id} SGP30 & SHT31 sensor logs before review.</span>
+                    <span>Cross-referenced with batch {batch.id} sensor logs before review.</span>
                   </div>
                 </div>
               )}
@@ -357,12 +357,12 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
 
             <div className="rate-confirm-title">Rating Logged for Verification! ⏳</div>
             <div className="rate-confirm-desc">
-              Your feedback for <strong>{batch.crop} ({batch.id})</strong> is queued for Navya's reinforcement learning pipeline. Sensor baselines will be cross-referenced.
+               Your feedback for <strong>{batch.crop} ({batch.id})</strong> has been recorded and will be reviewed by the system.
             </div>
 
             <div className="rate-confirm-badge-row">
               <Award size={18} color="#b45309" />
-              <span>Potential Reward: +50 Points (₹25 Credit) Once Verified</span>
+              <span>Potential Reward: +50 Points Once Verified</span>
             </div>
 
             <div className="rate-confirm-redemption-card">

@@ -20,11 +20,11 @@ export const TopUtilityBar = ({ onOpenLanguageModal }) => {
   return (
     <div className="top-utility-bar notranslate" translate="no">
       <div className="top-utility-inner notranslate" translate="no">
-        {/* Left: Hardware Sensor & APMC Telemetry Sync Status */}
+        {/* Left: Prototype Status Badge */}
         <div className="telemetry-status-strip notranslate" translate="no">
           <span className="live-pulse-dot" />
           <span className="telemetry-status-text">
-            <strong>APMC Mandi Grid Active</strong> • Sensirion SHT40 Hardware Synced
+            <strong>Navya Protocol</strong> • Post-Harvest Redressal Prototype
           </span>
         </div>
 

@@ -98,7 +98,7 @@ export const SAMPLE_NAVYA_REPORTS = [
     label: "📄 Navya_Inspection_Apple_409.json",
     batchId: "NAV-2026-APL-409",
     crop: "Apple (Royal Delicious)",
-    details: "Grade A • SGP30 TVOC: 125 ppb • SHT31: 16.5°C"
+    details: "Grade A • TVOC: 125 ppb • Temp: 16.5°C"
   },
   {
     id: "sample_mango_report",

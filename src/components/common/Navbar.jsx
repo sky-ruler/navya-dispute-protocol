@@ -94,7 +94,6 @@ export const Navbar = ({
           >
             <span className="points-coin">🪙</span>
             <span className="points-val">{userPoints} pts</span>
-            <span className="points-credit">(₹{Math.floor(userPoints / 2)})</span>
           </button>
 
           {/* Bilateral Role Switcher */}

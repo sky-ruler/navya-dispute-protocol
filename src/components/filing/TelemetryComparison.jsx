@@ -43,18 +43,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
           </div>
           <div>
             <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--navya-forest-800)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>Navya Hardware Telemetry Audit</span>
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 700,
-                background: '#e0f2fe',
-                color: '#0369a1',
-                border: '1px solid #bae6fd',
-                padding: '1px 6px',
-                borderRadius: '4px'
-              }}>
-                Sensirion SGP30 + SHT31
-              </span>
+              <span>Sensor Telemetry Comparison</span>
             </div>
             <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
               Hardware baseline comparison between farm packing gate and mandi arrival check
@@ -95,7 +84,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
         gap: '10px',
         marginBottom: '14px'
       }}>
-        {/* Channel 1: SGP30 TVOC */}
+        {/* Channel 1: TVOC */}
         <div style={{
           background: isAnomalous ? '#fffbeb' : 'var(--bg-surface-subtle)',
           border: `1px solid ${isAnomalous ? '#fde68a' : 'var(--border-subtle)'}`,
@@ -104,7 +93,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-              SGP30 TVOC (Ethylene)
+               TVOC (Ethylene Gas)
             </span>
             <Activity size={13} color={isAnomalous ? '#b45309' : 'var(--navya-forest-700)'} />
           </div>
@@ -113,7 +102,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
               {arrivalTvoc} ppb
             </span>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              (was {farmTvoc} ppb at farm)
+              (was {farmTvoc} ppb)
             </span>
           </div>
           <div style={{ fontSize: '11px', color: isAnomalous ? '#b45309' : '#059669', fontWeight: 600, marginTop: '2px' }}>
@@ -121,7 +110,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
           </div>
         </div>
 
-        {/* Channel 2: SHT31 Temp */}
+        {/* Channel 2: Temperature */}
         <div style={{
           background: isAnomalous ? '#fffbeb' : 'var(--bg-surface-subtle)',
           border: `1px solid ${isAnomalous ? '#fde68a' : 'var(--border-subtle)'}`,
@@ -130,7 +119,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-              SHT31 Temperature
+               Temperature
             </span>
             <Thermometer size={13} color={isAnomalous ? '#b45309' : 'var(--navya-forest-700)'} />
           </div>
@@ -139,15 +128,15 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
               {arrivalTemp}°C
             </span>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              (was {farmTemp}°C at pack)
+              (was {farmTemp}°C)
             </span>
           </div>
           <div style={{ fontSize: '11px', color: isAnomalous ? '#b45309' : '#059669', fontWeight: 600, marginTop: '2px' }}>
-            {isAnomalous ? '⚠️ Thermal Shock During Transit' : 'Cold-chain maintained'}
+            {isAnomalous ? '⚠️ Thermal Variance' : 'Conditions maintained'}
           </div>
         </div>
 
-        {/* Channel 3: SHT31 Humidity */}
+        {/* Channel 3: Humidity */}
         <div style={{
           background: isAnomalous ? '#fffbeb' : 'var(--bg-surface-subtle)',
           border: `1px solid ${isAnomalous ? '#fde68a' : 'var(--border-subtle)'}`,
@@ -156,7 +145,7 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-              SHT31 Humidity
+               Humidity
             </span>
             <Wind size={13} color={isAnomalous ? '#b45309' : 'var(--navya-forest-700)'} />
           </div>
@@ -186,17 +175,17 @@ export const TelemetryComparison = ({ batch, comparisonData }) => {
         border: '1px solid #fef08a'
       }}>
         <strong style={{ color: isAnomalous ? '#854d0e' : 'var(--navya-forest-800)' }}>
-          Hardware Verdict: 
+          Sensor Verdict: 
         </strong>{' '}
         {comparisonData?.simpleVerdict || (isAnomalous
-          ? "Sensirion SGP30 gas analysis indicates ripening volatile emissions increased 9x during transit. Physical evidence confirms produce was intact at farm gate certification; decay was caused by 28°C ambient heat in transit, validating the buyer's claim."
-          : "Sensor telemetry confirms the crate maintained continuous cold-chain conditions. No premature senescence detected.")}
+          ? "Gas sensor readings indicate elevated volatile emissions during transit. Combined with temperature data, the evidence suggests spoilage occurred after farm-gate packing, supporting the buyer's claim."
+          : "Sensor readings confirm the crate maintained acceptable conditions throughout transit. No spoilage indicators detected.")}
       </div>
 
-      {/* Device Calibration Footnote */}
+      {/* Device Footnote */}
       <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)' }}>
-        <span>Hardware Unit: <strong>Navya Mobile Agri-Scanner v2.1</strong></span>
-        <span>Cryptographic Hash: <code style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: '#f1f5f9', padding: '1px 5px', borderRadius: '3px' }}>0x8F3C...E41B</code></span>
+        <span>Device: <strong>Navya Sensor Unit (Prototype)</strong></span>
+        <span>Data Source: <strong>Demo Dataset</strong></span>
       </div>
     </div>
   );

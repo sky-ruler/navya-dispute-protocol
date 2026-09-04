@@ -68,7 +68,7 @@ export const HomePage = ({
         </div>
       </section>
 
-      {/* Editorial Luxury Hero Section */}
+      {/* Editorial Clean Hero Section */}
       <section className="hero-banner">
         <div className="hero-ambient-glow" />
         
@@ -76,33 +76,31 @@ export const HomePage = ({
           <div className="hero-pill">
             <span className="hero-pill-pulse" />
             <Leaf size={14} className="hero-pill-icon" />
-            <span>Navya Agritech • Hardware-Sealed Telemetry Protocol</span>
+            <span>Navya • Post-Harvest Quality & Redressal Prototype</span>
           </div>
 
           <div className={`hero-role-badge ${activeRole === 'FARMER' ? 'hero-role-badge--farmer' : 'hero-role-badge--dealer'}`}>
             <span className="hero-role-icon">{activeRole === 'FARMER' ? '👨‍🌾' : '🏢'}</span>
             <span className="hero-role-name">
-              {activeRole === 'FARMER' ? 'Farmer Mode' : 'Mandi Dealer Mode'}
+              {activeRole === 'FARMER' ? 'Farmer View' : 'Buyer / Trader View'}
             </span>
             <span className="hero-role-divider">•</span>
             <span className="hero-role-detail">
-              {activeRole === 'FARMER'
-                ? 'Kisan Sambal Sahakari (Nashik)'
-                : 'Apex Retail Hub (Vashi APMC)'}
+              {activeRole === 'FARMER' ? 'Grower Mode' : 'Mandi Trader Mode'}
             </span>
           </div>
         </div>
 
         <h1 className="hero-title">
           {activeRole === 'FARMER'
-            ? 'Protect Produce Value with Verifiable Transit Telemetry'
-            : 'Mandi Spoilage Audit & Fast Bilateral Redressal'}
+            ? 'Fair Resolution for Damaged or Spoiled Produce'
+            : 'Review Arriving Spoilage & Settle Claims Fast'}
         </h1>
         
         <p className="hero-subtitle">
           {activeRole === 'FARMER'
-            ? 'Report transit heat abuse, rotting crates, or unfair payment cuts. Backed by Sensirion sensor logs, receive fresh replacement crates or instant credit notes directly from buyers.'
-            : 'Audit arriving consignments against farm-gate packing sensor baselines. Propose fair replacement crates or credit note deductions to resolve claims instantly and keep trade moving.'}
+            ? 'Report transit heat abuse, rotting crates, or crushed fruit with photos. Work directly with your buyer to agree on fresh replacement crates or invoice adjustments without friction.'
+            : 'Inspect reported defects and arrival photos against dispatch baselines. Propose fair replacement crates or discount notes to resolve claims quickly and keep trade moving.'}
         </p>
 
         {/* Big Dual Core Action Cards */}
@@ -115,7 +113,7 @@ export const HomePage = ({
           >
             <div className="hero-action-text-col">
               <div className="hero-action-title">
-                {activeRole === 'FARMER' ? '🌿 File Quality Claim' : '📦 Report Arriving Spoilage'}
+                {activeRole === 'FARMER' ? '🌿 Report Produce Issue' : '📦 Log Arriving Damage'}
               </div>
               <div className="hero-action-desc">
                 {activeRole === 'FARMER'
@@ -136,7 +134,7 @@ export const HomePage = ({
           >
             <div className="hero-action-text-col">
               <div className="hero-action-title">
-                {activeRole === 'FARMER' ? '📋 My Filed Claims' : '📥 Arriving Spoilage Inbox'}
+                {activeRole === 'FARMER' ? '📋 My Claims' : '📥 Spoilage Inbox'}
               </div>
               <div className="hero-action-desc">
                 {activeRole === 'FARMER'
@@ -150,40 +148,17 @@ export const HomePage = ({
             </div>
           </div>
         </div>
-
-        {/* Institutional Trust Metrics Strip */}
-        <div className="hero-metrics-strip">
-          <div className="hero-metric-item">
-            <span className="hero-metric-val">99.8%</span>
-            <span className="hero-metric-lbl">Sensor Verification Accuracy</span>
-          </div>
-          <div className="hero-metric-divider" />
-          <div className="hero-metric-item">
-            <span className="hero-metric-val">&lt; 4 Hours</span>
-            <span className="hero-metric-lbl">Avg Mandi Settlement SLA</span>
-          </div>
-          <div className="hero-metric-divider" />
-          <div className="hero-metric-item">
-            <span className="hero-metric-val">₹12.4 Lakh</span>
-            <span className="hero-metric-lbl">Escrow Claims Settled</span>
-          </div>
-          <div className="hero-metric-divider" />
-          <div className="hero-metric-item">
-            <span className="hero-metric-val">Zero</span>
-            <span className="hero-metric-lbl">Paperwork Dispute Redressal</span>
-          </div>
-        </div>
       </section>
 
       {/* How It Works (In 3 Simple Steps) */}
       <section className="steps-section">
         <div className="steps-header">
-          <span className="steps-eyebrow">Fair & Objective Process</span>
+          <span className="steps-eyebrow">Transparent Process</span>
           <h2 className="steps-section-title">
             How Redressal Works in 3 Simple Steps
           </h2>
           <p className="steps-section-desc">
-            Eliminating subjective arguments between growers and buyers through cryptographic crate passporting
+            A direct, photo-backed way for growers and buyers to resolve quality issues without arguments
           </p>
         </div>
 
@@ -195,9 +170,9 @@ export const HomePage = ({
                 <QrCode size={18} />
               </div>
             </div>
-            <h3 className="step-title">Scan Crate or Pick Batch</h3>
+            <h3 className="step-title">Select Lot or Scan QR</h3>
             <p className="step-desc">
-              Scan the physical QR tag on any crate to instantly link packing sensor baselines and transit logs.
+              Pick the batch from your consignment list or scan the QR code on the crate.
             </p>
           </div>
 
@@ -208,9 +183,9 @@ export const HomePage = ({
                 <Camera size={18} />
               </div>
             </div>
-            <h3 className="step-title">Capture Defect Evidence</h3>
+            <h3 className="step-title">Add Photos & Notes</h3>
             <p className="step-desc">
-              Snap high-resolution photos of spoiled fruit or transit bruises. AI checks match sensor stress curves.
+              Upload photos showing the spoiled fruit or defects so the issue is clearly visible.
             </p>
           </div>
 
@@ -221,15 +196,15 @@ export const HomePage = ({
                 <Shield size={18} />
               </div>
             </div>
-            <h3 className="step-title">Get Replacement or Discount</h3>
+            <h3 className="step-title">Agree on Solution</h3>
             <p className="step-desc">
-              Buyer reviews verified telemetry proof and sends fresh crates or immediate credit note payouts.
+              Buyer reviews the claim and proposes fresh replacement crates or a price deduction.
             </p>
           </div>
         </div>
       </section>
 
-      {/* AI Shelf-Life Accuracy CTA Banner */}
+      {/* Ground-Truth Feedback CTA Banner */}
       <section className="rate-cta-banner">
         <div className="rate-cta-content">
           <div className="rate-cta-icon-box">
@@ -238,14 +213,14 @@ export const HomePage = ({
           <div className="rate-cta-text-group">
             <div className="rate-cta-title-row">
               <h3 className="rate-cta-title">
-                Train AI Shelf-Life Engine & Earn Rewards
+                Provide Produce Shelf-Life Feedback
               </h3>
               <span className="rate-cta-badge">
-                🪙 Earn +50 Mandi Credits
+                🪙 Earn +50 Demo Points
               </span>
             </div>
             <p className="rate-cta-desc">
-              Help train Navya's Sensirion-driven decay prediction model by rating whether our arrival estimate matched physical produce condition.
+              Help train the prototype prediction model by rating whether actual arrival freshness matched our initial estimate.
             </p>
           </div>
         </div>
@@ -255,7 +230,7 @@ export const HomePage = ({
           className="btn-primary rate-cta-btn"
           onClick={() => onOpenRateModal && onOpenRateModal()}
         >
-          <span>Rate Accuracy Now</span>
+          <span>Rate Freshness</span>
           <ArrowRight size={15} />
         </button>
       </section>
@@ -264,9 +239,9 @@ export const HomePage = ({
       <section className="recent-issues-section">
         <div className="section-header">
           <div>
-            <div className="section-eyebrow">Active Discrepancy Stream</div>
-            <h2 className="section-title">Recent Quality Claims & Audits</h2>
-            <p className="section-desc">Click on any ticket to inspect sensor logs and bilateral settlement offers</p>
+            <div className="section-eyebrow">Active Discrepancies</div>
+            <h2 className="section-title">Recent Quality Claims</h2>
+            <p className="section-desc">Click on any ticket to view details and bilateral resolution</p>
           </div>
           <button className="btn-secondary view-all-btn" onClick={() => setCurrentView('inbox')}>
             <span>View All Claims ({disputes.length})</span>
@@ -308,17 +283,17 @@ export const HomePage = ({
                     <span className="dispute-meta-date">📅 {d.filingDate}</span>
                   </div>
 
-                  {/* Hardware Telemetry Preview Pill */}
+                  {/* Grounded Transit Check Pill */}
                   <div className="dispute-sensor-pill">
                     <Activity size={12} className="dispute-sensor-icon" />
-                    <span>Sensirion SHT40 Hardware Sealed • Transit Peak: 21.4°C</span>
+                    <span>Transit Check: 21.4°C Peak Temp (Safe: 14°C)</span>
                   </div>
                 </div>
               </div>
 
               <div className="dispute-action-col">
                 <button className="btn-secondary dispute-view-btn">
-                  <span>Review Claim</span>
+                  <span>View Details</span>
                   <ChevronRight size={14} />
                 </button>
               </div>
