@@ -59,6 +59,13 @@ function App() {
   };
 
   const handleOpenRateModal = (batch = null) => {
+    if (currentView === 'home') {
+      const el = document.getElementById('rate-prediction-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
     setBatchToRate(batch || SEED_BATCHES[0]);
     setIsRateModalOpen(true);
   };
@@ -89,6 +96,7 @@ function App() {
             activeRole={activeRole}
             userPoints={userPoints}
             onOpenRateModal={handleOpenRateModal}
+            onRewardEarned={handleRewardEarned}
           />
         )}
 

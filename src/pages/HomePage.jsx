@@ -11,12 +11,14 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { StatusBadge } from '../components/common/StatusBadge';
+import { SeamlessRateAccuracySection } from '../components/redressal/SeamlessRateAccuracySection';
 
 export const HomePage = ({ 
   setCurrentView, 
   onSelectDispute, 
   disputes,
-  onOpenRateModal 
+  onOpenRateModal,
+  onRewardEarned 
 }) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
 
@@ -133,59 +135,8 @@ export const HomePage = ({
         </div>
       </section>
 
-      {/* AI Reinforcement Learning Feedback Card */}
-      <section style={{
-        background: 'linear-gradient(135deg, #fef9ee 0%, #edf8f2 100%)',
-        border: '1px solid #fed7aa',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px 24px',
-        marginBottom: '28px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '16px',
-        boxShadow: 'var(--shadow-sm)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '50%',
-            background: 'var(--navya-forest-800)',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '20px',
-            flexShrink: 0
-          }}>
-            🧠
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
-                Help Train Navya AI & Earn Scan Credits
-              </span>
-              <span style={{ fontSize: '11px', fontWeight: 700, background: '#f59e0b', color: '#fff', padding: '2px 8px', borderRadius: '12px' }}>
-                Up to 50 Pts (₹25)
-              </span>
-            </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px', maxWidth: '560px' }}>
-              Rate the accuracy of our shelf-life predictions. Once verified by our team, earned points can be redeemed as instant discounts on the main Navya website!
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="btn-bronze"
-          onClick={() => onOpenRateModal && onOpenRateModal()}
-          style={{ padding: '9px 18px', fontSize: '13px', flexShrink: 0 }}
-        >
-          Rate Accuracy
-        </button>
-      </section>
+      {/* Seamless Integrated AI Shelf-Life Precision Section */}
+      <SeamlessRateAccuracySection onRewardEarned={onRewardEarned} />
 
       {/* Super Simple 3 Steps */}
       <section style={{
