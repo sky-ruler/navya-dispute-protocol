@@ -15,7 +15,8 @@ import { StatusBadge } from '../components/common/StatusBadge';
 export const HomePage = ({ 
   setCurrentView, 
   onSelectDispute, 
-  disputes 
+  disputes,
+  onOpenRateModal
 }) => {
   const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION').length;
 
@@ -218,6 +219,80 @@ export const HomePage = ({
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Main Webpage Rating Pop-up Action Card */}
+      <section style={{
+        background: 'linear-gradient(135deg, #fcfbf9 0%, #ffffff 100%)',
+        border: '1px solid #e7ded2',
+        borderRadius: 'var(--radius-lg)',
+        padding: '20px 24px',
+        marginBottom: '28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '18px',
+        flexWrap: 'wrap',
+        boxShadow: 'var(--shadow-sm)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '260px', flex: 1 }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, var(--navya-forest-800) 0%, #005a3e 100%)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px',
+            flexShrink: 0,
+            boxShadow: '0 4px 12px rgba(0, 61, 44, 0.18)'
+          }}>
+            ⭐
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+                Rate Produce Shelf-Life Accuracy
+              </span>
+              <span style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                background: '#fef3c7',
+                color: '#92400e',
+                border: '1px solid #fde68a',
+                padding: '2px 8px',
+                borderRadius: '12px'
+              }}>
+                Earn +50 Credits
+              </span>
+            </div>
+            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px', lineHeight: 1.45 }}>
+              Help train Navya's AI prediction model by rating whether our estimated shelf life matched your produce quality.
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={() => onOpenRateModal && onOpenRateModal()}
+          style={{
+            padding: '10px 20px',
+            fontSize: '13px',
+            fontWeight: 700,
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 3px 10px rgba(0, 61, 44, 0.2)'
+          }}
+        >
+          <span>Rate Accuracy</span>
+          <ArrowRight size={14} />
+        </button>
       </section>
 
       {/* Recent Complaints */}

@@ -138,7 +138,6 @@ function App() {
         isOpen={isWalletModalOpen}
         onClose={() => setIsWalletModalOpen(false)}
         userPoints={userPoints}
-        onOpenRateModal={handleOpenRateModal}
       />
 
       {/* AI Reinforcement Learning Ground-Truth Rating Modal */}
