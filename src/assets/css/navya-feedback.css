@@ -4291,15 +4291,22 @@ body {
 
   .step-item {
     display: flex;
-    text-align: left;
+    flex-direction: column;
+    text-align: center;
     align-items: center;
-    gap: 14px;
-    padding: 6px;
+    gap: 12px;
+    padding: 16px;
   }
 
   .step-number {
     margin: 0;
     flex-shrink: 0;
+  }
+
+  .step-top-row {
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
   }
 
   .rate-cta-content {
