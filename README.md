@@ -11,7 +11,14 @@
 
 **An objective, sensor-grounded dispute resolution and telemetry calibration platform bridging Indian farmers and APMC Mandi aggregators.**
 
-[🚀 **Launch Live Application**](https://sky-ruler.github.io/navya-dispute-protocol/) • [📖 **Architecture**](#-hardware--sensor-architecture) • [⚡ **Quickstart**](#-getting-started) • [🤝 **Contributing**](CONTRIBUTING.md)
+<br />
+
+> ### 🌐 **Live Web Application**: [https://sky-ruler.github.io/navya-dispute-protocol/](https://sky-ruler.github.io/navya-dispute-protocol/)
+> **Try the dual-mode camera QR scanner, Sensirion SGP30/SHT31 sensor audits, and bilateral farmer-dealer dispute settlements live in your browser.**
+
+<br />
+
+[🚀 **Launch Live App**](https://sky-ruler.github.io/navya-dispute-protocol/) • [📖 **Architecture**](#-hardware--sensor-architecture) • [⚡ **Quickstart**](#-getting-started) • [🤝 **Contributing**](CONTRIBUTING.md)
 
 </div>
 
