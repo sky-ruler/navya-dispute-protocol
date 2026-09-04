@@ -60,20 +60,24 @@ export const HomePage = ({
             fontWeight: 700,
             color: activeRole === 'FARMER' ? '#a7f3d0' : '#fde68a'
           }}>
-            <span>{activeRole === 'FARMER' ? '👨‍🌾 Farmer Mode' : '🏢 Dealer Mode'}</span>
+            <span>{activeRole === 'FARMER' ? '👨‍🌾 Farmer View' : '🏢 Mandi Dealer View'}</span>
             <span style={{ opacity: 0.8, fontWeight: 500, color: '#f1f5f9' }}>
               {activeRole === 'FARMER'
-                ? '• Shielded from unfair mandi deductions via certified sensor baseline'
-                : '• Shielded from fraudulent claims with tamper-proof sensor telemetry'}
+                ? '• Connected as Ramesh Patil (Grower Member)'
+                : '• Connected as Apex Retail Hub (Vashi APMC)'}
             </span>
           </div>
         </div>
 
         <h1 style={{ fontSize: '28px', fontWeight: 800, lineHeight: 1.25, color: '#ffffff', marginBottom: '10px' }}>
-          Received Damaged or Spoiled Produce?
+          {activeRole === 'FARMER'
+            ? 'Protect Your Produce Value with Objective Telemetry'
+            : 'Mandi Spoilage Audit & Fast Bilateral Redressal'}
         </h1>
         <p style={{ fontSize: '15px', color: '#c2d5cd', maxWidth: '640px', lineHeight: 1.5, marginBottom: '24px' }}>
-          Report quality issues directly to your dealer or farmer. Backed by Sensirion physical sensor checks, both parties see the truth so problems get solved fairly and quickly.
+          {activeRole === 'FARMER'
+            ? 'Report transit heat abuse, rotting crates, or arbitrary payment cuts. Backed by Sensirion sensor checks, receive fresh replacement crates or fair price discounts directly from your buyer.'
+            : 'Audit arriving consignments against farm-gate packing sensor baselines. Propose fair replacement crates or credit note deductions to resolve claims instantly and keep trade moving.'}
         </p>
 
         {/* Big 2 Core Actions */}
@@ -95,10 +99,12 @@ export const HomePage = ({
           >
             <div>
               <div style={{ fontSize: '16px', fontWeight: 800 }}>
-                🌿 Report a Problem
+                {activeRole === 'FARMER' ? '🌿 File Quality Claim' : '📦 Report Arriving Spoilage'}
               </div>
               <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Upload photos & get replacement or discount
+                {activeRole === 'FARMER'
+                  ? 'Attach defect photos & request replacement crates'
+                  : 'Report damaged delivery & propose invoice adjustment'}
               </div>
             </div>
             <div style={{
@@ -132,10 +138,12 @@ export const HomePage = ({
           >
             <div>
               <div style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>
-                📋 View My Complaints
+                {activeRole === 'FARMER' ? '📋 My Filed Claims' : '📥 Arriving Spoilage Inbox'}
               </div>
               <div style={{ fontSize: '12.5px', color: '#c2d5cd', marginTop: '2px' }}>
-                {pendingCount} complaint(s) waiting for response
+                {activeRole === 'FARMER'
+                  ? `${pendingCount} active claim(s) awaiting dealer solution`
+                  : `${pendingCount} incoming claim(s) awaiting your settlement offer`}
               </div>
             </div>
             <div style={{

@@ -117,18 +117,34 @@ export const DisputeDetailsPage = ({
             </button>
           )}
 
-          {dispute.status !== 'RESOLVED' && (
+          {/* Bilateral Action: Propose Solution (Dealer / Aggregator Role) */}
+          {dispute.status !== 'RESOLVED' && activeRole === 'DEALER' && (
             <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
               <RefreshCw size={14} />
-              Offer Solution
+              {dispute.proposedAction ? 'Edit Settlement Offer' : 'Offer Solution'}
             </button>
           )}
 
+          {/* Bilateral Action: Accept Solution & Finish (Farmer / Claimant Role) */}
           {dispute.proposedAction && dispute.status !== 'RESOLVED' && (
-            <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px' }}>
-              <Star size={14} />
-              Accept & Finish
-            </button>
+            activeRole === 'FARMER' ? (
+              <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px' }}>
+                <Star size={14} />
+                Accept Solution & Finish
+              </button>
+            ) : (
+              <span style={{
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'var(--navya-forest-800)',
+                background: '#fef3c7',
+                border: '1px solid #fde68a',
+                padding: '6px 12px',
+                borderRadius: '6px'
+              }}>
+                ⏳ Offer Sent • Awaiting Farmer Acceptance
+              </span>
+            )
           )}
         </div>
       </div>
@@ -273,11 +289,28 @@ export const DisputeDetailsPage = ({
               )}
 
               {dispute.status !== 'RESOLVED' && (
-                <div style={{ marginTop: '14px', textAlign: 'right' }}>
-                  <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px', padding: '8px 16px' }}>
-                    <ThumbsUp size={14} />
-                    Accept Solution & Finish
-                  </button>
+                <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                  {activeRole === 'FARMER' ? (
+                    <>
+                      <span style={{ fontSize: '12.5px', color: 'var(--navya-forest-800)', fontWeight: 600 }}>
+                        👉 Please review the terms above and accept to close this claim.
+                      </span>
+                      <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px', padding: '8px 16px' }}>
+                        <ThumbsUp size={14} />
+                        Accept Solution & Finish
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ fontSize: '12px', color: '#92400e', fontWeight: 600 }}>
+                        ⏳ You offered this solution. The grower/farmer must review and accept it.
+                      </span>
+                      <button className="btn-secondary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '12px', padding: '6px 12px' }}>
+                        <RefreshCw size={13} />
+                        Edit Settlement Offer
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -290,14 +323,19 @@ export const DisputeDetailsPage = ({
               textAlign: 'center'
             }}>
               <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
-                Waiting for Dealer Reply
+                {activeRole === 'DEALER' ? 'Action Required: Offer Solution' : 'Waiting for Dealer Reply'}
               </div>
-              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '4px auto 12px', maxWidth: '320px' }}>
-                Check the sensor verdict and photos, then offer replacement crates or a fair discount.
+              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '4px auto 12px', maxWidth: '380px', lineHeight: 1.45 }}>
+                {activeRole === 'DEALER'
+                  ? 'Audit the produce photos and Sensirion hardware logs, then offer replacement crates or a credit note discount.'
+                  : `Your complaint is with the Mandi dealer (${batch?.dealer?.name || dispute.complainantName || 'Apex Hub'}). Switch to 🏢 Dealer Mode in the top navbar if you wish to simulate the dealer proposing terms.`}
               </div>
-              <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
-                Offer Solution Now
-              </button>
+              {activeRole === 'DEALER' && (
+                <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
+                  <RefreshCw size={14} />
+                  Offer Solution Now
+                </button>
+              )}
             </div>
           )}
 
