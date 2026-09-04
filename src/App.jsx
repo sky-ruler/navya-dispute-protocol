@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import './assets/css/navya-feedback.css';
 
+import { TopUtilityBar } from './components/common/TopUtilityBar';
 import { Navbar } from './components/common/Navbar';
+import { BottomNav } from './components/common/BottomNav';
 import { Footer } from './components/common/Footer';
+import { LanguageModal } from './components/common/LanguageModal';
 import { HomePage } from './pages/HomePage';
 import { FileComplaintPage } from './pages/FileComplaintPage';
 import { DealerDashboardPage } from './pages/DealerDashboardPage';
@@ -26,6 +29,7 @@ function App() {
   const [userPoints, setUserPoints] = useState(rewardService.getPoints());
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isRateModalOpen, setIsRateModalOpen] = useState(false);
+  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
   const [batchToRate, setBatchToRate] = useState(SEED_BATCHES[0]);
 
   // Load disputes on mount
@@ -69,9 +73,18 @@ function App() {
     setUserPoints(result.newTotalPoints);
   };
 
+  const pendingDisputesCount = disputes.filter(
+    d => d.status === 'PENDING_REVIEW' || d.status === 'UNDER_INVESTIGATION'
+  ).length;
+
   return (
     <div className="navya-shell">
-      {/* Universal Navya Navbar */}
+      {/* 1. Global Multilingual & Telemetry Ribbon */}
+      <TopUtilityBar 
+        onOpenLanguageModal={() => setIsLanguageModalOpen(true)} 
+      />
+
+      {/* 2. Universal Navya Navbar */}
       <Navbar
         currentView={currentView}
         setCurrentView={setCurrentView}
@@ -79,9 +92,10 @@ function App() {
         setActiveRole={setActiveRole}
         userPoints={userPoints}
         onOpenWalletModal={() => setIsWalletModalOpen(true)}
+        onOpenLanguageModal={() => setIsLanguageModalOpen(true)}
       />
 
-      {/* Main View Area */}
+      {/* 3. Main View Area */}
       <main className="main-content">
         {currentView === 'home' && (
           <HomePage
@@ -91,7 +105,7 @@ function App() {
             activeRole={activeRole}
             userPoints={userPoints}
             onOpenRateModal={handleOpenRateModal}
-            onRewardEarned={handleRewardEarned}
+            onOpenLanguageModal={() => setIsLanguageModalOpen(true)}
           />
         )}
 
@@ -130,17 +144,30 @@ function App() {
         )}
       </main>
 
-      {/* Universal Navya Footer */}
+      {/* 4. Universal Navya Footer */}
       <Footer />
 
-      {/* Mandi Rewards & Balance Breakdown Modal */}
+      {/* 5. Modern Floating Mobile Bottom Navigation Dock */}
+      <BottomNav
+        currentView={currentView}
+        setCurrentView={setCurrentView}
+        pendingCount={pendingDisputesCount}
+      />
+
+      {/* 6. Comprehensive Indian Languages Modal */}
+      <LanguageModal
+        isOpen={isLanguageModalOpen}
+        onClose={() => setIsLanguageModalOpen(false)}
+      />
+
+      {/* 7. Mandi Rewards & Balance Breakdown Modal */}
       <RewardsBalanceModal
         isOpen={isWalletModalOpen}
         onClose={() => setIsWalletModalOpen(false)}
         userPoints={userPoints}
       />
 
-      {/* AI Reinforcement Learning Ground-Truth Rating Modal */}
+      {/* 8. AI Reinforcement Learning Ground-Truth Rating Modal */}
       <RatePredictionModal
         isOpen={isRateModalOpen}
         onClose={() => setIsRateModalOpen(false)}
