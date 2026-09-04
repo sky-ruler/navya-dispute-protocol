@@ -1,23 +1,67 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Star, CheckCircle, Award, BrainCircuit, ShieldCheck, Clock, Info } from 'lucide-react';
+import { 
+  X, 
+  Sparkles, 
+  Star, 
+  CheckCircle2, 
+  Award, 
+  BrainCircuit, 
+  ShieldCheck, 
+  Clock, 
+  ArrowRight,
+  Send,
+  Calendar,
+  Layers,
+  HelpCircle,
+  ExternalLink
+} from 'lucide-react';
 import { rewardService } from '../../services/rewardService';
+
+const QUICK_STORAGE_TAGS = [
+  '❄️ Cold Storage (2–4°C)',
+  '🌡️ Ambient Mandi (26°C)',
+  '📦 Dry Corrugated Crates',
+  '🚚 Transit Shock Delay',
+  '💧 High Moisture Setting'
+];
 
 export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) => {
   if (!isOpen || !batch) return null;
 
   const [rating, setRating] = useState(5);
+  const [hoverRating, setHoverRating] = useState(0);
   const [note, setNote] = useState('');
+  const [selectedTags, setSelectedTags] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [rewardResult, setRewardResult] = useState(null);
 
   const predictedDays = batch.predictedShelfLifeDays || 7;
+  const displayRating = hoverRating || rating;
 
-  const ratingDescriptions = {
-    1: '1 Star — Very Inaccurate (produce spoiled far earlier than predicted)',
-    2: '2 Stars — Below Expectation (quality degraded faster than expected)',
-    3: '3 Stars — Acceptable (close to estimate with minor deviation)',
-    4: '4 Stars — Accurate (held up well as predicted)',
-    5: '5 Stars — Highly Accurate (shelf-life matched prediction perfectly)'
+  const ratingTiers = {
+    1: { label: 'Critical Decay', desc: 'Produce spoiled far earlier than predicted (< 4 days)', tier: 'tier-low' },
+    2: { label: 'Below Expectation', desc: 'Quality degraded faster than estimate (~6–8 days)', tier: 'tier-low' },
+    3: { label: 'Acceptable Precision', desc: 'Held up close to estimate with minor deviation (~10 days)', tier: 'tier-mid' },
+    4: { label: 'Accurate Prediction', desc: 'Produce held up well as predicted (~12 days)', tier: 'tier-high' },
+    5: { label: 'Spot-On Precision', desc: 'Shelf life matched prediction and telemetry perfectly (12+ days)', tier: 'tier-high' }
+  };
+
+  const handleTagToggle = (tag) => {
+    let nextTags;
+    if (selectedTags.includes(tag)) {
+      nextTags = selectedTags.filter(t => t !== tag);
+    } else {
+      nextTags = [...selectedTags, tag];
+    }
+    setSelectedTags(nextTags);
+
+    // Sync into note
+    const baseText = note.replace(/\[Tags:.*?\]/g, '').trim();
+    if (nextTags.length > 0) {
+      setNote(`${baseText} [Tags: ${nextTags.join(', ')}]`.trim());
+    } else {
+      setNote(baseText);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -28,7 +72,7 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
       crop: batch.crop,
       predictedShelfLifeDays: predictedDays,
       accuracyRating: rating,
-      userNote: note || ratingDescriptions[rating]
+      userNote: note || ratingTiers[rating].desc
     });
 
     setRewardResult(result);
@@ -41,229 +85,201 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
   const handleClose = () => {
     setIsSubmitted(false);
     setRewardResult(null);
+    setHoverRating(0);
+    setSelectedTags([]);
     onClose();
   };
 
+  const activeTierInfo = ratingTiers[displayRating] || ratingTiers[5];
+
   return (
     <div className="modal-backdrop" onClick={handleClose}>
-      <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
-        <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, var(--navya-forest-800), var(--navya-forest-600))',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <BrainCircuit size={18} />
+      <div className="rate-modal-dialog" onClick={(e) => e.stopPropagation()}>
+        {/* Top Gradient Ribbon */}
+        <div className="rate-modal-top-accent" />
+
+        {/* Modal Header */}
+        <div className="rate-modal-header">
+          <div className="rate-header-left">
+            <div className="rate-header-icon-box">
+              <BrainCircuit size={22} strokeWidth={2.4} />
             </div>
             <div>
-              <div className="modal-title" style={{ fontSize: '16px' }}>Rate AI Shelf-Life Prediction</div>
-              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                Help train Navya AI • Earn verified discount credits
+              <div className="rate-header-tag">
+                <Sparkles size={12} />
+                Reinforcement Learning Loop
+              </div>
+              <div className="rate-header-title">Rate Shelf-Life Precision</div>
+              <div className="rate-header-subtitle">
+                Validate Navya's AI prediction against actual harvest decay
               </div>
             </div>
           </div>
-          <button className="evidence-remove-btn" onClick={handleClose} style={{ position: 'static' }}>
-            <X size={15} />
+          <button className="rate-close-btn" onClick={handleClose} title="Close dialog">
+            <X size={16} />
           </button>
         </div>
 
         {!isSubmitted ? (
           <form onSubmit={handleSubmit}>
-            <div className="modal-body">
-              {/* Batch Banner */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '12px 16px',
-                background: 'var(--bg-surface-subtle)',
-                borderRadius: '8px',
-                border: '1px solid var(--border-subtle)',
-                marginBottom: '18px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '24px' }}>{batch.emoji}</span>
+            <div className="rate-modal-body">
+              {/* Produce Batch Passport Card */}
+              <div className="rate-batch-card">
+                <div className="rate-batch-info-left">
+                  <span className="rate-crop-avatar">{batch.emoji}</span>
                   <div>
-                    <div style={{ fontWeight: 800, color: 'var(--navya-forest-800)', fontSize: '14px' }}>
-                      {batch.crop} ({batch.id})
+                    <div className="rate-batch-title">
+                      {batch.crop} <span className="rate-batch-code">{batch.id}</span>
                     </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                      Farm Gate Quality: <strong>{batch.certifiedGrade || 'Grade A'}</strong>
+                    <div className="rate-batch-sub">
+                      Certified: <strong style={{ color: 'var(--navya-success)' }}>{batch.certifiedGrade || 'Grade A Fresh'}</strong> • {batch.variety || 'Standard Lot'}
                     </div>
                   </div>
                 </div>
 
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                    AI Predicted Shelf Life
-                  </div>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
-                    {predictedDays} Days
-                  </div>
+                <div className="rate-predicted-pill">
+                  <div className="rate-predicted-label">AI PREDICTED SHELF LIFE</div>
+                  <div className="rate-predicted-value">{predictedDays} Days</div>
                 </div>
               </div>
 
-              {/* Unified Star Rating (1-5) */}
-              <div className="form-group" style={{ textAlign: 'center', margin: '14px 0 16px' }}>
-                <label className="form-label" style={{ fontSize: '13.5px', marginBottom: '8px' }}>
-                  How accurate was the {predictedDays}-day shelf life estimate?
-                </label>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
+              {/* Star Rating Section */}
+              <div className="rate-star-section">
+                <div className="rate-star-prompt">
+                  How accurate was Navya's {predictedDays}-day shelf life estimate?
+                </div>
+
+                <div className="rate-stars-row" onMouseLeave={() => setHoverRating(0)}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       type="button"
                       key={star}
+                      className="rate-star-btn"
+                      onMouseEnter={() => setHoverRating(star)}
                       onClick={() => setRating(star)}
-                      style={{
-                        fontSize: '30px',
-                        color: rating >= star ? '#f59e0b' : '#d1d5db',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'transform 0.15s ease',
-                        transform: rating >= star ? 'scale(1.12)' : 'scale(1)',
-                        padding: '2px 4px'
-                      }}
                       title={`${star} Star${star > 1 ? 's' : ''}`}
                     >
-                      ★
+                      <Star
+                        className="rate-star-icon"
+                        fill={displayRating >= star ? '#f59e0b' : 'none'}
+                        stroke={displayRating >= star ? '#d97706' : '#cbd5e1'}
+                        strokeWidth={1.75}
+                      />
                     </button>
                   ))}
                 </div>
-                <div style={{
-                  fontSize: '12.5px',
-                  fontWeight: 600,
-                  color: rating <= 2 ? 'var(--navya-danger)' : rating === 3 ? 'var(--navya-warning)' : 'var(--navya-success)',
-                  minHeight: '20px'
-                }}>
-                  {ratingDescriptions[rating]}
+
+                <div>
+                  <div className={`rate-feedback-pill ${activeTierInfo.tier}`}>
+                    <span>★ {displayRating}.0 — {activeTierInfo.label}:</span>
+                    <span style={{ fontWeight: 500, opacity: 0.9 }}>{activeTierInfo.desc}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Detailed Description / Observations */}
-              <div className="form-group" style={{ marginBottom: '16px' }}>
-                <label className="form-label" style={{ fontSize: '12.5px' }}>
-                  Observations & Storage Notes (Optional):
+              {/* Quick Storage Context Tags */}
+              <div>
+                <label className="form-label" style={{ fontSize: '12.5px', marginBottom: '6px' }}>
+                  Storage Environment & Arrival Notes (Optional):
                 </label>
+                <div className="rate-quick-tags-row">
+                  {QUICK_STORAGE_TAGS.map((tag) => {
+                    const isSelected = selectedTags.includes(tag);
+                    return (
+                      <button
+                        type="button"
+                        key={tag}
+                        className={`rate-quick-tag ${isSelected ? 'active' : ''}`}
+                        onClick={() => handleTagToggle(tag)}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+
                 <textarea
-                  className="form-textarea"
+                  className="rate-textarea"
                   rows={2}
-                  style={{ fontSize: '12.5px', padding: '8px 12px', resize: 'vertical' }}
-                  placeholder="e.g. Crate arrived in good condition, lasted 2 extra days in cool shade / or decayed early due to transit heat..."
+                  placeholder="e.g. Crate arrived fresh; produce lasted 2 days longer under shade / or early decay in bottom layer..."
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                 />
               </div>
 
-              {/* Clear Verification & Redemption Notice */}
-              <div style={{
-                background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
-                border: '1px solid #fcd34d',
-                borderRadius: '8px',
-                padding: '12px 14px',
-                fontSize: '12px',
-                color: '#92400e',
-                lineHeight: 1.45,
-                display: 'flex',
-                gap: '10px'
-              }}>
-                <Info size={16} color="#b45309" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <div>
-                  <div style={{ fontWeight: 800, color: '#78350f', marginBottom: '2px' }}>
-                    Reward & Verification Policy
+              {/* Rewards & Verification Notice */}
+              <div className="rate-policy-card">
+                <div className="rate-policy-coin">🪙</div>
+                <div style={{ flex: 1 }}>
+                  <div className="rate-policy-title">
+                    <span>Earn Up to +50 Verified Points (₹25 Value)</span>
                   </div>
-                  <div>
-                    Our agronomy team & model verify submitted ratings against crate telemetry. Once verified, you will receive up to <strong>+50 points (₹25 credit)</strong>.
+                  <div className="rate-policy-text">
+                    Ratings are verified by Navya's agronomy team & telemetry validation pipeline before credits are issued to ensure clean ML training data.
                   </div>
-                  <div style={{ marginTop: '4px', color: '#b45309', fontWeight: 600 }}>
-                    🎁 Verified points can be redeemed as discounts on the main Navya website for scan credits and digital passports.
+                  <div className="rate-policy-highlight">
+                    <CheckCircle2 size={13} color="var(--navya-success)" />
+                    Redeemable as instant discounts on the main Navya platform for produce scans and lot certificates.
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: 'var(--navya-bronze-dark)' }}>
-                <ShieldCheck size={16} />
-                Subject to Verification
+            {/* Modal Footer */}
+            <div className="rate-modal-footer">
+              <div className="rate-footer-shield">
+                <ShieldCheck size={16} color="var(--navya-forest-700)" />
+                <span>Verified Feedback Protocol</span>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button type="button" className="btn-secondary" onClick={handleClose} style={{ fontSize: '13px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button type="button" className="btn-secondary" onClick={handleClose} style={{ fontSize: '13px', padding: '9px 16px' }}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-primary" style={{ fontSize: '13px' }}>
-                  Submit for Verification
+                <button type="submit" className="rate-submit-btn">
+                  <span>Submit for Review</span>
+                  <Send size={14} />
                 </button>
               </div>
             </div>
           </form>
         ) : (
-          <div className="modal-body" style={{ textAlign: 'center', padding: '36px 24px' }}>
-            <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              background: '#fef3c7',
-              color: '#d97706',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 16px'
-            }}>
-              <Clock size={32} />
+          <div className="rate-confirm-container">
+            <div className="rate-confirm-icon-box">
+              <CheckCircle2 size={34} strokeWidth={2.4} />
             </div>
 
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)', marginBottom: '6px' }}>
-              Rating Submitted for Verification! ⏳
-            </h3>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '380px', margin: '0 auto 18px', lineHeight: 1.5 }}>
-              Thank you! Your rating is queued for Navya's reinforcement learning model. Our team will verify the batch observations against sensor telemetry.
-            </p>
-
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: '#ecfdf5',
-              border: '1px solid #a7f3d0',
-              padding: '10px 18px',
-              borderRadius: '20px',
-              fontSize: '13.5px',
-              fontWeight: 700,
-              color: '#065f46',
-              marginBottom: '16px'
-            }}>
-              <Award size={18} color="#059669" />
-              Potential Reward: Up to +50 Points (₹25 Credit) Once Verified
+            <div className="rate-confirm-title">Rating Logged for Verification! ⏳</div>
+            <div className="rate-confirm-desc">
+              Your feedback for <strong>{batch.crop} ({batch.id})</strong> is queued for Navya's reinforcement learning model. Our quality team will cross-reference sensor telemetry.
             </div>
 
-            <div style={{
-              fontSize: '12px',
-              color: 'var(--text-muted)',
-              maxWidth: '360px',
-              margin: '0 auto 24px',
-              background: 'var(--bg-surface-subtle)',
-              padding: '10px 14px',
-              borderRadius: '8px',
-              border: '1px solid var(--border-subtle)'
-            }}>
-              💡 <strong>Redemption Info:</strong> Verified points can be redeemed later as instant discounts on the main Navya website for produce scans and lot certificates.
+            <div className="rate-confirm-badge-row">
+              <Award size={18} color="#b45309" />
+              <span>Potential Reward: +50 Points (₹25 Credit) Once Verified</span>
             </div>
 
-            <div>
-              <button className="btn-primary" onClick={handleClose} style={{ margin: '0 auto', fontSize: '13px' }}>
-                Done
-              </button>
+            <div className="rate-confirm-redemption-card">
+              <div style={{ fontSize: '18px' }}>🎁</div>
+              <div>
+                <strong style={{ color: 'var(--navya-forest-800)', display: 'block', marginBottom: '2px' }}>
+                  Redeemable on Main Navya Website
+                </strong>
+                Once reviewed, verified credits are deposited directly into your account and can be applied as discounts during produce scanning, lot certification, and digital passport issuance.
+              </div>
             </div>
+
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleClose}
+              style={{ padding: '10px 28px', fontSize: '13.5px' }}
+            >
+              Done
+            </button>
           </div>
         )}
       </div>
     </div>
   );
 };
+
