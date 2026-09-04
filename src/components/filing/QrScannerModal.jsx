@@ -461,7 +461,7 @@ export const QrScannerModal = ({ isOpen, onClose, onBatchScanned }) => {
               1-Tap Crate Presets:
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))', gap: '8px' }}>
               {SEED_BATCHES.map((b) => (
                 <button
                   key={b.id}

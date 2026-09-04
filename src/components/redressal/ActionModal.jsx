@@ -62,7 +62,7 @@ export const ActionModal = ({ isOpen, onClose, dispute, onActionSubmit }) => {
               <label className="form-label" style={{ fontWeight: 700, marginBottom: '8px', display: 'block' }}>
                 Select How You Want to Solve This:
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
                 <div
                   onClick={() => {
                     setActionType('REPLACEMENT_BATCH');
