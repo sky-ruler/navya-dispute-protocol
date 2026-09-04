@@ -72,77 +72,61 @@ export const DisputeDetailsPage = ({
   return (
     <div className="dispute-detail-container">
       {/* Top Header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '12px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-secondary" onClick={onBack} style={{ padding: '7px 12px', fontSize: '13px' }}>
+      <div className="detail-top-header">
+        <div className="detail-header-left">
+          <button className="btn-secondary btn-sm" onClick={onBack}>
             <ArrowLeft size={15} />
-            Back
+            <span>Back</span>
           </button>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="detail-header-info">
+            <div className="detail-header-title-row">
               <span style={{ fontSize: '22px' }}>{dispute.emoji}</span>
-              <h1 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+              <h1 className="detail-page-title">
                 {dispute.defectTitle}
               </h1>
               <StatusBadge status={dispute.status} />
             </div>
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+            <div className="detail-header-subtitle">
               Ticket: <strong>{dispute.id}</strong> • Batch: <strong>{dispute.batchId}</strong> ({dispute.crop})
             </div>
           </div>
         </div>
 
         {/* Header Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <button className="btn-secondary" onClick={() => window.print()} style={{ fontSize: '12.5px' }}>
+        <div className="detail-header-actions">
+          <button className="btn-secondary btn-sm" onClick={() => window.print()}>
             <Printer size={14} />
-            Print Slip
+            <span className="btn-label-mobile-hide">Print Slip</span>
           </button>
 
           {batch && onOpenRateModal && (
             <button 
-              className="btn-bronze" 
+              className="btn-bronze btn-sm" 
               onClick={() => onOpenRateModal(batch)} 
-              style={{ fontSize: '12.5px' }}
               title="Rate AI prediction accuracy to earn verified discounts"
             >
-              🧠 Rate Accuracy
+              🧠 <span className="btn-label-mobile-hide">Rate Accuracy</span>
             </button>
           )}
 
           {/* Bilateral Action: Propose Solution (Dealer / Aggregator Role) */}
           {dispute.status !== 'RESOLVED' && activeRole === 'DEALER' && (
-            <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
+            <button className="btn-primary btn-sm" onClick={() => setIsActionModalOpen(true)}>
               <RefreshCw size={14} />
-              {dispute.proposedAction ? 'Edit Settlement Offer' : 'Offer Solution'}
+              <span>{dispute.proposedAction ? 'Edit Offer' : 'Offer Solution'}</span>
             </button>
           )}
 
           {/* Bilateral Action: Accept Solution & Finish (Farmer / Claimant Role) */}
           {dispute.proposedAction && dispute.status !== 'RESOLVED' && (
             activeRole === 'FARMER' ? (
-              <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px' }}>
+              <button className="btn-bronze btn-sm" onClick={() => setIsFeedbackModalOpen(true)}>
                 <Star size={14} />
-                Accept Solution & Finish
+                <span>Accept & Finish</span>
               </button>
             ) : (
-              <span style={{
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--navya-forest-800)',
-                background: '#fef3c7',
-                border: '1px solid #fde68a',
-                padding: '6px 12px',
-                borderRadius: '6px'
-              }}>
-                ⏳ Offer Sent • Awaiting Farmer Acceptance
+              <span className="waiting-farmer-pill">
+                ⏳ Offer Sent • Awaiting Farmer
               </span>
             )
           )}
@@ -152,41 +136,41 @@ export const DisputeDetailsPage = ({
       {/* Main 2-Column Split */}
       <div className="split-detail-grid">
         {/* LEFT: Batch Origin, Sensor Check, & Photos */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="detail-left-col">
           {/* Card 1: Batch Info */}
           <div className="detail-pane">
-            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+            <h3 className="pane-title">
               <Building size={16} />
               Batch Origin Details
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px' }}>
+            <div className="batch-origin-grid">
               <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Farmer</span>
-                <div style={{ fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                <span className="batch-origin-label">Farmer</span>
+                <div className="batch-origin-value">
                   {batch?.farmer?.name || dispute.respondentName}
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{batch?.farmer?.region}</div>
+                <div className="batch-origin-sub">{batch?.farmer?.region}</div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Dealer</span>
-                <div style={{ fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                <span className="batch-origin-label">Dealer</span>
+                <div className="batch-origin-value">
                   {batch?.dealer?.name || dispute.complainantName}
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{batch?.dealer?.hub}</div>
+                <div className="batch-origin-sub">{batch?.dealer?.hub}</div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Quality Grade at Farm</span>
-                <div style={{ fontWeight: 700, color: 'var(--navya-success)' }}>
+                <span className="batch-origin-label">Quality Grade at Farm</span>
+                <div className="batch-origin-value" style={{ color: 'var(--navya-success)' }}>
                   {batch?.certifiedGrade || 'Grade A'} (Fresh)
                 </div>
               </div>
 
               <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '11px', textTransform: 'uppercase' }}>Total Lot Size</span>
-                <div style={{ fontWeight: 700 }}>
+                <span className="batch-origin-label">Total Lot Size</span>
+                <div className="batch-origin-value">
                   {batch?.quantityCrates || 100} Crates
                 </div>
               </div>
@@ -201,7 +185,7 @@ export const DisputeDetailsPage = ({
 
           {/* Card 3: Photos */}
           <div className="detail-pane">
-            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+            <h3 className="pane-title">
               Produce Photos Attached ({dispute.evidenceImages?.length || 0})
             </h3>
 
@@ -228,18 +212,18 @@ export const DisputeDetailsPage = ({
         </div>
 
         {/* RIGHT: Complaint, Solution, and Chat */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="detail-right-col">
           {/* What Was Reported */}
           <div className="detail-pane">
-            <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--navya-bronze-dark)' }}>
+            <div className="reported-by-label">
               Reported by {dispute.complainantName} ({dispute.filingDate})
             </div>
 
-            <div style={{ fontSize: '14px', color: 'var(--text-body)', marginTop: '8px', lineHeight: 1.5, background: 'var(--bg-surface-subtle)', padding: '12px', borderRadius: '8px' }}>
+            <div className="reported-quote">
               "{dispute.description}"
             </div>
 
-            <div style={{ marginTop: '12px', display: 'flex', gap: '16px', fontSize: '13px' }}>
+            <div className="reported-meta-row">
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Damaged Crates:</span>{' '}
                 <strong>{dispute.affectedCrates} Crates</strong>
@@ -253,61 +237,56 @@ export const DisputeDetailsPage = ({
 
           {/* Dealer's Solution Box */}
           {dispute.proposedAction ? (
-            <div style={{
-              background: dispute.status === 'RESOLVED' ? 'var(--navya-success-bg)' : '#fff8ed',
-              border: `1.5px solid ${dispute.status === 'RESOLVED' ? 'var(--navya-success-border)' : '#fed7aa'}`,
-              borderRadius: 'var(--radius-lg)',
-              padding: '20px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+            <div className={`solution-box ${dispute.status === 'RESOLVED' ? 'resolved' : 'pending'}`}>
+              <div className="solution-box-header">
+                <div className="solution-box-title">
                   {dispute.status === 'RESOLVED' ? <ShieldCheck size={18} color="var(--navya-success)" /> : <Clock size={18} color="var(--navya-warning)" />}
                   {dispute.status === 'RESOLVED' ? 'Problem Solved & Agreed' : 'Solution Offered by Dealer'}
                 </div>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{dispute.proposedAction.proposedAt}</span>
+                <span className="solution-box-time">{dispute.proposedAction.proposedAt}</span>
               </div>
 
-              <div style={{ fontSize: '13.5px', color: 'var(--text-body)', marginBottom: '12px' }}>
+              <div className="solution-box-note">
                 {dispute.proposedAction.note}
               </div>
 
               {dispute.proposedAction.amountInr > 0 && (
-                <div style={{ display: 'inline-block', padding: '6px 12px', background: '#ffffff', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.08)', fontSize: '13px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                <div className="solution-amount-badge">
                   Discount Agreed: ₹{dispute.proposedAction.amountInr?.toLocaleString('en-IN')}
                 </div>
               )}
 
               {dispute.feedback && (
-                <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                <div className="solution-feedback">
                   <div style={{ color: '#f59e0b', fontSize: '16px' }}>
                     {'★'.repeat(dispute.feedback.rating || 5)}
                   </div>
-                  <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '2px' }}>
+                  <div className="solution-feedback-text">
                     "{dispute.feedback.comment}"
                   </div>
                 </div>
               )}
 
               {dispute.status !== 'RESOLVED' && (
-                <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                <div className="solution-actions-row">
                   {activeRole === 'FARMER' ? (
                     <>
-                      <span style={{ fontSize: '12.5px', color: 'var(--navya-forest-800)', fontWeight: 600 }}>
+                      <span className="solution-hint-text">
                         👉 Please review the terms above and accept to close this claim.
                       </span>
-                      <button className="btn-bronze" onClick={() => setIsFeedbackModalOpen(true)} style={{ fontSize: '13px', padding: '8px 16px' }}>
+                      <button className="btn-bronze btn-sm" onClick={() => setIsFeedbackModalOpen(true)}>
                         <ThumbsUp size={14} />
-                        Accept Solution & Finish
+                        Accept & Finish
                       </button>
                     </>
                   ) : (
                     <>
-                      <span style={{ fontSize: '12px', color: '#92400e', fontWeight: 600 }}>
+                      <span className="solution-waiting-text">
                         ⏳ You offered this solution. The grower/farmer must review and accept it.
                       </span>
-                      <button className="btn-secondary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '12px', padding: '6px 12px' }}>
+                      <button className="btn-secondary btn-sm" onClick={() => setIsActionModalOpen(true)}>
                         <RefreshCw size={13} />
-                        Edit Settlement Offer
+                        Edit Offer
                       </button>
                     </>
                   )}
@@ -315,23 +294,17 @@ export const DisputeDetailsPage = ({
               )}
             </div>
           ) : (
-            <div style={{
-              background: 'var(--bg-surface-subtle)',
-              border: '1px dashed var(--border-medium)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '20px',
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+            <div className="no-solution-placeholder">
+              <div className="no-solution-title">
                 {activeRole === 'DEALER' ? 'Action Required: Offer Solution' : 'Waiting for Dealer Reply'}
               </div>
-              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '4px auto 12px', maxWidth: '380px', lineHeight: 1.45 }}>
+              <div className="no-solution-desc">
                 {activeRole === 'DEALER'
                   ? 'Audit the produce photos and Sensirion hardware logs, then offer replacement crates or a credit note discount.'
                   : `Your complaint is with the Mandi dealer (${batch?.dealer?.name || dispute.complainantName || 'Apex Hub'}). Switch to 🏢 Dealer Mode in the top navbar if you wish to simulate the dealer proposing terms.`}
               </div>
               {activeRole === 'DEALER' && (
-                <button className="btn-primary" onClick={() => setIsActionModalOpen(true)} style={{ fontSize: '13px' }}>
+                <button className="btn-primary" onClick={() => setIsActionModalOpen(true)}>
                   <RefreshCw size={14} />
                   Offer Solution Now
                 </button>
@@ -341,7 +314,7 @@ export const DisputeDetailsPage = ({
 
           {/* Simple Message Chat */}
           <div className="detail-pane">
-            <h3 className="pane-title" style={{ fontSize: '15px' }}>
+            <h3 className="pane-title">
               <MessageSquare size={16} />
               Messages & Activity
             </h3>
@@ -351,22 +324,21 @@ export const DisputeDetailsPage = ({
                 <div key={idx} className="timeline-node">
                   <div className="timeline-dot"></div>
                   <div className="timeline-node-time">{item.time}</div>
-                  <div className="timeline-node-title" style={{ fontSize: '13px' }}>{item.actor}</div>
-                  <div className="timeline-node-text" style={{ fontSize: '12px' }}>{item.action}</div>
+                  <div className="timeline-node-title">{item.actor}</div>
+                  <div className="timeline-node-text">{item.action}</div>
                 </div>
               ))}
             </div>
 
-            <form onSubmit={handleSendComment} style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
+            <form onSubmit={handleSendComment} className="comment-form">
               <input
                 type="text"
                 className="form-input"
-                style={{ padding: '8px 12px', fontSize: '13px' }}
                 placeholder={`Type a note as ${activeRole === 'DEALER' ? 'Dealer' : 'Farmer'}...`}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
               />
-              <button type="submit" className="btn-primary" style={{ padding: '0 14px' }}>
+              <button type="submit" className="btn-primary comment-send-btn">
                 <Send size={14} />
               </button>
             </form>
@@ -377,12 +349,11 @@ export const DisputeDetailsPage = ({
       {/* Image Zoom Lightbox */}
       {activeImageZoom && (
         <div className="modal-backdrop" onClick={() => setActiveImageZoom(null)}>
-          <div style={{ maxWidth: '700px', width: '90%', position: 'relative' }}>
-            <img src={activeImageZoom} alt="Zoomed evidence" style={{ width: '100%', borderRadius: '10px' }} />
+          <div className="lightbox-container">
+            <img src={activeImageZoom} alt="Zoomed evidence" className="lightbox-img" />
             <button 
-              className="evidence-remove-btn" 
+              className="evidence-remove-btn lightbox-close"
               onClick={() => setActiveImageZoom(null)}
-              style={{ position: 'absolute', top: '10px', right: '10px' }}
             >
               ✕
             </button>

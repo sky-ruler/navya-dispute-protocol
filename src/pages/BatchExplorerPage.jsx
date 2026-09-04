@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, ShieldCheck, Activity, Thermometer, Wind, QrCode, PlusCircle, ArrowRight } from 'lucide-react';
 import { SEED_BATCHES } from '../services/mockData';
 
-export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
+export const BatchExplorerPage = ({ onSelectBatchForClaim, onOpenRateModal }) => {
   const [search, setSearch] = useState('');
 
   const filtered = SEED_BATCHES.filter(b => 
@@ -14,24 +14,23 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
 
   return (
     <div className="batch-explorer-container">
-      <div className="section-header" style={{ marginBottom: '24px' }}>
+      <div className="section-header">
         <div>
-          <h1 className="section-title" style={{ fontSize: '26px' }}>Navya Produce Batch Explorer</h1>
+          <h1 className="section-title">Navya Produce Batch Explorer</h1>
           <p className="section-desc">
             Cryptographically registered produce batches with immutable sensor baselines and checkpoints
           </p>
         </div>
 
-        <div style={{ position: 'relative', width: '280px' }}>
+        <div className="batch-search-wrap">
           <input
             type="text"
-            className="form-input"
-            style={{ padding: '8px 12px 8px 34px', fontSize: '13px' }}
+            className="form-input batch-search-input"
             placeholder="Search crop, batch ID, or farmer..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Search size={15} style={{ position: 'absolute', left: '10px', top: '10px', color: 'var(--text-muted)' }} />
+          <Search size={15} className="batch-search-icon" />
         </div>
       </div>
 
@@ -39,36 +38,27 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
         {filtered.map((b) => (
           <div 
             key={b.id} 
-            className="action-card"
-            style={{ background: '#ffffff' }}
+            className="action-card batch-card"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '28px' }}>{b.emoji}</span>
+            <div className="batch-card-header">
+              <div className="batch-card-identity">
+                <span className="batch-card-emoji">{b.emoji}</span>
                 <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+                  <div className="batch-card-id">
                     {b.id}
                   </div>
-                  <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>
+                  <div className="batch-card-crop">
                     {b.crop} • {b.variety}
                   </div>
                 </div>
               </div>
 
-              <span style={{
-                fontSize: '11.5px',
-                fontWeight: 700,
-                padding: '3px 8px',
-                borderRadius: '4px',
-                background: 'var(--navya-success-bg)',
-                color: 'var(--navya-success)',
-                border: '1px solid var(--navya-success-border)'
-              }}>
+              <span className="batch-card-grade">
                 {b.certifiedGrade} ({b.farmGateScore}/100)
               </span>
             </div>
 
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.5 }}>
+            <div className="batch-card-details">
               <div><strong>Farmer:</strong> {b.farmer.name} ({b.farmer.fpo})</div>
               <div><strong>Location:</strong> {b.farmer.region}</div>
               <div><strong>Volume:</strong> {b.quantityCrates} Crates ({b.quantityKg} kg)</div>
@@ -77,59 +67,46 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
             </div>
 
             {/* Hardware Sensor Telemetry Box */}
-            <div style={{
-              background: 'var(--bg-surface-subtle)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: '8px',
-              padding: '12px',
-              fontSize: '11.5px',
-              marginBottom: '16px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--navya-forest-700)', textTransform: 'uppercase' }}>
+            <div className="batch-telemetry-box">
+              <div className="batch-telemetry-header">
+                <span className="batch-telemetry-scanner-label">
                   📡 Navya Mobile Scanner v2.1
                 </span>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                <span className="batch-telemetry-hw-label">
                   Sensirion Hardware Suite
                 </span>
               </div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '8px'
-              }}>
+              <div className="batch-telemetry-grid">
                 <div>
-                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>SGP30 TVOC</span>
-                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.tvoc_ppb} ppb</strong>
+                  <span className="batch-telemetry-metric">SGP30 TVOC</span>
+                  <strong className="batch-telemetry-value">{b.initialTelemetry.tvoc_ppb} ppb</strong>
                 </div>
                 <div>
-                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>eCO₂ Respiration</span>
-                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.eco2_ppm} ppm</strong>
+                  <span className="batch-telemetry-metric">eCO₂ Respiration</span>
+                  <strong className="batch-telemetry-value">{b.initialTelemetry.eco2_ppm} ppm</strong>
                 </div>
                 <div>
-                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>SHT31 Thermal</span>
-                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.initialTelemetry.temp_c}°C / {b.initialTelemetry.humidity_rh}% RH</strong>
+                  <span className="batch-telemetry-metric">SHT31 Thermal</span>
+                  <strong className="batch-telemetry-value">{b.initialTelemetry.temp_c}°C / {b.initialTelemetry.humidity_rh}% RH</strong>
                 </div>
                 <div>
-                  <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '10.5px' }}>Sensor Est. Shelf Life</span>
-                  <strong style={{ color: 'var(--navya-forest-800)' }}>{b.predictedShelfLifeDays} Days</strong>
+                  <span className="batch-telemetry-metric">Sensor Est. Shelf Life</span>
+                  <strong className="batch-telemetry-value">{b.predictedShelfLifeDays} Days</strong>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+            <div className="batch-card-actions">
               <button 
-                className="btn-secondary" 
-                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '7px' }}
+                className="btn-secondary batch-card-btn"
                 onClick={() => onSelectBatchForClaim(b)}
               >
                 <PlusCircle size={13} />
                 Report Issue
               </button>
               <button 
-                className="btn-bronze" 
-                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '7px' }}
+                className="btn-bronze batch-card-btn"
                 onClick={() => onOpenRateModal && onOpenRateModal(b)}
                 title="Rate AI prediction accuracy to earn verified discounts"
               >

@@ -24,26 +24,9 @@ export const HomePage = ({
   return (
     <div className="home-page-container">
       {/* Simple, Welcoming Banner */}
-      <section style={{
-        background: 'linear-gradient(135deg, #003d2c 0%, #00261b 100%)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '36px 32px',
-        color: '#ffffff',
-        marginBottom: '28px',
-        boxShadow: 'var(--shadow-md)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'rgba(255, 255, 255, 0.12)',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--navya-lime-tint)'
-          }}>
+      <section className="hero-banner" style={{ marginBottom: '28px' }}>
+        <div className="hero-banner-top" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+          <div className="hero-pill">
             <Leaf size={14} />
             <span>Navya Agritech • Hardware-Backed Dispute Redressal</span>
           </div>
@@ -58,10 +41,11 @@ export const HomePage = ({
             borderRadius: '20px',
             fontSize: '11.5px',
             fontWeight: 700,
-            color: activeRole === 'FARMER' ? '#a7f3d0' : '#fde68a'
+            color: activeRole === 'FARMER' ? '#a7f3d0' : '#fde68a',
+            flexWrap: 'wrap'
           }}>
             <span>{activeRole === 'FARMER' ? '👨‍🌾 Farmer View' : '🏢 Mandi Dealer View'}</span>
-            <span style={{ opacity: 0.8, fontWeight: 500, color: '#f1f5f9' }}>
+            <span className="hero-role-detail" style={{ opacity: 0.8, fontWeight: 500, color: '#f1f5f9' }}>
               {activeRole === 'FARMER'
                 ? '• Connected as Ramesh Patil (Grower Member)'
                 : '• Connected as Apex Retail Hub (Vashi APMC)'}
@@ -69,94 +53,53 @@ export const HomePage = ({
           </div>
         </div>
 
-        <h1 style={{ fontSize: '28px', fontWeight: 800, lineHeight: 1.25, color: '#ffffff', marginBottom: '10px' }}>
+        <h1 className="hero-title">
           {activeRole === 'FARMER'
             ? 'Protect Your Produce Value with Objective Telemetry'
             : 'Mandi Spoilage Audit & Fast Bilateral Redressal'}
         </h1>
-        <p style={{ fontSize: '15px', color: '#c2d5cd', maxWidth: '640px', lineHeight: 1.5, marginBottom: '24px' }}>
+        <p className="hero-subtitle">
           {activeRole === 'FARMER'
             ? 'Report transit heat abuse, rotting crates, or arbitrary payment cuts. Backed by Sensirion sensor checks, receive fresh replacement crates or fair price discounts directly from your buyer.'
             : 'Audit arriving consignments against farm-gate packing sensor baselines. Propose fair replacement crates or credit note deductions to resolve claims instantly and keep trade moving.'}
         </p>
 
         {/* Big 2 Core Actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+        <div className="hero-actions-grid">
           <div 
             onClick={() => setCurrentView('file-complaint')}
-            style={{
-              background: '#ffffff',
-              color: 'var(--navya-forest-800)',
-              borderRadius: 'var(--radius-md)',
-              padding: '20px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              transition: 'transform 0.15s ease',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-            }}
+            className="hero-action-card hero-action-card--primary"
           >
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 800 }}>
+              <div className="hero-action-title">
                 {activeRole === 'FARMER' ? '🌿 File Quality Claim' : '📦 Report Arriving Spoilage'}
               </div>
-              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              <div className="hero-action-desc">
                 {activeRole === 'FARMER'
                   ? 'Attach defect photos & request replacement crates'
                   : 'Report damaged delivery & propose invoice adjustment'}
               </div>
             </div>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'var(--navya-forest-800)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0
-            }}>
+            <div className="hero-action-icon">
               <PlusCircle size={20} />
             </div>
           </div>
 
           <div 
             onClick={() => setCurrentView('inbox')}
-            style={{
-              background: 'rgba(255, 255, 255, 0.12)',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
-              borderRadius: 'var(--radius-md)',
-              padding: '20px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              transition: 'transform 0.15s ease'
-            }}
+            className="hero-action-card hero-action-card--ghost"
           >
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>
+              <div className="hero-action-title" style={{ color: '#ffffff' }}>
                 {activeRole === 'FARMER' ? '📋 My Filed Claims' : '📥 Arriving Spoilage Inbox'}
               </div>
-              <div style={{ fontSize: '12.5px', color: '#c2d5cd', marginTop: '2px' }}>
+              <div className="hero-action-desc" style={{ color: '#c2d5cd' }}>
                 {activeRole === 'FARMER'
                   ? `${pendingCount} active claim(s) awaiting dealer solution`
                   : `${pendingCount} incoming claim(s) awaiting your settlement offer`}
               </div>
             </div>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.2)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0
-            }}>
+            <div className="hero-action-icon hero-action-icon--ghost">
               <Inbox size={20} />
             </div>
           </div>
@@ -164,87 +107,44 @@ export const HomePage = ({
       </section>
 
       {/* Super Simple 3 Steps */}
-      <section style={{
-        background: '#ffffff',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '28px 24px',
-        marginBottom: '28px',
-        boxShadow: 'var(--shadow-sm)'
-      }}>
-        <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)', marginBottom: '18px', textAlign: 'center' }}>
+      <section className="steps-section">
+        <h2 className="steps-section-title">
           How It Works (In 3 Simple Steps)
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-          <div style={{ textAlign: 'center', padding: '10px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              background: 'var(--navya-success-bg)',
-              color: 'var(--navya-forest-800)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 10px',
-              fontWeight: 800,
-              fontSize: '16px'
-            }}>
+        <div className="steps-grid">
+          <div className="step-item">
+            <div className="step-number" style={{ background: 'var(--navya-success-bg)', color: 'var(--navya-forest-800)' }}>
               1
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+            <div className="step-title">
               Scan Crate or Pick Batch
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            <div className="step-desc">
               Simply scan the QR code on your crate or pick the lot from the list.
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '10px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              background: 'var(--navya-bronze-light)',
-              color: 'var(--navya-bronze-dark)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 10px',
-              fontWeight: 800,
-              fontSize: '16px'
-            }}>
+          <div className="step-item">
+            <div className="step-number" style={{ background: 'var(--navya-bronze-light)', color: 'var(--navya-bronze-dark)' }}>
               2
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+            <div className="step-title">
               Take a Photo
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            <div className="step-desc">
               Show the damaged or spoiled fruits so the dealer clearly sees the issue.
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '10px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              background: 'var(--navya-success-bg)',
-              color: 'var(--navya-forest-800)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 10px',
-              fontWeight: 800,
-              fontSize: '16px'
-            }}>
+          <div className="step-item">
+            <div className="step-number" style={{ background: 'var(--navya-success-bg)', color: 'var(--navya-forest-800)' }}>
               3
             </div>
-            <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+            <div className="step-title">
               Get Replacement or Discount
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            <div className="step-desc">
               Dealer reviews the sensor proof and sends fresh crates or a price discount.
             </div>
           </div>
@@ -252,53 +152,21 @@ export const HomePage = ({
       </section>
 
       {/* Main Webpage Rating Pop-up Action Card */}
-      <section style={{
-        background: 'linear-gradient(135deg, #fcfbf9 0%, #ffffff 100%)',
-        border: '1px solid #e7ded2',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px 24px',
-        marginBottom: '28px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '18px',
-        flexWrap: 'wrap',
-        boxShadow: 'var(--shadow-sm)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '260px', flex: 1 }}>
-          <div style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, var(--navya-forest-800) 0%, #005a3e 100%)',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '20px',
-            flexShrink: 0,
-            boxShadow: '0 4px 12px rgba(0, 61, 44, 0.18)'
-          }}>
+      <section className="rate-cta-banner">
+        <div className="rate-cta-content">
+          <div className="rate-cta-icon">
             ⭐
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+            <div className="rate-cta-title-row">
+              <span className="rate-cta-title">
                 Rate Produce Shelf-Life Accuracy
               </span>
-              <span style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                background: '#fef3c7',
-                color: '#92400e',
-                border: '1px solid #fde68a',
-                padding: '2px 8px',
-                borderRadius: '12px'
-              }}>
+              <span className="rate-cta-badge">
                 Earn +50 Credits
               </span>
             </div>
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px', lineHeight: 1.45 }}>
+            <div className="rate-cta-desc">
               Help train Navya's AI prediction model by rating whether our estimated shelf life matched your produce quality.
             </div>
           </div>
@@ -306,19 +174,8 @@ export const HomePage = ({
 
         <button
           type="button"
-          className="btn-primary"
+          className="btn-primary rate-cta-btn"
           onClick={() => onOpenRateModal && onOpenRateModal()}
-          style={{
-            padding: '10px 20px',
-            fontSize: '13px',
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 3px 10px rgba(0, 61, 44, 0.2)'
-          }}
         >
           <span>Rate Accuracy</span>
           <ArrowRight size={14} />
@@ -328,7 +185,7 @@ export const HomePage = ({
       {/* Recent Complaints */}
       <div className="section-header" style={{ marginBottom: '14px' }}>
         <div>
-          <h2 className="section-title" style={{ fontSize: '20px' }}>Recent Quality Issues</h2>
+          <h2 className="section-title">Recent Quality Issues</h2>
           <p className="section-desc">Click on any ticket to see how it was resolved</p>
         </div>
         <button className="btn-secondary" onClick={() => setCurrentView('inbox')}>
@@ -342,30 +199,29 @@ export const HomePage = ({
             key={d.id} 
             className="dispute-item-card"
             onClick={() => onSelectDispute(d.id)}
-            style={{ padding: '16px 20px' }}
           >
             <div className="dispute-main-col">
-              <div className="crop-badge-avatar" style={{ width: '42px', height: '42px', fontSize: '20px' }}>
+              <div className="crop-badge-avatar">
                 {d.emoji}
               </div>
               <div className="dispute-meta-block">
-                <div className="dispute-title-row" style={{ gap: '8px' }}>
+                <div className="dispute-title-row">
                   <span className="dispute-id-code">{d.id}</span>
                   <span style={{ color: 'var(--text-subtle)' }}>•</span>
                   <span className="dispute-crop-name">{d.crop}</span>
                   <StatusBadge status={d.status} />
                 </div>
-                <div style={{ fontSize: '13.5px', color: 'var(--text-body)', fontWeight: 600, marginTop: '2px' }}>
+                <div className="dispute-defect-title">
                   {d.defectTitle}
                 </div>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                <div className="dispute-meta-line">
                   {d.affectedCrates} Crates • Batch: {d.batchId} • {d.filingDate}
                 </div>
               </div>
             </div>
 
             <div className="dispute-action-col">
-              <button className="btn-secondary" style={{ padding: '6px 14px', fontSize: '12px' }}>
+              <button className="btn-secondary dispute-view-btn">
                 View →
               </button>
             </div>

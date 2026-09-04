@@ -114,73 +114,57 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="file-complaint-container">
       {/* Page Title */}
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
+      <div className="page-header-block">
+        <h1 className="page-main-title">
           Report a Quality Problem
         </h1>
-        <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+        <p className="page-main-desc">
           Fill in 3 simple details so your dealer can review and fix the issue
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
         {/* Step 1: Select Batch */}
-        <div style={{
-          background: '#ffffff',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '24px',
-          marginBottom: '20px',
-          boxShadow: 'var(--shadow-sm)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+        <div className="form-card">
+          <div className="form-card-header">
+            <div className="form-card-title">
               Step 1: Which Produce Batch?
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div className="form-card-actions">
               <button
                 type="button"
-                className="btn-secondary"
-                style={{ padding: '6px 12px', fontSize: '12px' }}
+                className="btn-secondary btn-sm"
                 onClick={() => setIsQrModalOpen(true)}
               >
                 <QrCode size={14} />
-                Scan Crate QR
+                <span className="btn-label-mobile-hide">Scan Crate</span> QR
               </button>
               <button
                 type="button"
-                className="btn-secondary"
-                style={{ padding: '6px 12px', fontSize: '12px' }}
+                className="btn-secondary btn-sm"
                 onClick={() => setShowReportUploader(!showReportUploader)}
               >
                 <UploadCloud size={14} />
-                Upload Report
+                <span className="btn-label-mobile-hide">Upload</span> Report
               </button>
             </div>
           </div>
 
           {/* Quick Click Batches */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+          <div className="batch-select-grid">
             {SEED_BATCHES.map((b) => (
               <div
                 key={b.id}
                 onClick={() => setSelectedBatch(b)}
-                style={{
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: `1.5px solid ${selectedBatch?.id === b.id ? 'var(--navya-forest-800)' : 'var(--border-subtle)'}`,
-                  background: selectedBatch?.id === b.id ? 'var(--navya-success-bg)' : 'var(--bg-surface-subtle)',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease'
-                }}
+                className={`batch-select-card ${selectedBatch?.id === b.id ? 'selected' : ''}`}
               >
                 <div style={{ fontSize: '20px' }}>{b.emoji}</div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)', marginTop: '4px' }}>
+                <div className="batch-select-name">
                   {b.crop}
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                <div className="batch-select-meta">
                   {b.id} • {b.quantityCrates} Crates
                 </div>
               </div>
@@ -189,7 +173,7 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
 
           {/* Optional Report Uploader drop-down */}
           {showReportUploader && (
-            <div style={{ marginTop: '16px', padding: '16px', background: '#faf9f5', borderRadius: '8px', border: '1px solid var(--border-medium)' }}>
+            <div className="report-uploader-wrap">
               <ReportUploader
                 onReportParsed={(parsed) => {
                   setSelectedBatch(parsed);
@@ -202,37 +186,17 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
 
           {/* Simple Selected Batch Badge */}
           {selectedBatch && (
-            <div style={{
-              marginTop: '12px',
-              padding: '10px 14px',
-              background: '#f0fdf4',
-              border: '1px solid #bbf7d0',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '12.5px',
-              color: 'var(--navya-forest-800)',
-              flexWrap: 'wrap',
-              gap: '8px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="selected-batch-badge">
+              <div className="selected-batch-info">
                 <CheckCircle2 size={16} color="#16a34a" />
                 <span>
                   Selected: <strong>{selectedBatch.crop}</strong> ({selectedBatch.id})
                 </span>
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  background: '#dcfce7',
-                  color: '#15803d',
-                  padding: '2px 8px',
-                  borderRadius: '12px'
-                }}>
+                <span className="grade-pill">
                   {selectedBatch.certifiedGrade || 'Grade A'} Verified
                 </span>
               </div>
-              <span style={{ fontSize: '11.5px', color: '#166534', fontWeight: 600 }}>
+              <span className="selected-batch-count">
                 {selectedBatch.quantityCrates} Crates Available
               </span>
             </div>
@@ -240,47 +204,33 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
         </div>
 
         {/* Step 2: What is the issue? */}
-        <div style={{
-          background: '#ffffff',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '24px',
-          marginBottom: '20px',
-          boxShadow: 'var(--shadow-sm)'
-        }}>
-          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '14px' }}>
+        <div className="form-card">
+          <div className="form-card-title" style={{ marginBottom: '14px' }}>
             Step 2: What Went Wrong?
           </div>
 
           {/* Big Issue Selection Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }}>
+          <div className="issue-select-grid">
             {issueOptions.map((opt) => (
               <div
                 key={opt.id}
                 onClick={() => setIssueType(opt.id)}
-                style={{
-                  padding: '14px',
-                  borderRadius: '8px',
-                  border: `1.5px solid ${issueType === opt.id ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
-                  background: issueType === opt.id ? 'var(--navya-success-bg)' : '#ffffff',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease'
-                }}
+                className={`issue-select-card ${issueType === opt.id ? 'selected' : ''}`}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '20px' }}>{opt.emoji}</span>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--navya-forest-800)' }}>
+                  <span className="issue-select-title">
                     {opt.title}
                   </span>
                 </div>
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                <div className="issue-select-desc">
                   {opt.desc}
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+          <div className="form-two-col">
             <div className="form-group" style={{ margin: 0 }}>
               <label className="form-label">How Many Crates Are Affected?</label>
               <input
@@ -322,25 +272,18 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
         </div>
 
         {/* Step 3: Photos & Submit */}
-        <div style={{
-          background: '#ffffff',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '24px',
-          marginBottom: '28px',
-          boxShadow: 'var(--shadow-sm)'
-        }}>
-          <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--navya-forest-800)', marginBottom: '14px' }}>
+        <div className="form-card">
+          <div className="form-card-title" style={{ marginBottom: '14px' }}>
             Step 3: Add Photos of Damaged Produce
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap' }}>
-            <label className="btn-secondary" style={{ cursor: 'pointer', padding: '7px 14px', fontSize: '13px' }}>
+          <div className="photo-actions-row">
+            <label className="btn-secondary photo-upload-btn">
               <Camera size={15} />
               Take or Upload Photo
               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleCustomPhotoUpload} />
             </label>
-            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <span className="photo-hint-text">
               or click to add test photo:
             </span>
             {SAMPLE_DEFECT_PHOTOS.slice(0, 2).map((s, idx) => (
@@ -376,8 +319,7 @@ export const FileComplaintPage = ({ onDisputeCreated, activeRole }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="btn-primary"
-            style={{ width: '100%', justifyContent: 'center', padding: '14px', fontSize: '15px' }}
+            className="btn-primary submit-claim-btn"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
