@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./leaf.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navya — Dispute & Redressal Protocol | Post-Harvest Quality Claims</title>
+    <meta name="description" content="Verifiable post-harvest dispute redressal and feedback platform for farmers, aggregators, and dealers powered by Navya produce telemetry." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="./assets/index-pb5p7Rio.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-GVQXxyBD.css">
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Completely Hide Google Translate 3rd Party UI & Keep Translation Engine Active -->
+    <style>
+      /* Hide top Google Translate banner frame, direct body skiptranslate wrapper, and any Google branding */
+      body > .skiptranslate,
+      .goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      iframe.goog-te-banner-frame,
+      iframe[class*="goog-te-banner-frame"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0px !important;
+        width: 0px !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+        pointer-events: none !important;
+      }
+
+      /* Force body to stay at top: 0 with zero displacement */
+      body {
+        top: 0px !important;
+        position: static !important;
+        margin-top: 0px !important;
+      }
+
+      /* Hide Google translation hover tooltip balloons and yellow text highlights */
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      .goog-tooltip,
+      .goog-tooltip:hover {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      .goog-text-highlight {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Hide Google attribution clutter */
+      .goog-logo-link,
+      .goog-te-gadget span {
+        display: none !important;
+      }
+    </style>
+
+    <!-- Google Translate Multi-Lingual Support Script -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        if (window.google && window.google.translate) {
+          var targetId = document.getElementById('google_translate_hidden_holder') ? 'google_translate_hidden_holder' : 'google_translate_element';
+          new window.google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi,or,mr,pa,gu,bn,te,ta,kn',
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+          }, targetId);
+        }
+      }
+
+      // Continuously reset inline body.style.top added by Google Translate
+      function suppressGoogleTopBanner() {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.top = '0px';
+        }
+        var topBanner = document.querySelector('body > .skiptranslate');
+        if (topBanner) {
+          topBanner.style.setProperty('display', 'none', 'important');
+        }
+      }
+
+      var observer = new MutationObserver(suppressGoogleTopBanner);
+      window.addEventListener('DOMContentLoaded', function() {
+        observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+        setInterval(suppressGoogleTopBanner, 150);
+      });
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  </body>
+</html>
