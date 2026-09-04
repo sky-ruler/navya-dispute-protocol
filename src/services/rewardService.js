@@ -9,7 +9,7 @@ const STORAGE_KEY_RL_LOGS = 'navya_rl_feedback_logs_v1';
 export const rewardService = {
   getPoints() {
     const stored = localStorage.getItem(STORAGE_KEY_POINTS);
-    return stored ? parseInt(stored, 10) : 150; // Starting baseline credit: 150 pts = ₹75
+    return stored ? parseInt(stored, 10) : 150; // Current verified balance: 150 pts = ₹75
   },
 
   getCreditsInr() {
@@ -27,9 +27,7 @@ export const rewardService = {
 
   submitPredictionFeedback(data) {
     const currentPoints = this.getPoints();
-    const pointsAwarded = 50; // +50 pts = ₹25 reward per batch rated
-    const newPoints = currentPoints + pointsAwarded;
-    localStorage.setItem(STORAGE_KEY_POINTS, newPoints.toString());
+    const potentialPoints = 50; // Up to 50 pts = ₹25 reward once verified
 
     const logs = this.getFeedbackLogs();
     const newLog = {
@@ -37,10 +35,10 @@ export const rewardService = {
       batchId: data.batchId || "NAV-BATCH",
       crop: data.crop || "Fresh Produce",
       predictedShelfLifeDays: data.predictedShelfLifeDays || 7,
-      actualOutcome: data.actualOutcome || "ACCURATE", // SPOILED_EARLY | ACCURATE | LASTED_LONGER
       accuracyRating: data.accuracyRating || 4, // 1 to 5 stars
-      userNote: data.userNote || "Confirmed arrival condition.",
-      pointsAwarded,
+      userNote: data.userNote || "Batch prediction rated by user.",
+      status: 'PENDING_VERIFICATION', // Review by agronomy team & RL pipeline
+      potentialPoints,
       timestamp: new Date().toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'short',
@@ -53,9 +51,10 @@ export const rewardService = {
 
     return {
       success: true,
-      pointsAwarded,
-      newTotalPoints: newPoints,
-      newCreditsInr: Math.floor(newPoints / 2),
+      status: 'PENDING_VERIFICATION',
+      potentialPoints,
+      currentPoints,
+      currentCreditsInr: Math.floor(currentPoints / 2),
       log: newLog
     };
   }

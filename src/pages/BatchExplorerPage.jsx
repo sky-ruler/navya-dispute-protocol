@@ -119,8 +119,9 @@ export const BatchExplorerPage = ({ onSelectBatchForClaim }) => {
                 className="btn-bronze" 
                 style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '7px' }}
                 onClick={() => onOpenRateModal && onOpenRateModal(b)}
+                title="Rate AI prediction accuracy to earn verified discounts"
               >
-                🧠 Rate AI (+50 pts)
+                🧠 Rate Accuracy
               </button>
             </div>
           </div>

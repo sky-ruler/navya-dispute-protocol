@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Star, CheckCircle, Award, BrainCircuit, ArrowRight } from 'lucide-react';
+import { X, Sparkles, Star, CheckCircle, Award, BrainCircuit, ShieldCheck, Clock, Info } from 'lucide-react';
 import { rewardService } from '../../services/rewardService';
 
 export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) => {
   if (!isOpen || !batch) return null;
 
-  const [actualOutcome, setActualOutcome] = useState('ACCURATE'); // SPOILED_EARLY | ACCURATE | LASTED_LONGER
-  const [rating, setRating] = useState(4);
+  const [rating, setRating] = useState(5);
   const [note, setNote] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [rewardResult, setRewardResult] = useState(null);
 
   const predictedDays = batch.predictedShelfLifeDays || 7;
+
+  const ratingDescriptions = {
+    1: '1 Star — Very Inaccurate (produce spoiled far earlier than predicted)',
+    2: '2 Stars — Below Expectation (quality degraded faster than expected)',
+    3: '3 Stars — Acceptable (close to estimate with minor deviation)',
+    4: '4 Stars — Accurate (held up well as predicted)',
+    5: '5 Stars — Highly Accurate (shelf-life matched prediction perfectly)'
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,9 +27,8 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
       batchId: batch.id,
       crop: batch.crop,
       predictedShelfLifeDays: predictedDays,
-      actualOutcome,
       accuracyRating: rating,
-      userNote: note || `Actual outcome: ${actualOutcome.replace('_', ' ')}`
+      userNote: note || ratingDescriptions[rating]
     });
 
     setRewardResult(result);
@@ -58,7 +64,7 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
             <div>
               <div className="modal-title" style={{ fontSize: '16px' }}>Rate AI Shelf-Life Prediction</div>
               <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                Help train Navya AI & earn +50 Points (₹25 Mandi Credit)
+                Help train Navya AI • Earn verified discount credits
               </div>
             </div>
           </div>
@@ -103,123 +109,96 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
                 </div>
               </div>
 
-              {/* Question 1: How did it actually hold up? */}
-              <div className="form-group">
-                <label className="form-label" style={{ fontSize: '13px' }}>
-                  How did the produce actually hold up in real life?
+              {/* Unified Star Rating (1-5) */}
+              <div className="form-group" style={{ textAlign: 'center', margin: '14px 0 16px' }}>
+                <label className="form-label" style={{ fontSize: '13.5px', marginBottom: '8px' }}>
+                  How accurate was the {predictedDays}-day shelf life estimate?
                 </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                  <div
-                    onClick={() => setActualOutcome('SPOILED_EARLY')}
-                    style={{
-                      padding: '10px 8px',
-                      borderRadius: '8px',
-                      border: `1.5px solid ${actualOutcome === 'SPOILED_EARLY' ? 'var(--navya-warning)' : 'var(--border-medium)'}`,
-                      background: actualOutcome === 'SPOILED_EARLY' ? 'var(--navya-warning-bg)' : '#ffffff',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <div style={{ fontSize: '18px' }}>⚡</div>
-                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--navya-forest-800)', marginTop: '2px' }}>
-                      Spoiled Sooner
-                    </div>
-                    <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>&lt; {predictedDays} days</div>
-                  </div>
-
-                  <div
-                    onClick={() => setActualOutcome('ACCURATE')}
-                    style={{
-                      padding: '10px 8px',
-                      borderRadius: '8px',
-                      border: `1.5px solid ${actualOutcome === 'ACCURATE' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
-                      background: actualOutcome === 'ACCURATE' ? 'var(--navya-success-bg)' : '#ffffff',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <div style={{ fontSize: '18px' }}>✅</div>
-                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--navya-forest-800)', marginTop: '2px' }}>
-                      Matched (~{predictedDays}d)
-                    </div>
-                    <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>Accurate AI</div>
-                  </div>
-
-                  <div
-                    onClick={() => setActualOutcome('LASTED_LONGER')}
-                    style={{
-                      padding: '10px 8px',
-                      borderRadius: '8px',
-                      border: `1.5px solid ${actualOutcome === 'LASTED_LONGER' ? 'var(--navya-forest-800)' : 'var(--border-medium)'}`,
-                      background: actualOutcome === 'LASTED_LONGER' ? 'var(--navya-success-bg)' : '#ffffff',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <div style={{ fontSize: '18px' }}>🌟</div>
-                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--navya-forest-800)', marginTop: '2px' }}>
-                      Lasted Longer
-                    </div>
-                    <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>&gt; {predictedDays} days</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Question 2: Accuracy Stars */}
-              <div className="form-group" style={{ textAlign: 'center', margin: '18px 0' }}>
-                <label className="form-label" style={{ fontSize: '13px', marginBottom: '6px' }}>
-                  Rate Prediction Accuracy (1–5 Stars)
-                </label>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       type="button"
                       key={star}
                       onClick={() => setRating(star)}
                       style={{
-                        fontSize: '26px',
+                        fontSize: '30px',
                         color: rating >= star ? '#f59e0b' : '#d1d5db',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
                         transition: 'transform 0.15s ease',
-                        transform: rating >= star ? 'scale(1.1)' : 'scale(1)'
+                        transform: rating >= star ? 'scale(1.12)' : 'scale(1)',
+                        padding: '2px 4px'
                       }}
+                      title={`${star} Star${star > 1 ? 's' : ''}`}
                     >
                       ★
                     </button>
                   ))}
                 </div>
+                <div style={{
+                  fontSize: '12.5px',
+                  fontWeight: 600,
+                  color: rating <= 2 ? 'var(--navya-danger)' : rating === 3 ? 'var(--navya-warning)' : 'var(--navya-success)',
+                  minHeight: '20px'
+                }}>
+                  {ratingDescriptions[rating]}
+                </div>
               </div>
 
-              {/* Optional Note */}
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label" style={{ fontSize: '12px' }}>Optional feedback for the ML training model:</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  style={{ fontSize: '12.5px', padding: '8px 12px' }}
-                  placeholder="e.g. Apples stayed fresh 2 days longer in cold storage..."
+              {/* Detailed Description / Observations */}
+              <div className="form-group" style={{ marginBottom: '16px' }}>
+                <label className="form-label" style={{ fontSize: '12.5px' }}>
+                  Observations & Storage Notes (Optional):
+                </label>
+                <textarea
+                  className="form-textarea"
+                  rows={2}
+                  style={{ fontSize: '12.5px', padding: '8px 12px', resize: 'vertical' }}
+                  placeholder="e.g. Crate arrived in good condition, lasted 2 extra days in cool shade / or decayed early due to transit heat..."
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                 />
+              </div>
+
+              {/* Clear Verification & Redemption Notice */}
+              <div style={{
+                background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
+                border: '1px solid #fcd34d',
+                borderRadius: '8px',
+                padding: '12px 14px',
+                fontSize: '12px',
+                color: '#92400e',
+                lineHeight: 1.45,
+                display: 'flex',
+                gap: '10px'
+              }}>
+                <Info size={16} color="#b45309" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <div style={{ fontWeight: 800, color: '#78350f', marginBottom: '2px' }}>
+                    Reward & Verification Policy
+                  </div>
+                  <div>
+                    Our agronomy team & model verify submitted ratings against crate telemetry. Once verified, you will receive up to <strong>+50 points (₹25 credit)</strong>.
+                  </div>
+                  <div style={{ marginTop: '4px', color: '#b45309', fontWeight: 600 }}>
+                    🎁 Verified points can be redeemed as discounts on the main Navya website for scan credits and digital passports.
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: 'var(--navya-bronze-dark)' }}>
-                <Award size={16} />
-                Reward: +50 Pts (₹25 Credit)
+                <ShieldCheck size={16} />
+                Subject to Verification
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button type="button" className="btn-secondary" onClick={handleClose} style={{ fontSize: '13px' }}>
                   Cancel
                 </button>
                 <button type="submit" className="btn-primary" style={{ fontSize: '13px' }}>
-                  Submit Rating
+                  Submit for Verification
                 </button>
               </div>
             </div>
@@ -230,38 +209,51 @@ export const RatePredictionModal = ({ isOpen, onClose, batch, onRewardEarned }) 
               width: '56px',
               height: '56px',
               borderRadius: '50%',
-              background: 'var(--navya-success-bg)',
-              color: 'var(--navya-success)',
+              background: '#fef3c7',
+              color: '#d97706',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px'
             }}>
-              <CheckCircle size={32} />
+              <Clock size={32} />
             </div>
 
             <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--navya-forest-800)', marginBottom: '6px' }}>
-              Thank You! Ground-Truth Logged 🎉
+              Rating Submitted for Verification! ⏳
             </h3>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '340px', margin: '0 auto 18px' }}>
-              Your feedback is queued for Navya's reinforcement learning decay regression model.
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '380px', margin: '0 auto 18px', lineHeight: 1.5 }}>
+              Thank you! Your rating is queued for Navya's reinforcement learning model. Our team will verify the batch observations against sensor telemetry.
             </p>
 
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#fef3c7',
-              border: '1px solid #fcd34d',
-              padding: '8px 16px',
+              background: '#ecfdf5',
+              border: '1px solid #a7f3d0',
+              padding: '10px 18px',
               borderRadius: '20px',
-              fontSize: '14px',
-              fontWeight: 800,
-              color: '#92400e',
-              marginBottom: '24px'
+              fontSize: '13.5px',
+              fontWeight: 700,
+              color: '#065f46',
+              marginBottom: '16px'
             }}>
-              <Award size={18} />
-              +50 Points Earned! Total: {rewardResult?.newTotalPoints} pts (₹{rewardResult?.newCreditsInr} Credit)
+              <Award size={18} color="#059669" />
+              Potential Reward: Up to +50 Points (₹25 Credit) Once Verified
+            </div>
+
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--text-muted)',
+              maxWidth: '360px',
+              margin: '0 auto 24px',
+              background: 'var(--bg-surface-subtle)',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              border: '1px solid var(--border-subtle)'
+            }}>
+              💡 <strong>Redemption Info:</strong> Verified points can be redeemed later as instant discounts on the main Navya website for produce scans and lot certificates.
             </div>
 
             <div>

@@ -163,16 +163,16 @@ export const HomePage = ({
             🧠
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--navya-forest-800)' }}>
                 Help Train Navya AI & Earn Scan Credits
               </span>
               <span style={{ fontSize: '11px', fontWeight: 700, background: '#f59e0b', color: '#fff', padding: '2px 8px', borderRadius: '12px' }}>
-                +50 Pts (₹25)
+                Up to 50 Pts (₹25)
               </span>
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px', maxWidth: '560px' }}>
-              Tell our reinforcement learning model how long your produce actually lasted compared to our estimate. Your rating makes future predictions more accurate!
+              Rate the accuracy of our shelf-life predictions. Once verified by our team, earned points can be redeemed as instant discounts on the main Navya website!
             </p>
           </div>
         </div>
@@ -183,7 +183,7 @@ export const HomePage = ({
           onClick={() => onOpenRateModal && onOpenRateModal()}
           style={{ padding: '9px 18px', fontSize: '13px', flexShrink: 0 }}
         >
-          Rate a Prediction (+50 pts)
+          Rate Accuracy
         </button>
       </section>
 

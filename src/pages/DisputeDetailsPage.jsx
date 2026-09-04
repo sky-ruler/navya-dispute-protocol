@@ -111,9 +111,9 @@ export const DisputeDetailsPage = ({
               className="btn-bronze" 
               onClick={() => onOpenRateModal(batch)} 
               style={{ fontSize: '12.5px' }}
-              title="Help train Navya AI model by rating prediction accuracy"
+              title="Rate AI prediction accuracy to earn verified discounts"
             >
-              🧠 Rate AI (+50 pts)
+              🧠 Rate Accuracy
             </button>
           )}
 

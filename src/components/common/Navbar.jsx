@@ -64,7 +64,7 @@ export const Navbar = ({
           type="button"
           className="reward-points-badge"
           onClick={() => onOpenRateModal && onOpenRateModal()}
-          title="Earn Mandi scan credits by rating AI prediction accuracy"
+          title="Verified Navya reward points — redeemable as discounts on the main Navya website"
         >
           <span className="points-coin">🪙</span>
           <span className="points-val">{userPoints} pts</span>
