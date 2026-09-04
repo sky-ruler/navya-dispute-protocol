@@ -1,7 +1,26 @@
 {
-  "name": "navya-feedback",
+  "name": "navya-dispute-protocol",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Navya — Dispute & Redressal Protocol | Post-Harvest Produce Quality Claims, Telemetry Calibration & Bilateral Mandi Settlement Platform",
+  "homepage": "https://sky-ruler.github.io/navya-dispute-protocol/",
+  "author": "Sky Ruler <skyruler3281@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sky-ruler/navya-dispute-protocol.git"
+  },
+  "keywords": [
+    "agritech",
+    "post-harvest",
+    "dispute-redressal",
+    "sensirion",
+    "sgp30",
+    "sht31",
+    "smart-india-hackathon",
+    "mandi",
+    "apmc"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
